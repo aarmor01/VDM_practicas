@@ -1,0 +1,15 @@
+- Tablero (GM) 
+  {
+	comprobar;
+	limpiar_comprobacion;
+	check_victoria;
+	genera_tablero;
+	limpiar_tablero;
+  }
+  |--Casilla
+     {
+	avanza_estado_on_click;
+	marcar_fallo;
+	desmarcar_fallo;
+     }
+     |--state
