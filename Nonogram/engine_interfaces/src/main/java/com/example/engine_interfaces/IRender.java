@@ -6,19 +6,25 @@ public interface IRender {
 
     public void run();
 
-    void update(double deltaTime);
+    public void update(double deltaTime);
     //public void setScene(MyScene scene);
 
-    void renderCircle(float x, float y, float r);
+    public void renderCircle(float x, float y, float r);
     //renderText o Fuente hay que hacer uno común
 
-    void render();
-    public void resume();
+    public void render();
     public void pause();
 
+    public void resume();
 
-
-
-
-
+    public IImage newImage();
+    public IFont newFont();
+    public void setResolution();
+    public void setColor();
+    public void setFont();
+    public void drawImage();
+    public void drawRectangle();
+    public void fillRectangle();
+    public void drawLine();
+    public void drawText();
 }
