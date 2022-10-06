@@ -1,10 +1,15 @@
 package com.example.nonogram;
 
 public class Board {
-    private int[][] board;
+    private Cell[][] board;
+    private int cellsLeft;
 
-    public boolean createBoard(int height, int width) {
-        board = new int[height][width];
-        return false;
+    public void createBoard(int height, int width, int allCells) {
+        board = new Cell[height][width];
+        cellsLeft = allCells;
+    }
+
+    public void markCell(int x, int y) {
+        cellsLeft += board[x][y].changeCell();
     }
 }
