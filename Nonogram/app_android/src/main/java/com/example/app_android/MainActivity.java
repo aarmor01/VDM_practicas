@@ -2,13 +2,18 @@ package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.IOException;
 
@@ -19,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private MyRenderClass render;
 
     private AssetManager aMan;
+
+    private SoundPool soundPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         scene.init(render);
         render.setScene(scene);
         aMan = this.getBaseContext().getAssets();
+
+        renderView.setOnTouchListener(uwuListener);
+        soundPool = new SoundPool.Builder().setMaxStreams(10).build();
     }
 
     @Override
@@ -46,6 +56,27 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         this.render.pause();
     }
+
+    private View.OnTouchListener uwuListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            int soundId = -1;
+            try {
+                AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
+                soundId = soundPool.load(assetDescriptor, 0);
+            }catch (IOException e) {
+                throw new RuntimeException("Couldn't load sound.");
+            }
+
+            if(motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                soundPool.play(soundId, 1,1,
+                        0, -1, 440);
+                return true;
+            }
+
+            return false;
+        }
+    };
 
     //Clase interna que representa la escena que queremos pintar
     class MyScene {
