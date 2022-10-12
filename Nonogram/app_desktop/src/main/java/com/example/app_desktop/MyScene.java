@@ -47,7 +47,6 @@ public class MyScene {
     }
 
     public void render(){
-        renderClass.renderText();
-
+//        renderClass.renderText();
     }
 }
