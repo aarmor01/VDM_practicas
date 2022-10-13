@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SoundPool soundPool;
 
+    private int soundId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +43,17 @@ public class MainActivity extends AppCompatActivity {
         render.setScene(scene);
         aMan = this.getBaseContext().getAssets();
 
-        renderView.setOnTouchListener(uwuListener);
         soundPool = new SoundPool.Builder().setMaxStreams(10).build();
+        renderView.setOnTouchListener(uwuListener);
+
+        // id sound
+        soundId = -1;
+        try {
+            AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
+            soundId = soundPool.load(assetDescriptor, 0);
+        }catch (IOException e) {
+            throw new RuntimeException("Couldn't load sound.");
+        }
     }
 
     @Override
@@ -60,20 +71,12 @@ public class MainActivity extends AppCompatActivity {
     private View.OnTouchListener uwuListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int soundId = -1;
-            try {
-                AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
-                soundId = soundPool.load(assetDescriptor, 0);
-            }catch (IOException e) {
-                throw new RuntimeException("Couldn't load sound.");
-            }
-
             if(motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                System.out.println("hi");
                 soundPool.play(soundId, 1,1,
-                        0, -1, 440);
+                        0, 0, 1);
                 return true;
             }
-
             return false;
         }
     };

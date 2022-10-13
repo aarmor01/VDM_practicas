@@ -29,7 +29,7 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent evt) {
-        System.out.println("bazinga");
+
     }
 
     @Override
