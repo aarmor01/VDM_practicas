@@ -4,8 +4,9 @@ public class Cell {
     public enum State {
         EMPTY, MARKED, CROSSED, CHECKED    }
 
-    public void init(){
-
+    public void init(boolean ans) {
+        isAnswer = ans;
+        s = State.EMPTY;
     }
 
     public void render(){
