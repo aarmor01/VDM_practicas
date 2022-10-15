@@ -20,7 +20,6 @@ public class MyRenderClass implements Runnable{
     private Graphics2D graphics2D;
 
     private Thread renderThread;
-
     private boolean running;
 
     private MyScene scene;

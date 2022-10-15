@@ -1,33 +1,28 @@
 package com.example.app_desktop;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferStrategy;
-
-import javax.swing.JFrame;
+import com.example.engine_interfaces.IScene;
+import com.example.engine_interfaces.IRender;
+import com.example.engine_interfaces.IEngine;
 
 //Clase interna que representa la escena que queremos pintar
-public class MyScene {
+public class MyScene implements IScene {
     private float x;
     private float y;
     private int radius;
     private int speed;
 
-    private MyRenderClass renderClass;
-
-    public MyScene(){
+    @Override
+    public void init(IEngine eng) {
         this.x=50;
         this.y=50;
         this.radius = 50;
         this.speed = 150;
+
+
     }
 
-    public void init(MyRenderClass renderClass){
-        this.renderClass = renderClass;
-    }
-
-    public void update(double deltaTime){
+    @Override
+    public void update(double deltaTime) {
         int maxX = this.renderClass.getWidth()-this.radius;
 
         this.x += this.speed * deltaTime;
@@ -46,7 +41,8 @@ public class MyScene {
         }
     }
 
-    public void render(){
-//        renderClass.renderText();
+    @Override
+    public void render(IRender renderMng) {
+        renderClass.renderText();
     }
 }

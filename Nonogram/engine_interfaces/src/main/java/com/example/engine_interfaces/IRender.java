@@ -13,4 +13,7 @@ public interface IRender {
     public void fillRectangle();
     public void drawLine();
     public void drawText();
+
+    public int getWindowWidth();
+    public int getWindowHeight();
 }
