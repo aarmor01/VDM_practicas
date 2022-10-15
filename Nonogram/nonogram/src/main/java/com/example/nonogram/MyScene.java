@@ -1,4 +1,4 @@
-package com.example.app_desktop;
+package com.example.nonogram;
 
 import com.example.engine_interfaces.IScene;
 import com.example.engine_interfaces.IRender;
@@ -11,6 +11,8 @@ public class MyScene implements IScene {
     private int radius;
     private int speed;
 
+    private IEngine engRef;
+
     @Override
     public void init(IEngine eng) {
         this.x=50;
@@ -18,12 +20,12 @@ public class MyScene implements IScene {
         this.radius = 50;
         this.speed = 150;
 
-
+        engRef = eng;
     }
 
     @Override
     public void update(double deltaTime) {
-        int maxX = this.renderClass.getWidth()-this.radius;
+        int maxX = this.engRef.getRender().getWindowWidth()-this.radius;
 
         this.x += this.speed * deltaTime;
         this.y += 2*deltaTime;
@@ -43,6 +45,6 @@ public class MyScene implements IScene {
 
     @Override
     public void render(IRender renderMng) {
-        renderClass.renderText();
+        this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
     }
 }

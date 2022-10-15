@@ -2,6 +2,9 @@ package com.example.app_desktop;
 
 import javax.swing.JFrame;
 
+import com.example.engine_desktop.Engine;
+import com.example.nonogram.MyScene;
+
 public class MainActivity {
 
     public static void main(String[] args) {
@@ -31,14 +34,11 @@ public class MainActivity {
             // En "modo debug" podríamos querer escribir esto.
             //System.out.println("BufferStrategy tras " + (100 - intentos) + " intentos.");
         }
-        IExample ie = new IExample();
-        renderView.add(ie);
 
-//        MyScene scene = new MyScene();
-//
-//        MyRenderClass render = new MyRenderClass(renderView);
-//        scene.init(render);
-//        render.setScene(scene);
-//        render.resume();
+        Engine eng = new Engine();
+        MyScene scene = new MyScene();
+        scene.init(eng);
+        eng.init(renderView, scene);
+        eng.resume();
     }
 }
