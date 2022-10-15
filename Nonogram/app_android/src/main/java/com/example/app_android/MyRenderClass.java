@@ -67,12 +67,12 @@ class MyRenderClass implements Runnable{
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
             this.update(elapsedTime);
-            if (currentTime - informePrevio > 1000000000l) {
-                long fps = frames * 1000000000l / (currentTime - informePrevio);
-                System.out.println("" + fps + " fps");
-                frames = 0;
-                informePrevio = currentTime;
-            }
+//            if (currentTime - informePrevio > 1000000000l) {
+//                long fps = frames * 1000000000l / (currentTime - informePrevio);
+//                System.out.println("" + fps + " fps");
+//                frames = 0;
+//                informePrevio = currentTime;
+//            }
             ++frames;
 
             // Pintamos el frame

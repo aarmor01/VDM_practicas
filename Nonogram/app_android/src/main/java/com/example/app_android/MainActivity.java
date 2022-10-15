@@ -15,13 +15,20 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.engine_android.Engine;
+import com.example.engine_interfaces.IEngine;
+import com.example.engine_interfaces.IFont;
+import com.example.engine_interfaces.IImage;
+import com.example.engine_interfaces.IRender;
+import com.example.engine_interfaces.IScene;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private SurfaceView renderView;
 
-    private MyRenderClass render;
+    private Engine eng;
 
     private AssetManager aMan;
 
@@ -38,41 +45,41 @@ public class MainActivity extends AppCompatActivity {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
-        MyScene scene = new MyScene();
+        Scene scene = new Scene();
+        eng = new Engine();
+        eng.init(this.renderView);
+        eng.setScene(scene);
+        eng.resume();
+        //aMan = this.getBaseContext().getAssets();
 
-        this.render = new MyRenderClass(this.renderView);
-        scene.init(render);
-        render.setScene(scene);
-        aMan = this.getBaseContext().getAssets();
+        //listener = new MyListener();
 
-        listener = new MyListener();
-
-        soundPool = new SoundPool.Builder().setMaxStreams(10).build();
-        listener.setSoundPool(soundPool);
-        renderView.setOnTouchListener(listener);
+        //soundPool = new SoundPool.Builder().setMaxStreams(10).build();
+        //listener.setSoundPool(soundPool);
+        //renderView.setOnTouchListener(listener);
 
         // id sound
-        soundId = -1;
-        try {
-            AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
-            soundId = soundPool.load(assetDescriptor, 0);
-            listener.setSoundId(soundId);
-        }catch (IOException e) {
-            throw new RuntimeException("Couldn't load sound.");
-        }
-
-        render.setAssetManager(aMan);
+//        soundId = -1;
+//        try {
+//            AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
+//            soundId = soundPool.load(assetDescriptor, 0);
+//            listener.setSoundId(soundId);
+//        }catch (IOException e) {
+//            throw new RuntimeException("Couldn't load sound.");
+//        }
+//
+//        render.setAssetManager(aMan);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.render.resume();
+        //this.render.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.render.pause();
+        //this.render.pause();
     }
 }

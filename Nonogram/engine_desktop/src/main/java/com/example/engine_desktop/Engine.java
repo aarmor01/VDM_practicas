@@ -14,7 +14,7 @@ public class Engine implements IEngine, Runnable {
     Render myRender;
     IScene currScene;
 
-    void init(JFrame myWindow, IScene startScene) {
+    public void init(JFrame myWindow, IScene startScene) {
         myRender = new Render();
         currScene = startScene;
 
