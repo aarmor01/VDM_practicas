@@ -21,6 +21,7 @@ import com.example.engine_interfaces.IFont;
 import com.example.engine_interfaces.IImage;
 import com.example.engine_interfaces.IRender;
 import com.example.engine_interfaces.IScene;
+import com.example.nonogram.MyScene;
 
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
-        Scene scene = new Scene();
+        MyScene scene = new MyScene();
         eng = new Engine();
         eng.init(this.renderView);
         eng.setScene(scene);
