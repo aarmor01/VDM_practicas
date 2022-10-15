@@ -14,7 +14,7 @@ public class Engine implements IEngine, Runnable {
     Render myRender;
     IScene currScene;
 
-    void init(JFrame myWindow, IScene startScene) {
+    public void init(JFrame myWindow, IScene startScene) {
         myRender = new Render();
         currScene = startScene;
 
@@ -23,7 +23,7 @@ public class Engine implements IEngine, Runnable {
 
     @Override
     public IRender getRender() {
-        return null;
+        return myRender;
     }
 
     @Override
@@ -62,9 +62,10 @@ public class Engine implements IEngine, Runnable {
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
+            double deltaTime = (double)nanoElapsedTime / 1.0E9;
 
             // Informe de FPS [DEBUG]
-//            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+//
 //            this.update(elapsedTime);
 //            if (currentTime - informePrevio > 1000000000l) {
 //                long fps = frames * 1000000000l / (currentTime - informePrevio);
@@ -74,8 +75,32 @@ public class Engine implements IEngine, Runnable {
 //            }
 //            ++frames;
 
-            this.currScene.update(nanoElapsedTime);
+            this.currScene.update(deltaTime);
             this.myRender.render(currScene);
+        }
+    }
+
+    public void resume() {
+        if (!this.running) {
+            this.running = true;
+
+            this.renderThread = new Thread(this);
+            this.renderThread.start();
+        }
+    }
+
+    public void pause() {
+        if (this.running) {
+            this.running = false;
+            while (true) {
+                try {
+                    this.renderThread.join();
+                    this.renderThread = null;
+                    break;
+                } catch (InterruptedException ie) {
+                    // Esto no debería ocurrir nunca...
+                }
+            }
         }
     }
 }

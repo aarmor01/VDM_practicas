@@ -47,6 +47,7 @@ public class Render implements IRender {
             do {
                 Graphics graphics = this.myBufferStrategy.getDrawGraphics();
                 try {
+                    fillBackground();
                     currScene.render(this);
                 } finally {
                     graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
@@ -102,6 +103,13 @@ public class Render implements IRender {
     }
 
     @Override
+    public void drawCircle(int x, int y, int r) {
+        this.myGraphics2D.setColor(Color.white);
+        this.myGraphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
+        this.myGraphics2D.setPaintMode();
+    }
+
+    @Override
     public void drawText() {
 
     }
@@ -115,72 +123,10 @@ public class Render implements IRender {
     public int getWindowHeight() {
         return this.myWin.getHeight();
     }
+
+    protected void fillBackground() {
+        // "Borramos" el fondo.
+        this.myGraphics2D.setColor(Color.BLUE);
+        this.myGraphics2D.fillRect(0,0, this.getWindowWidth(), this.getWindowHeight());
+    }
 }
-
-
-////Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
-//public class MyRenderClass implements Runnable{
-//
-//    private JFrame myView;
-//    private BufferStrategy bufferStrategy;
-//    private Graphics2D graphics2D;
-//
-//    private Thread renderThread;
-//
-//    private boolean running;
-//
-//    private MyScene scene;
-//
-//
-//    protected void update(double deltaTime) {
-//        this.scene.update(deltaTime);
-//    }
-//
-//    public void setScene(MyScene scene) {
-//        this.scene = scene;
-//    }
-//
-//    protected void renderCircle(float x, float y, float r){
-//        this.graphics2D.setColor(Color.white);
-//        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
-//        this.graphics2D.setPaintMode();
-//    }
-//
-//    protected void renderText() {
-//
-//    }
-//
-//    protected void render() {
-//        // "Borramos" el fondo.
-//        this.graphics2D.setColor(Color.BLUE);
-//        this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
-//        // Pintamos la escena
-//        this.scene.render();
-//    }
-//
-//    public void resume() {
-//        if (!this.running) {
-//            // Solo hacemos algo si no nos estábamos ejecutando ya
-//            // (programación defensiva)
-//            this.running = true;
-//            // Lanzamos la ejecución de nuestro método run() en un nuevo Thread.
-//            this.renderThread = new Thread(this);
-//            this.renderThread.start();
-//        }
-//    }
-//
-//    public void pause() {
-//        if (this.running) {
-//            this.running = false;
-//            while (true) {
-//                try {
-//                    this.renderThread.join();
-//                    this.renderThread = null;
-//                    break;
-//                } catch (InterruptedException ie) {
-//                    // Esto no debería ocurrir nunca...
-//                }
-//            }
-//        }
-//    }
-//}
