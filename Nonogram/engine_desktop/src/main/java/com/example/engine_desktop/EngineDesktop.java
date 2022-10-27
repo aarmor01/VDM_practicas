@@ -1,29 +1,35 @@
 package com.example.engine_desktop;
 
-import com.example.engine_interfaces.*;
+import com.example.engine_common.*;
 
 import javax.swing.JFrame;
 
-public class Engine implements IEngine, Runnable {
+public class EngineDesktop implements IEngine, Runnable {
 
     // thread variables
     private Thread renderThread;
     private boolean running;
 
     // engine variables
-    Render myRender;
-    IScene currScene;
+    RenderDesktop myRenderDesktop;
+    SceneManager mySceneManager;
 
-    public void init(JFrame myWindow, IScene startScene) {
-        myRender = new Render();
-        currScene = startScene;
+    public void init(JFrame myWindow) {
+        // add listeners
 
-        myRender.init(myWindow);
+        myRenderDesktop = new RenderDesktop();
+        mySceneManager = new SceneManager();
+
+        myRenderDesktop.init(myWindow);
+    }
+
+    public void setStartScene(IScene startScene) {
+        this.mySceneManager.pushScene(startScene);
     }
 
     @Override
     public IRender getRender() {
-        return myRender;
+        return myRenderDesktop;
     }
 
     @Override
@@ -46,38 +52,29 @@ public class Engine implements IEngine, Runnable {
         if (renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        // Si el Thread se pone en marcha
-        // muy rápido, la vista podría todavía no estar inicializada.
-        while (this.running && this.myRender.getWindowWidth() == 0);
-        // Espera activa. Sería más elegante al menos dormir un poco.
-
-
-//        long informePrevio = lastFrameTime; // Informes de FPS
-//        int frames = 0;
+        while (this.running && this.myRenderDesktop.getWindowWidth() == 0);
 
         long lastFrameTime = System.nanoTime();
 
         // Bucle de juego principal.
-        while (running) {
+        if(running) {
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
             double deltaTime = (double)nanoElapsedTime / 1.0E9;
 
-            // Informe de FPS [DEBUG]
-//
-//            this.update(elapsedTime);
-//            if (currentTime - informePrevio > 1000000000l) {
-//                long fps = frames * 1000000000l / (currentTime - informePrevio);
-//                System.out.println("" + fps + " fps");
-//                frames = 0;
-//                informePrevio = currentTime;
-//            }
-//            ++frames;
+            // update
+            this.mySceneManager.currentScene().update(deltaTime);
 
-            this.currScene.update(deltaTime);
-            this.myRender.render(currScene);
+            // render
+            do {
+                this.myRenderDesktop.prepareFrame();
+                this.mySceneManager.currentScene().render(this.myRenderDesktop);
+                this.myRenderDesktop.finishFrame();
+            } while(this.myRenderDesktop.swapBuffer());
         }
+
+
     }
 
     public void resume() {

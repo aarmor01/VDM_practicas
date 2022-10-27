@@ -1,8 +1,8 @@
 package com.example.nonogram;
 
-import com.example.engine_interfaces.IScene;
-import com.example.engine_interfaces.IRender;
-import com.example.engine_interfaces.IEngine;
+import com.example.engine_common.IScene;
+import com.example.engine_common.IRender;
+import com.example.engine_common.IEngine;
 
 //Clase interna que representa la escena que queremos pintar
 public class MyScene implements IScene {

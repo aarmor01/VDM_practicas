@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 rootProject.name = "Nonogram"
 include ':engine_android'
 include ':engine_desktop'
-include ':engine_interfaces'
+include ':engine_common'
 include ':nonogram'
 include ':app_android'
 include ':app_desktop'

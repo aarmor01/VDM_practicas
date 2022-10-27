@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    implementation project(':engine_interfaces')
+    implementation project(':engine_common')
     implementation project(':engine_android')
     implementation project(':nonogram')
 

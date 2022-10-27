@@ -1,4 +1,4 @@
-package com.example.engine_interfaces;
+package com.example.engine_common;
 
 public interface IScene {
     public void init(IEngine eng);

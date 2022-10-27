@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':engine_interfaces')
+    implementation project(':engine_common')
     implementation project(':engine_desktop')
     implementation project(':nonogram')
 }

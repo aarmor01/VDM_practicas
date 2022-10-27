@@ -3,8 +3,9 @@ plugins {
 }
 
 dependencies {
-    implementation project(':engine_interfaces')
+    implementation project(':engine_common')
 }
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7

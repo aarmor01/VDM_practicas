@@ -1,4 +1,4 @@
-package com.example.engine_interfaces;
+package com.example.engine_common;
 
 public interface IEngine {
     IRender getRender();

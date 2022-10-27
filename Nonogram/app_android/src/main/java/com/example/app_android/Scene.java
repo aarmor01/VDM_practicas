@@ -1,8 +1,8 @@
 package com.example.app_android;
 
-import com.example.engine_interfaces.IEngine;
-import com.example.engine_interfaces.IRender;
-import com.example.engine_interfaces.IScene;
+import com.example.engine_common.IEngine;
+import com.example.engine_common.IRender;
+import com.example.engine_common.IScene;
 
 public class Scene implements IScene {
 

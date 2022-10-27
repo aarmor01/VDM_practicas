@@ -1,12 +1,8 @@
 package com.example.engine_android;
 
-import android.content.res.AssetFileDescriptor;
-import android.media.SoundPool;
 import android.view.SurfaceView;
 
-import com.example.engine_interfaces.*;
-
-import java.io.IOException;
+import com.example.engine_common.*;
 
 public class Engine implements IEngine, Runnable {
     private Thread renderThread;

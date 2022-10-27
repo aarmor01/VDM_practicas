@@ -1,19 +1,14 @@
 package com.example.engine_android;
 
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.engine_interfaces.IFont;
-import com.example.engine_interfaces.IImage;
-import com.example.engine_interfaces.IRender;
-import com.example.engine_interfaces.IScene;
-
-import java.io.IOException;
+import com.example.engine_common.IFont;
+import com.example.engine_common.IImage;
+import com.example.engine_common.IRender;
+import com.example.engine_common.IScene;
 
 public class Render implements IRender {
 

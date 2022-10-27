@@ -2,16 +2,18 @@ package com.example.app_desktop;
 
 import javax.swing.JFrame;
 
-import com.example.engine_desktop.Engine;
+import com.example.engine_desktop.EngineDesktop;
 import com.example.nonogram.MyScene;
+
+import java.awt.Color;
 
 public class MainActivity {
 
     public static void main(String[] args) {
         JFrame renderView = new JFrame("Mi aplicación");
 
-
         renderView.setSize(600, 400);
+        renderView.setBackground(Color.GRAY);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);
         renderView.setVisible(true);
@@ -35,10 +37,11 @@ public class MainActivity {
             //System.out.println("BufferStrategy tras " + (100 - intentos) + " intentos.");
         }
 
-        Engine eng = new Engine();
+        EngineDesktop eng = new EngineDesktop();
         MyScene scene = new MyScene();
         scene.init(eng);
-        eng.init(renderView, scene);
+        eng.init(renderView);
+        eng.setStartScene(scene);
         eng.resume();
     }
 }

@@ -2,28 +2,13 @@ package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.engine_android.Engine;
-import com.example.engine_interfaces.IEngine;
-import com.example.engine_interfaces.IFont;
-import com.example.engine_interfaces.IImage;
-import com.example.engine_interfaces.IRender;
-import com.example.engine_interfaces.IScene;
 import com.example.nonogram.MyScene;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
