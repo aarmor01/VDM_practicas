@@ -11,10 +11,9 @@ public interface IRender {
     public void setFont();
 
     public void drawImage();
-    public void drawRectangle();
-    public void fillRectangle();
-    public void drawLine();
-    public void drawText();
+    public void drawRectangle(int x, int y, int width, int height, boolean fill);
+    public void drawLine(int og_x, int og_y, int dst_x, int dst_y);
+    public void drawText(int x, int y, String text, IFont font);
     public void drawCircle(int x, int y, int r);
 
     public int getWindowWidth();

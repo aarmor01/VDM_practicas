@@ -23,6 +23,9 @@ public class Render implements IRender {
     private BufferStrategy myBufferStrategy;
     private Graphics2D myGraphics2D;
 
+    private int baseWidth;
+    private int baseHeight;
+
     public void init(JFrame win) {
         this.myWin = win;
         this.myBufferStrategy = this.myWin.getBufferStrategy();
@@ -39,6 +42,9 @@ public class Render implements IRender {
                 myGraphics2D = (Graphics2D) myBufferStrategy.getDrawGraphics();
             }
         });
+
+        baseWidth = this.myWin.getWidth();
+        baseHeight = this.myWin.getHeight();
     }
 
     public void render(IScene currScene) {
