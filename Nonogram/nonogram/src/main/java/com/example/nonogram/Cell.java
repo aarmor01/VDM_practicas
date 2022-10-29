@@ -23,8 +23,7 @@ public class Cell {
 
         if(s==State.CROSSED && isAnswer)
             retValue = -1;
-
-        if(s == State.MARKED && isAnswer)
+        else if(s == State.MARKED && isAnswer)
             retValue = 1;
 
         return retValue;
