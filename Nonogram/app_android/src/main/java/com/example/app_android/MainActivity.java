@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.renderView);
         MyScene scene = new MyScene();
         eng = new Engine();
-        eng.init(this.renderView);
+        eng.init(this.renderView, aMan);
         eng.setScene(scene);
         eng.resume();
         //aMan = this.getBaseContext().getAssets();

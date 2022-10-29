@@ -1,7 +1,9 @@
 package com.example.engine_common;
 
+import java.io.IOException;
+
 public interface IRender {
-    public String loadImage(String filePath);
+    public String loadImage(String filePath) throws IOException;
     public String loadFont(String filePath);
 
     public void setResolution();

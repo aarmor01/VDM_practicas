@@ -1,5 +1,6 @@
 package com.example.engine_android;
 
+import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
 import com.example.engine_common.*;
@@ -10,6 +11,7 @@ public class Engine implements IEngine, Runnable {
     private Render render;
     private IScene currentScene;
     private SurfaceView renderView;
+    private  AssetManager assetManager;
 
     public void setScene(IScene s) {
         currentScene = s;
@@ -35,12 +37,12 @@ public class Engine implements IEngine, Runnable {
         return null;
     }
 
-    public void init(SurfaceView s) {
+    public void init(SurfaceView s, AssetManager aM) {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = s;
-
+        assetManager = aM;
         this.render = new Render();
-        this.render.init(this.renderView);
+        this.render.init(this.renderView, assetManager);
     }
 
     @Override
