@@ -1,10 +1,12 @@
-package com.example.engine_common;
+package com.example.engine_common.interfaces;
+
+import com.example.engine_common.shared.FontType;
 
 import java.io.IOException;
 
 public interface IRender {
-    public String loadImage(String filePath) throws IOException;
-    public String loadFont(String filePath);
+    public String loadImage(String filePath);
+    public String loadFont(String filePath, FontType type, int size);
 
     public void setResolution();
     public void setColor();
@@ -17,6 +19,6 @@ public interface IRender {
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y);
     public void drawCircle(int x, int y, int r);
 
-    public int getWindowWidth();
-    public int getWindowHeight();
+    public int getWidth();
+    public int getHeight();
 }

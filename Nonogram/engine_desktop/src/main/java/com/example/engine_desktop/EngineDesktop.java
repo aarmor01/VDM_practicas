@@ -1,6 +1,13 @@
 package com.example.engine_desktop;
 
-import com.example.engine_common.*;
+import com.example.engine_common.interfaces.IAudio;
+import com.example.engine_common.interfaces.IEngine;
+import com.example.engine_common.interfaces.IInput;
+import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.interfaces.IScene;
+import com.example.engine_common.shared.InputManager;
+import com.example.engine_common.shared.InputType;
+import com.example.engine_common.shared.SceneManager;
 
 import javax.swing.JFrame;
 
@@ -11,20 +18,18 @@ public class EngineDesktop implements IEngine, Runnable {
     private boolean running;
 
     // engine variables
-    RenderDesktop myRenderDesktop;
-    SceneManager mySceneManager;
+    private RenderDesktop myRenderDesktop;
+    private SceneManager mySceneManager;
+    private InputManager myInputManager;
 
-    public void init(JFrame myWindow) {
-        // add listeners
-
+    public EngineDesktop(JFrame myWindow) {
         myRenderDesktop = new RenderDesktop();
         mySceneManager = new SceneManager();
+        myInputManager = new InputManager();
 
         myRenderDesktop.init(myWindow);
-    }
 
-    public void setStartScene(IScene startScene) {
-        this.mySceneManager.pushScene(startScene);
+        // add listeners window
     }
 
     @Override
@@ -38,13 +43,8 @@ public class EngineDesktop implements IEngine, Runnable {
     }
 
     @Override
-    public IInput getInput() {
-        return null;
-    }
-
-    @Override
-    public IScene getScene() {
-        return null;
+    public SceneManager getSceneManager() {
+        return mySceneManager;
     }
 
     @Override
@@ -52,16 +52,20 @@ public class EngineDesktop implements IEngine, Runnable {
         if (renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while (this.running && this.myRenderDesktop.getWindowWidth() == 0);
+        while (this.running && this.myRenderDesktop.getWidth() == 0);
 
         long lastFrameTime = System.nanoTime();
 
         // Bucle de juego principal.
-        if(running) {
+        if(this.running) {
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
-            double deltaTime = (double)nanoElapsedTime / 1.0E9;
+            double deltaTime = (double) nanoElapsedTime / 1.0E9;
+
+            // handle input
+//            IInput input;
+//            for ((input = myInputManager.getInput()) == null)
 
             // update
             this.mySceneManager.currentScene().update(deltaTime);
@@ -71,10 +75,8 @@ public class EngineDesktop implements IEngine, Runnable {
                 this.myRenderDesktop.prepareFrame();
                 this.mySceneManager.currentScene().render(this.myRenderDesktop);
                 this.myRenderDesktop.finishFrame();
-            } while(this.myRenderDesktop.swapBuffer());
+            } while (this.myRenderDesktop.swapBuffer());
         }
-
-
     }
 
     public void resume() {

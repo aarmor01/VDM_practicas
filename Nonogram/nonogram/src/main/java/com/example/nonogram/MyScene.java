@@ -1,8 +1,9 @@
 package com.example.nonogram;
 
-import com.example.engine_common.IScene;
-import com.example.engine_common.IRender;
-import com.example.engine_common.IEngine;
+import com.example.engine_common.interfaces.IInput;
+import com.example.engine_common.interfaces.IScene;
+import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.interfaces.IEngine;
 
 //Clase interna que representa la escena que queremos pintar
 public class MyScene implements IScene {
@@ -25,7 +26,7 @@ public class MyScene implements IScene {
 
     @Override
     public void update(double deltaTime) {
-        int maxX = this.engRef.getRender().getWindowWidth()-this.radius;
+        int maxX = this.engRef.getRender().getWidth()-this.radius;
 
         this.x += this.speed * deltaTime;
         this.y += 2*deltaTime;
@@ -46,5 +47,10 @@ public class MyScene implements IScene {
     @Override
     public void render(IRender renderMng) {
         this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
+    }
+
+    @Override
+    public void handleInput(IInput input) {
+
     }
 }

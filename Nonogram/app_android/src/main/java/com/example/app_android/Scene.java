@@ -1,8 +1,8 @@
 package com.example.app_android;
 
-import com.example.engine_common.IEngine;
-import com.example.engine_common.IRender;
-import com.example.engine_common.IScene;
+import com.example.engine_common.interfaces.IEngine;
+import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.interfaces.IScene;
 
 public class Scene implements IScene {
 
@@ -23,7 +23,7 @@ public class Scene implements IScene {
 
     @Override
     public void update(double deltaTime) {
-        int maxX = eng.getRender().getWindowWidth()-this.radius;
+        int maxX = eng.getRender().getWidth()-this.radius;
 
         this.x += this.speed * deltaTime;
         this.y += 1;

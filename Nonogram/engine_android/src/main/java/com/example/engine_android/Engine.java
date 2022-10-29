@@ -3,7 +3,11 @@ package com.example.engine_android;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
-import com.example.engine_common.*;
+import com.example.engine_common.interfaces.IAudio;
+import com.example.engine_common.interfaces.IEngine;
+import com.example.engine_common.interfaces.IInput;
+import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.interfaces.IScene;
 
 public class Engine implements IEngine, Runnable {
     private Thread renderThread;
@@ -17,6 +21,7 @@ public class Engine implements IEngine, Runnable {
         currentScene = s;
         currentScene.init(this);
     }
+
     @Override
     public IRender getRender() {
         return render;
@@ -33,7 +38,7 @@ public class Engine implements IEngine, Runnable {
     }
 
     @Override
-    public IScene getScene() {
+    public SceneManager getSceneManager() {
         return null;
     }
 
@@ -55,7 +60,7 @@ public class Engine implements IEngine, Runnable {
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && render.getWindowWidth() == 0);
+        while(this.running && render.getWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();

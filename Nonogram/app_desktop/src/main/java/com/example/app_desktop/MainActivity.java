@@ -10,7 +10,7 @@ import java.awt.Color;
 public class MainActivity {
 
     public static void main(String[] args) {
-        JFrame renderView = new JFrame("Mi aplicación");
+        JFrame renderView = new JFrame("Nonogram");
 
         renderView.setSize(600, 400);
         renderView.setBackground(Color.GRAY);
@@ -37,10 +37,10 @@ public class MainActivity {
             //System.out.println("BufferStrategy tras " + (100 - intentos) + " intentos.");
         }
 
-        EngineDesktop eng = new EngineDesktop();
+        EngineDesktop eng = new EngineDesktop(renderView);
         MyScene scene = new MyScene();
+
         scene.init(eng);
-        eng.init(renderView);
         eng.setStartScene(scene);
         eng.resume();
     }

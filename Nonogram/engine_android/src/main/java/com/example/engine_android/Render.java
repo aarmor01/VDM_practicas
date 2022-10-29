@@ -7,10 +7,10 @@ import android.graphics.fonts.Font;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.engine_common.IFont;
-import com.example.engine_common.IImage;
-import com.example.engine_common.IRender;
-import com.example.engine_common.IScene;
+import com.example.engine_common.interfaces.IFont;
+import com.example.engine_common.interfaces.IImage;
+import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.interfaces.IScene;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,12 +101,12 @@ public class Render implements IRender {
     }
 
     @Override
-    public int getWindowWidth() {
+    public int getWidth() {
         return this.myView.getWidth();
     }
 
     @Override
-    public int getWindowHeight() {
+    public int getHeight() {
         return this.myView.getHeight();
     }
 }

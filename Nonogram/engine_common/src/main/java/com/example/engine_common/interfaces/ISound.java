@@ -1,8 +1,8 @@
-package com.example.engine_common;
+package com.example.engine_common.interfaces;
 
-public interface ISound {
+public interface
+ISound {
     public int getVolume();
-    public String getPath();
 
     public void play();
     public void stop();
