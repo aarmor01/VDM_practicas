@@ -46,6 +46,7 @@ public class MyScene implements IScene {
 
     @Override
     public void render(IRender renderMng) {
+        this.engRef.getRender().setColor(0x1FFFFFF);
         this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
     }
 

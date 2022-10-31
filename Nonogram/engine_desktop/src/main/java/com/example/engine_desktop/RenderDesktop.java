@@ -104,10 +104,15 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void setColor(int hexColor) {
-        int r = (hexColor & 0xFF000000) >> 24;
-        int g = (hexColor & 0xFF0000) >> 16;
-        int b = (hexColor & 0xFF00) >> 8;
-        int a = (hexColor & 0xFF);
+        int r = (hexColor & 0xFF0000) >> 16;
+        int g = (hexColor & 0xFF00) >> 8;
+        int b = (hexColor & 0xFF);
+
+        // java es un lenguaje deleznable
+        int a = (hexColor & 0x1000000) >> 24;
+        if(a == 1) a = 255;
+
+        this.myGraphics2D.setColor(new Color(r, g, b, a));
     }
 
     @Override
@@ -131,7 +136,6 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
-        this.myGraphics2D.setColor(Color.white); // change this pls
         if (fill) this.myGraphics2D.drawRect(x, y, width, height);
         else      this.myGraphics2D.fillRect(x, y, width, height);
         this.myGraphics2D.setPaintMode();
@@ -139,14 +143,12 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y){
-        this.myGraphics2D.setColor(Color.white); // change this pls
         this.myGraphics2D.drawLine(og_x, og_y, dst_x, dst_y);
         this.myGraphics2D.setPaintMode();
     }
 
     @Override
     public void drawCircle(int x, int y, int r) {
-        this.myGraphics2D.setColor(Color.white); // change this pls
         this.myGraphics2D.fillOval((int) x, (int) y, (int) r * 2, (int) r * 2);
         this.myGraphics2D.setPaintMode();
     }
