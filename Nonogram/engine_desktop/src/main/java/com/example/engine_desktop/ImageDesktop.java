@@ -9,7 +9,7 @@ import java.awt.Image;
 import javax.imageio.ImageIO;
 
 public class ImageDesktop implements IImage {
-    Image image;
+    private Image image;
 
     public ImageDesktop(File file) {
         try {
@@ -19,6 +19,8 @@ public class ImageDesktop implements IImage {
             e.printStackTrace();
         }
     }
+
+    public Image getImage() { return image; }
 
     @Override
     public int getWidth() {

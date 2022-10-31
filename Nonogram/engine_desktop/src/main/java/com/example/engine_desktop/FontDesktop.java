@@ -24,18 +24,14 @@ public class FontDesktop implements IFont {
         }
     }
 
-    @Override
-    public int getSize() {
-        return font.getSize();
-    }
+    public Font getFont() { return font; }
 
     @Override
-    public boolean isBold() {
-        return font.isBold();
-    }
+    public int getSize() { return font.getSize(); }
 
     @Override
-    public boolean isItalic() {
-        return font.isItalic();
-    }
+    public boolean isBold() { return font.isBold(); }
+
+    @Override
+    public boolean isItalic() { return font.isItalic(); }
 }

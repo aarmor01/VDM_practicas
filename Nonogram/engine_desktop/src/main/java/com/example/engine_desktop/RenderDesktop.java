@@ -1,11 +1,13 @@
 package com.example.engine_desktop;
 
 import com.example.engine_common.interfaces.IFont;
+import com.example.engine_common.interfaces.IImage;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.shared.FontType;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -28,7 +30,7 @@ public class RenderDesktop implements IRender {
     private int baseWidth;
     private int baseHeight;
 
-    private HashMap<String, IFont> fonts;
+    private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
     public void init(JFrame win) {
@@ -63,6 +65,7 @@ public class RenderDesktop implements IRender {
     }
 
     public void prepareFrame() {
+        this.myGraphics2D = (Graphics2D) this.myBufferStrategy.getDrawGraphics();
         this.clear();
     }
 
@@ -100,8 +103,11 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
-    public void setColor() {
-
+    public void setColor(int hexColor) {
+        int r = (hexColor & 0xFF000000) >> 24;
+        int g = (hexColor & 0xFF0000) >> 16;
+        int b = (hexColor & 0xFF00) >> 8;
+        int a = (hexColor & 0xFF);
     }
 
     @Override
@@ -110,8 +116,37 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
+    public void drawImage(int x, int y, int width, int height, String imageID){
+        IImage image = images.get(imageID);
+        this.myGraphics2D.drawImage(images.get(imageID).getImage(), x, y, width, height,
+                0, 0, image.getWidth(), image.getHeight(), null);
+        this.myGraphics2D.setPaintMode();
+    }
+
+    @Override
+    public void drawText(int x, int y, String text, String fontID){
+        this.myGraphics2D.setFont(fonts.get(fontID).getFont());
+        this.myGraphics2D.drawString(text, x, y);
+    }
+
+    @Override
+    public void drawRectangle(int x, int y, int width, int height, boolean fill){
+        this.myGraphics2D.setColor(Color.white); // change this pls
+        if (fill) this.myGraphics2D.drawRect(x, y, width, height);
+        else      this.myGraphics2D.fillRect(x, y, width, height);
+        this.myGraphics2D.setPaintMode();
+    }
+
+    @Override
+    public void drawLine(int og_x, int og_y, int dst_x, int dst_y){
+        this.myGraphics2D.setColor(Color.white); // change this pls
+        this.myGraphics2D.drawLine(og_x, og_y, dst_x, dst_y);
+        this.myGraphics2D.setPaintMode();
+    }
+
+    @Override
     public void drawCircle(int x, int y, int r) {
-        this.myGraphics2D.setColor(Color.white);
+        this.myGraphics2D.setColor(Color.white); // change this pls
         this.myGraphics2D.fillOval((int) x, (int) y, (int) r * 2, (int) r * 2);
         this.myGraphics2D.setPaintMode();
     }
@@ -128,7 +163,7 @@ public class RenderDesktop implements IRender {
 
     protected void clear() {
         // "Borramos" el fondo.
-        this.myGraphics2D.setColor(Color.WHITE);
+        this.myGraphics2D.setColor(Color.blue);
         this.myGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }

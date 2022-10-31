@@ -26,7 +26,7 @@ public class MyScene implements IScene {
 
     @Override
     public void update(double deltaTime) {
-        int maxX = this.engRef.getRender().getWidth()-this.radius;
+        int maxX = this.engRef.getRender().getWidth() - this.radius;
 
         this.x += this.speed * deltaTime;
         this.y += 2*deltaTime;

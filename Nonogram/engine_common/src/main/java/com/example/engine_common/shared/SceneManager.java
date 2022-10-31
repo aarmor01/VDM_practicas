@@ -9,13 +9,13 @@ import java.util.Stack;
 public class SceneManager {
     Stack<IScene> scenes;
 
+    public SceneManager() { scenes = new Stack<>(); }
+
     public IScene currentScene() {
         return scenes.peek();
     }
 
-    public void pushScene(IScene newScene) {
-        scenes.push(newScene);
-    }
+    public void pushScene(IScene newScene) { scenes.push(newScene); }
 
     public IScene popScene() { return scenes.pop(); }
 

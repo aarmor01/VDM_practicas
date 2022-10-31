@@ -41,7 +41,7 @@ public class MainActivity {
         MyScene scene = new MyScene();
 
         scene.init(eng);
-        eng.setStartScene(scene);
+        eng.getSceneManager().pushScene(scene);
         eng.resume();
     }
 }

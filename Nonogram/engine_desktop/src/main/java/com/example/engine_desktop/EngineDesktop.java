@@ -54,21 +54,19 @@ public class EngineDesktop implements IEngine, Runnable {
 
         while (this.running && this.myRenderDesktop.getWidth() == 0);
 
-        long lastFrameTime = System.nanoTime();
-
         // Bucle de juego principal.
-        if(this.running) {
-            long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
-            double deltaTime = (double) nanoElapsedTime / 1.0E9;
+        long currentTime = System.currentTimeMillis();
+        while (this.running) {
+            long deltaTime = System.currentTimeMillis() - currentTime;
+            System.out.println(deltaTime);
+            currentTime += deltaTime;
 
             // handle input
 //            IInput input;
 //            for ((input = myInputManager.getInput()) == null)
 
             // update
-            this.mySceneManager.currentScene().update(deltaTime);
+            this.mySceneManager.currentScene().update(deltaTime / 1000.0);
 
             // render
             do {
@@ -76,6 +74,12 @@ public class EngineDesktop implements IEngine, Runnable {
                 this.mySceneManager.currentScene().render(this.myRenderDesktop);
                 this.myRenderDesktop.finishFrame();
             } while (this.myRenderDesktop.swapBuffer());
+
+//            try {
+//                Thread.sleep(16);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

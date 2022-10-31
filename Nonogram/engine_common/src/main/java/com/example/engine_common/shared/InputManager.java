@@ -2,12 +2,14 @@ package com.example.engine_common.shared;
 
 import com.example.engine_common.interfaces.IInput;
 
-import java.util.Queue;
+import java.util.LinkedList;
 
 public class InputManager {
-    Queue<IInput> bufferInput;
+    LinkedList<IInput> bufferInput;
 
-    public void addInput(IInput newInput) { bufferInput.add(newInput); }
+    public InputManager() { bufferInput = new LinkedList<>(); }
 
-    public IInput getInput() { return bufferInput.remove(); }
+    public void addInput(IInput newInput) { bufferInput.addLast(newInput); }
+
+    public IInput getInput() { return bufferInput.removeFirst(); }
 }
