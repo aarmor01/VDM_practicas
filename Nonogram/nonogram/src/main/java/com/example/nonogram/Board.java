@@ -1,5 +1,7 @@
 package com.example.nonogram;
 
+import com.example.engine_common.interfaces.IRender;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,10 +13,10 @@ public class Board {
     private int cellsLeft;
     private int height, width;
 
-    public void render(){
+    public void render(IRender renderMng){
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
-                board[i][j].render();
+                board[i][j].render(renderMng, i, j, 50);
             }
         }
     }
@@ -23,6 +25,11 @@ public class Board {
         height = h;
         width = w;
         board = new Cell[height][width];
+        for(int i=0; i<height; i++){
+            for(int j=0; j<height; j++){
+                board[i][j] = new Cell();
+            }
+        }
         cols = new ArrayList[width];
         rows = new ArrayList[height];
         Random random = new Random();

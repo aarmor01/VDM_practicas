@@ -1,16 +1,37 @@
 package com.example.nonogram;
 
+import com.example.engine_common.interfaces.IRender;
+
 public class Cell {
     public enum State {
         EMPTY, MARKED, CROSSED, CHECKED    }
 
     public void init(boolean ans) {
         isAnswer = ans;
-        s = State.EMPTY;
+        s = State.CROSSED;
     }
 
-    public void render(){
-
+    public void render(IRender renderMng, int x, int y, int size){
+        int color = 0x1FFFFFF;
+        switch (s){
+            case EMPTY:
+                color = 0x1B9B9B9;
+                break;
+            case MARKED:
+                color = 0x12879C5;
+                break;
+            case CROSSED:
+                color = 0x1FFFFFF;
+                break;
+            case CHECKED:
+                color = 0x1EA2525;
+                break;
+        }
+        if(isAnswer)
+            color = 0x1FF0000;
+        renderMng.setColor(color);
+        renderMng.drawRectangle(x*size + x*2 + 10, y*size + y*2 + 35, size, size, true);
+        renderMng.setColor(0x1FFFFFF);
     }
 
     public int changeCell(){
