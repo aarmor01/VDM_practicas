@@ -58,7 +58,7 @@ public class EngineDesktop implements IEngine, Runnable {
         long currentTime = System.currentTimeMillis();
         while (this.running) {
             long deltaTime = System.currentTimeMillis() - currentTime;
-            System.out.println(deltaTime);
+            //System.out.println(deltaTime);
             currentTime += deltaTime;
 
             // handle input

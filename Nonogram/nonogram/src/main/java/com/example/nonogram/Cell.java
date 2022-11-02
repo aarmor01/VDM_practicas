@@ -28,7 +28,9 @@ public class Cell {
                 break;
         }
         if(isAnswer)
-            color = 0x1FF0000;
+            color = 0xFFFFFFF;
+        else
+            color = 0xFEA2525;
         renderMng.setColor(color);
         renderMng.drawRectangle(x*size + x*2 + 10, y*size + y*2 + 35, size, size, true);
         renderMng.setColor(0x1FFFFFF);

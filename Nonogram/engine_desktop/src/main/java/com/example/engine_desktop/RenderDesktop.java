@@ -108,6 +108,7 @@ public class RenderDesktop implements IRender {
         int g = (hexColor & 0xFF0000) >> 16;
         int b = (hexColor & 0xFF00) >> 8;
         int a = (hexColor & 0xFF);
+        myGraphics2D.setColor(new Color(r,g,b,a));
     }
 
     @Override
@@ -131,7 +132,6 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
-        this.myGraphics2D.setColor(Color.white); // change this pls
         if (!fill) this.myGraphics2D.drawRect(x, y, width, height);
         else      this.myGraphics2D.fillRect(x, y, width, height);
         this.myGraphics2D.setPaintMode();
