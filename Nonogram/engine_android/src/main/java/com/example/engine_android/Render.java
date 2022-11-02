@@ -68,7 +68,7 @@ public class Render implements IRender {
 
     @Override
     public void setColor(int hexColor) {
-
+        paint.setColor(hexColor);
     }
 
     @Override

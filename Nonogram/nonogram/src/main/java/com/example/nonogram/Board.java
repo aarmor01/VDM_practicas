@@ -16,7 +16,7 @@ public class Board {
     public void render(IRender renderMng){
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                board[i][j].render(renderMng, i, j, 50);
+                board[i][j].render(renderMng, i, j, 150);
             }
         }
     }
