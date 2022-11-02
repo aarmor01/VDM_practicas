@@ -32,6 +32,7 @@ public class Render implements IRender {
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.assetManager = aM;
+        this.paint = new Paint();
     }
 
     public void render(IScene currentScene) {
