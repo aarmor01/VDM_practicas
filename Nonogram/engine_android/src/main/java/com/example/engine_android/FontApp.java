@@ -1,15 +1,28 @@
 package com.example.engine_android;
 
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
-import com.example.engine_common.IFont;
+import com.example.engine_common.interfaces.IFont;
+import com.example.engine_common.shared.FontType;
+
+import java.io.File;
 
 public class FontApp implements IFont {
     Typeface font;
+    int size;
 
-    public FontApp(String path, AssetManager assetManager) {
-        font = Typeface.createFromAsset(assetManager, path);
+    public FontApp(File file, int s, FontType t) {
+        switch (t) {
+            case DEFAULT:
+                break;
+            case BOLD:
+                font = Typeface.create(Typeface.createFromFile(file), Typeface.BOLD);
+                break;
+            case ITALIC:
+                font = Typeface.create(Typeface.createFromFile(file), Typeface.ITALIC);
+                break;
+        }
+        size = s;
     }
 
     public Typeface getFont() {
@@ -18,31 +31,16 @@ public class FontApp implements IFont {
 
     @Override
     public int getSize() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isBold() {
-        return false;
+        return font.isBold();
     }
 
     @Override
     public boolean isItalic() {
-        return false;
-    }
-
-    @Override
-    public void setSize(int s) {
-
-    }
-
-    @Override
-    public void setBold(boolean bold) {
-
-    }
-
-    @Override
-    public void setItalic(boolean italic) {
-
+        return font.isItalic();
     }
 }

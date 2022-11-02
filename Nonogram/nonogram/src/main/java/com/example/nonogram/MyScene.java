@@ -11,6 +11,7 @@ public class MyScene implements IScene {
     private float y;
     private int radius;
     private int speed;
+    private Board board;
 
     private IEngine engRef;
 
@@ -20,6 +21,8 @@ public class MyScene implements IScene {
         this.y=50;
         this.radius = 50;
         this.speed = 150;
+        board = new Board();
+        board.init(5,7);
 
         engRef = eng;
     }
@@ -46,8 +49,8 @@ public class MyScene implements IScene {
 
     @Override
     public void render(IRender renderMng) {
-        this.engRef.getRender().setColor(0x1FFFFFF);
-        this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
+        //this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
+        board.render(renderMng);
     }
 
     @Override
