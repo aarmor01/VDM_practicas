@@ -22,7 +22,7 @@ public class MyScene implements IScene {
         this.radius = 50;
         this.speed = 150;
         board = new Board();
-        board.init(5,5);
+        board.init(5,7);
 
         engRef = eng;
     }
