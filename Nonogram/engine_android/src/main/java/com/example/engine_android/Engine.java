@@ -8,6 +8,7 @@ import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
+import com.example.engine_common.shared.SceneManager;
 
 public class Engine implements IEngine, Runnable {
     private Thread renderThread;
@@ -16,6 +17,7 @@ public class Engine implements IEngine, Runnable {
     private IScene currentScene;
     private SurfaceView renderView;
     private  AssetManager assetManager;
+    private SceneManager mySceneManager;
 
     public void setScene(IScene s) {
         currentScene = s;
@@ -33,13 +35,8 @@ public class Engine implements IEngine, Runnable {
     }
 
     @Override
-    public IInput getInput() {
-        return null;
-    }
-
-    @Override
     public SceneManager getSceneManager() {
-        return null;
+        return mySceneManager;
     }
 
     public void init(SurfaceView s, AssetManager aM) {

@@ -4,7 +4,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.example.engine_common.IImage;
+import com.example.engine_common.interfaces.IImage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,16 +38,5 @@ public class ImageApp implements IImage {
     @Override
     public int getHeight() {
         return image.getHeight();
-    }
-
-    //AAAAAAAAAAAAAAAAAAAAAA
-    @Override
-    public void setWidth(int w) {
-
-    }
-
-    @Override
-    public void setHeight(int h) {
-
     }
 }
