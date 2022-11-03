@@ -9,7 +9,10 @@ import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
+import javax.swing.event.MouseInputListener;
 
 public class EngineDesktop implements IEngine, Runnable {
 
@@ -30,6 +33,43 @@ public class EngineDesktop implements IEngine, Runnable {
         myRenderDesktop.init(myWindow);
 
         // add listeners window
+        myWindow.addMouseListener(new MouseInputListener() {
+
+            @Override
+            public void mouseDragged(MouseEvent mouseEvent) {
+//                IInput ip = new IInput()
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
     }
 
     @Override
@@ -104,6 +144,44 @@ public class EngineDesktop implements IEngine, Runnable {
                     // Esto no debería ocurrir nunca...
                 }
             }
+        }
+    }
+
+    private class InputListenerDesktop implements MouseInputListener {
+
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent mouseEvent) {
+//            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), )
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent mouseEvent) {
+
         }
     }
 }
