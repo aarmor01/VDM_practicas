@@ -1,13 +1,17 @@
 package com.example.engine_android;
 
 import android.content.res.AssetManager;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
+import com.example.engine_common.shared.InputManager;
+import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
 
 public class Engine implements IEngine, Runnable {
@@ -18,6 +22,7 @@ public class Engine implements IEngine, Runnable {
     private SurfaceView renderView;
     private  AssetManager assetManager;
     private SceneManager mySceneManager;
+    private InputManager myInputManager;
 
     public void setScene(IScene s) {
         currentScene = s;
@@ -42,7 +47,9 @@ public class Engine implements IEngine, Runnable {
     public void init(SurfaceView s, AssetManager aM) {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = s;
-        assetManager = aM;
+        this.renderView.setOnTouchListener(new myTouchListener());
+        this.assetManager = aM;
+        this.myInputManager = new InputManager();
         this.render = new Render();
         this.render.init(this.renderView, assetManager);
     }
@@ -113,6 +120,15 @@ public class Engine implements IEngine, Runnable {
                     // Esto no debería ocurrir nunca...
                 }
             }
+        }
+    }
+    private class myTouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY(), InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
+            myInputManager.addInput(iA);
+            return true;
         }
     }
 }

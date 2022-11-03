@@ -12,16 +12,7 @@ public class FontApp implements IFont {
     int size;
 
     public FontApp(File file, int s, FontType t) {
-        switch (t) {
-            case DEFAULT:
-                break;
-            case BOLD:
-                font = Typeface.create(Typeface.createFromFile(file), Typeface.BOLD);
-                break;
-            case ITALIC:
-                font = Typeface.create(Typeface.createFromFile(file), Typeface.ITALIC);
-                break;
-        }
+        font = Typeface.create(Typeface.createFromFile(file), t.ordinal());
         size = s;
     }
 
