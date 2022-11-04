@@ -1,6 +1,8 @@
 package com.example.engine_android;
 
 import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -22,6 +24,7 @@ public class EngineAndroid implements IEngine, Runnable {
     private  AssetManager assetManager;
     private SceneManager mySceneManager;
     private InputManager myInputManager;
+    private AudioAndroid myAudioManager;
 
     public void setScene(IScene s) {
         currentScene = s;
@@ -35,7 +38,7 @@ public class EngineAndroid implements IEngine, Runnable {
 
     @Override
     public IAudio getAudio() {
-        return null;
+        return myAudioManager;
     }
 
     @Override
@@ -54,6 +57,8 @@ public class EngineAndroid implements IEngine, Runnable {
         this.myInputManager = new InputManager();
         this.render = new RenderAndroid();
         this.render.init(this.renderView, assetManager);
+        this.myAudioManager = new AudioAndroid();
+        this.myAudioManager.init(assetManager);
     }
 
     @Override

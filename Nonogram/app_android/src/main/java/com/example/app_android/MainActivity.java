@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 
 import com.example.engine_android.EngineAndroid;
+import com.example.engine_common.interfaces.IAudio;
 import com.example.nonogram.MyScene;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AssetManager aMan;
 
-    private SoundPool soundPool;
+    private IAudio audioManager;
 
     private MyListener listener;
 
@@ -27,15 +30,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
         MyScene scene = new MyScene();
         eng = new EngineAndroid();
+        aMan = this.getBaseContext().getAssets();
         eng.init(this.renderView, aMan);
+        audioManager = eng.getAudio();
+        try {
+            audioManager.setBackgroundMusic("sounds/doFlauta.wav");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         eng.setScene(scene);
+        audioManager.startBGMusic();
         eng.resume();
+
         //aMan = this.getBaseContext().getAssets();
 
         //listener = new MyListener();
