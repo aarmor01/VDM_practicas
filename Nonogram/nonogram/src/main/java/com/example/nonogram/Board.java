@@ -1,6 +1,8 @@
 package com.example.nonogram;
 
+import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IRender;
+import com.example.engine_common.shared.FontType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +14,15 @@ public class Board {
     private List<Integer>[] rows;
     private int cellsLeft;
     private int height, width;
+    private String font;
 
     public void render(IRender renderMng){
         int x=30, y=50;
         renderMng.setColor(0xFF000000);
         renderMng.drawRectangle(50 + x, y,width*52, (height + 1)*52, false);
         renderMng.drawRectangle(x,50 + y,(width + 1)*52, height*52, false);
-        renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)), "FFF_Tusj.ttf");
+        renderMng.setFont(font);
+        renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)));
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
@@ -27,7 +31,7 @@ public class Board {
         }
     }
 
-    public void init(int h, int w) {
+    public void init(int h, int w, IEngine eng) {
         height = h;
         width = w;
         board = new Cell[width][height];
@@ -85,6 +89,9 @@ public class Board {
             if (rows[i].get(rows[i].size() - 1) != -1)
                 rows[i].add(-1);
         }
+
+
+        font = eng.getRender().loadFont("Assets/Fonts/FFF_Tusj.ttf", FontType.BOLD, 20);
     }
 
     public void markCell(int x, int y) {

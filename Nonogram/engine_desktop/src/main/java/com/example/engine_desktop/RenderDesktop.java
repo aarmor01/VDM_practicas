@@ -98,18 +98,13 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
-    public void setResolution() {
-
-    }
-
-    @Override
     public void setColor(int hexColor) {
         this.myGraphics2D.setColor(new Color(hexColor, true));
     }
 
     @Override
-    public void setFont() {
-
+    public void setFont(String fontID) {
+        this.myGraphics2D.setFont(fonts.get(fontID).getFont());
     }
 
     @Override
@@ -121,8 +116,7 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
-    public void drawText(int x, int y, String text, String fontID){
-        this.myGraphics2D.setFont(fonts.get(fontID).getFont());
+    public void drawText(int x, int y, String text){
         this.myGraphics2D.drawString(text, x, y);
     }
 

@@ -4,6 +4,7 @@ import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IEngine;
+import com.example.engine_common.shared.FontType;
 
 //Clase interna que representa la escena que queremos pintar
 public class MyScene implements IScene {
@@ -22,7 +23,7 @@ public class MyScene implements IScene {
         this.radius = 50;
         this.speed = 150;
         board = new Board();
-        board.init(5,7);
+        board.init(5,7, eng);
 
         engRef = eng;
     }

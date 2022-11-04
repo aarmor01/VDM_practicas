@@ -68,8 +68,9 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public void setFont() {
-
+    public void setFont(String fontID) {
+        FontAndroid font = fonts.get(fontID);
+        paint.setTypeface(font.getFont());
     }
 
     @Override
@@ -78,9 +79,7 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public void drawText(int x, int y, String text, String fontID) {
-        FontAndroid font = fonts.get(fontID);
-        paint.setTypeface(font.getFont());
+    public void drawText(int x, int y, String text) {
         canvas.drawText(text, x, y, paint);
     }
 
