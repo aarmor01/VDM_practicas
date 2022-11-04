@@ -14,9 +14,15 @@ public class Board {
     private int height, width;
 
     public void render(IRender renderMng){
+        int x=30, y=50;
+        renderMng.setColor(0xFF000000);
+        renderMng.drawRectangle(50 + x, y,width*52, (height + 1)*52, false);
+        renderMng.drawRectangle(x,50 + y,(width + 1)*52, height*52, false);
+        renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)), "FFF_Tusj.ttf");
+
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                board[i][j].render(renderMng, i, j, 150);
+                board[i][j].render(renderMng, (i + 1)*50 + (i+1)*2 + x, (j + 1)*50 + (j + 1)*2 + y, 50);
             }
         }
     }
