@@ -5,6 +5,7 @@ import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
+import com.example.engine_common.shared.FontType;
 import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
@@ -33,43 +34,7 @@ public class EngineDesktop implements IEngine, Runnable {
         myRenderDesktop.init(myWindow);
 
         // add listeners window
-        myWindow.addMouseListener(new MouseInputListener() {
-
-            @Override
-            public void mouseDragged(MouseEvent mouseEvent) {
-//                IInput ip = new IInput()
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-
-            }
-        });
+        myWindow.addMouseListener(new InputListenerDesktop(myInputManager));
     }
 
     @Override
@@ -104,8 +69,10 @@ public class EngineDesktop implements IEngine, Runnable {
             currentTime += deltaTime;
 
             // handle input
-//            IInput input;
-//            for ((input = myInputManager.getInput()) == null)
+            while(!myInputManager.empty()){
+                IInput input = myInputManager.getInput();
+                this.mySceneManager.currentScene().handleInput(input);
+            }
 
             // update
             this.mySceneManager.currentScene().update(deltaTime / 1000.0);
@@ -151,39 +118,48 @@ public class EngineDesktop implements IEngine, Runnable {
 
     private class InputListenerDesktop implements MouseInputListener {
 
+        InputManager iM;
+
+        InputListenerDesktop(InputManager iM) {
+            this.iM = iM;
+        }
+
         @Override
         public void mouseDragged(MouseEvent mouseEvent) {
-
+            System.out.println("drg");
         }
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent) {
-
+            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), InputType.TOUCH_MOVE);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mouseClicked(MouseEvent mouseEvent) {
-
+            System.out.println("clk");
         }
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-//            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), )
+            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), InputType.TOUCH_DOWN);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent) {
-
+            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), InputType.TOUCH_UP);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mouseEntered(MouseEvent mouseEvent) {
-
+            System.out.println("ent");
         }
 
         @Override
         public void mouseExited(MouseEvent mouseEvent) {
-
+            System.out.println("ext");
         }
     }
 }

@@ -4,12 +4,12 @@ import java.io.IOException;
 
 public interface IAudio {
 
-    public void setBackgroundMusic(String filePath) throws IOException;
-    public void startBGMusic();
-    public void stopBGMusic();
-    public void pauseBGMusic();
-    public void setBGVolume(float volume);
-    public void setVFX(float volume);
+    public void setMusic(String filePath) throws IOException;
+    public void startMusic();
+    public void stopMusic();
+    public void pauseMusic();
+    public void setMusicVolume(float volume);
+    public void setSoundVolume(float volume);
     String loadSound(String filePath) throws IOException;
     void playSound(String soundName);
 }

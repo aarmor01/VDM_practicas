@@ -7,6 +7,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
+import com.example.engine_android.AudioAndroid;
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_common.interfaces.IAudio;
 import com.example.nonogram.MyScene;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AssetManager aMan;
 
-    private IAudio audioManager;
+    private AudioAndroid audioManager;
 
     private MyListener listener;
 
@@ -37,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
         eng = new EngineAndroid();
         aMan = this.getBaseContext().getAssets();
         eng.init(this.renderView, aMan);
-        audioManager = eng.getAudio();
+        audioManager = (AudioAndroid)eng.getAudio();
         try {
-            audioManager.setBackgroundMusic("sounds/doFlauta.wav");
+            audioManager.setMusic("sounds/doFlauta.wav");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         eng.setScene(scene);
-        audioManager.startBGMusic();
+        audioManager.startMusic();
         eng.resume();
 
         //aMan = this.getBaseContext().getAssets();

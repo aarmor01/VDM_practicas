@@ -12,4 +12,6 @@ public class InputManager {
     public void addInput(IInput newInput) { bufferInput.addLast(newInput); }
 
     public IInput getInput() { return bufferInput.removeFirst(); }
+
+    public boolean empty() { return bufferInput.isEmpty(); }
 }

@@ -25,7 +25,7 @@ public class AudioAndroid implements IAudio {
     }
 
     @Override
-    public void setBackgroundMusic(String filePath) throws IOException {
+    public void setMusic(String filePath) throws IOException {
         mediaPlayer.reset();
         AssetFileDescriptor afd = assetManager.openFd(filePath);
         mediaPlayer.setDataSource(afd.getFileDescriptor(),
@@ -35,37 +35,41 @@ public class AudioAndroid implements IAudio {
     }
 
     @Override
-    public void startBGMusic() {
+    public void startMusic() {
         mediaPlayer.start();
     }
 
     @Override
-    public void stopBGMusic() {
+    public void stopMusic() {
         mediaPlayer.stop();
     }
 
     @Override
-    public void pauseBGMusic() {
+    public void pauseMusic() {
         mediaPlayer.pause();
     }
 
     @Override
-    public void setBGVolume(float volume) {
+    public void setMusicVolume(float volume) {
         mediaPlayer.setVolume(volume, volume);
     }
 
     @Override
-    public void setVFX(float volume){
-        for (String clave:sounds.keySet()) {
+    public void setSoundVolume(float volume){
+        for (String clave:sounds.keySet())
             sounds.get(clave).setVolume(volume);
-        }
     }
 
     //COMO SETEAR EL VOLUMEN EN LA CARGA, COMO PARAMETRO DE LOAD SOUND??
     @Override
-    public String loadSound(String filePath) throws IOException {
+    public String loadSound(String filePath) {
         File soundFile = new File(filePath);
-        AssetFileDescriptor assetDescriptor = assetManager.openFd(filePath);
+        AssetFileDescriptor assetDescriptor = null;
+        try {
+            assetDescriptor = assetManager.openFd(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int soundId = soundPool.load(assetDescriptor, 0);
         sounds.put(soundFile.getName(), new SoundAndroid(soundId, 0.5f, 0, 1, 1));
         return soundFile.getName();

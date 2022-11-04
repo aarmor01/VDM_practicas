@@ -135,6 +135,7 @@ public class EngineAndroid implements IEngine, Runnable {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY(), InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
             myInputManager.addInput(iA);
+            System.out.printf("Bazinga");
             return true;
         }
     }
