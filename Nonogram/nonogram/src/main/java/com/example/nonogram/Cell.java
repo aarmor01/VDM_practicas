@@ -28,7 +28,7 @@ public class Cell {
                 break;
         }
         if(isAnswer)        //hay que quitar esto que es para debug
-            color = 0xFFFFFFFF;
+            color = 0xFF2140D1;
         renderMng.setColor(color);
         renderMng.drawRectangle(x, y, size, size, true);
     }

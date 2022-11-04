@@ -5,6 +5,7 @@ import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.shared.FontType;
+import com.example.engine_common.shared.InputType;
 
 //Clase interna que representa la escena que queremos pintar
 public class MyScene implements IScene {
@@ -56,6 +57,7 @@ public class MyScene implements IScene {
 
     @Override
     public void handleInput(IInput input) {
-
+        if(input.getType() == InputType.TOUCH_UP)
+            board.markCell(0,0);
     }
 }

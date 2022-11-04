@@ -137,13 +137,13 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseClicked(MouseEvent mouseEvent) {
-            System.out.println("clk");
+            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), InputType.TOUCH_DOWN);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop(mouseEvent.getX(), mouseEvent.getY(), InputType.TOUCH_DOWN);
-            this.iM.addInput((ip));
+            System.out.println("clk");
         }
 
         @Override
