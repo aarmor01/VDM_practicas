@@ -3,29 +3,25 @@ package com.example.engine_android;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.fonts.Font;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.engine_common.interfaces.IFont;
-import com.example.engine_common.interfaces.IImage;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.shared.FontType;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
-public class Render implements IRender {
+public class RenderAndroid implements IRender {
 
     private SurfaceView myView;
     private SurfaceHolder holder;
     private Canvas canvas;
     private Paint paint;
 
-    private HashMap<String, ImageApp> images;
-    private HashMap<String, FontApp> fonts;
+    private HashMap<String, ImageAndroid> images;
+    private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
 
     public void init (SurfaceView myView, AssetManager aM){
@@ -50,14 +46,14 @@ public class Render implements IRender {
     @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        images.put(imageFile.getName(), new ImageApp(filePath, assetManager));
+        images.put(imageFile.getName(), new ImageAndroid(filePath, assetManager));
         return imageFile.getName();
     }
 
     @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
-        fonts.put(fontFile.getName(), new FontApp(fontFile, size, type));
+        fonts.put(fontFile.getName(), new FontAndroid(fontFile, size, type));
         return fontFile.getName();
     }
 
@@ -83,7 +79,7 @@ public class Render implements IRender {
 
     @Override
     public void drawText(int x, int y, String text, String fontID) {
-        FontApp font = fonts.get(fontID);
+        FontAndroid font = fonts.get(fontID);
         paint.setTypeface(font.getFont());
         canvas.drawText(text, x, y, paint);
     }

@@ -7,17 +7,16 @@ import android.view.View;
 
 import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IEngine;
-import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
 
-public class Engine implements IEngine, Runnable {
+public class EngineAndroid implements IEngine, Runnable {
     private Thread renderThread;
     private boolean running;
-    private Render render;
+    private RenderAndroid render;
     private IScene currentScene;
     private SurfaceView renderView;
     private  AssetManager assetManager;
@@ -40,6 +39,9 @@ public class Engine implements IEngine, Runnable {
     }
 
     @Override
+    public InputManager getInputManager() {return myInputManager; }
+
+    @Override
     public SceneManager getSceneManager() {
         return mySceneManager;
     }
@@ -50,7 +52,7 @@ public class Engine implements IEngine, Runnable {
         this.renderView.setOnTouchListener(new myTouchListener());
         this.assetManager = aM;
         this.myInputManager = new InputManager();
-        this.render = new Render();
+        this.render = new RenderAndroid();
         this.render.init(this.renderView, assetManager);
     }
 

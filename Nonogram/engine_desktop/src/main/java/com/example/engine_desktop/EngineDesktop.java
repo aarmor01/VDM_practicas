@@ -82,6 +82,8 @@ public class EngineDesktop implements IEngine, Runnable {
         return null;
     }
 
+    public InputManager getInputManager() {return myInputManager; }
+
     @Override
     public SceneManager getSceneManager() {
         return mySceneManager;

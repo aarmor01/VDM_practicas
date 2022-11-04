@@ -7,11 +7,11 @@ import com.example.engine_common.shared.FontType;
 
 import java.io.File;
 
-public class FontApp implements IFont {
+public class FontAndroid implements IFont {
     Typeface font;
     int size;
 
-    public FontApp(File file, int s, FontType t) {
+    public FontAndroid(File file, int s, FontType t) {
         font = Typeface.create(Typeface.createFromFile(file), t.ordinal());
         size = s;
     }

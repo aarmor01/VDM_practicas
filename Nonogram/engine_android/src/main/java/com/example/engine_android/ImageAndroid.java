@@ -14,10 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-public class ImageApp implements IImage {
+public class ImageAndroid implements IImage {
     Bitmap image;
 
-    public ImageApp(String path, AssetManager assetManager) {
+    public ImageAndroid(String path, AssetManager assetManager) {
         try {
             InputStream is = assetManager.open(path);
             image = BitmapFactory.decodeStream(is);

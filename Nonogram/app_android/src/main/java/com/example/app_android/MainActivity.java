@@ -7,14 +7,14 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
-import com.example.engine_android.Engine;
+import com.example.engine_android.EngineAndroid;
 import com.example.nonogram.MyScene;
 
 public class MainActivity extends AppCompatActivity {
 
     private SurfaceView renderView;
 
-    private Engine eng;
+    private EngineAndroid eng;
 
     private AssetManager aMan;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
         MyScene scene = new MyScene();
-        eng = new Engine();
+        eng = new EngineAndroid();
         eng.init(this.renderView, aMan);
         eng.setScene(scene);
         eng.resume();
