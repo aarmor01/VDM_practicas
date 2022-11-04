@@ -21,8 +21,8 @@ public class Board {
         renderMng.setColor(0xFF000000);
         renderMng.drawRectangle(50 + x, y,width*52, (height + 1)*52, false);
         renderMng.drawRectangle(x,50 + y,(width + 1)*52, height*52, false);
-        renderMng.setFont(font);
-        renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)));
+
+        printNumbers(renderMng);
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
@@ -91,7 +91,30 @@ public class Board {
         }
 
 
-        font = eng.getRender().loadFont("Assets/Fonts/FFF_Tusj.ttf", FontType.BOLD, 20);
+        font = eng.getRender().loadFont("Assets/Fonts/FFF_Tusj.ttf", FontType.DEFAULT, 20);
+    }
+
+    private void printNumbers(IRender renderMng){
+        renderMng.setFont(font);
+        for(int i=0; i< cols.length; i++){
+            if(cols[i].size() == 1){
+                renderMng.drawText(50 * (i + 1) + 30 + 20, 90, "0");
+            }
+            for(int j=cols[i].size()-2; j>=0; j--) {
+                int w = cols[i].get(j);
+                renderMng.drawText(50 * (i + 1) + 30 + 20, 90 - (18*(cols[i].size()-2-j)), Integer.toString(w));
+            }
+        }
+
+        for(int i=0; i< rows.length; i++){
+            if(rows[i].size() == 1){
+                renderMng.drawText(40, 50 * (i + 1) + 30 + 50, "0");
+            }
+            for(int j=rows[i].size()-2; j>=0; j--) {
+                int w = rows[i].get(j);
+                renderMng.drawText(40 - (18*(cols[i].size()-2-j)),50 * (i + 1) + 30 + 50, Integer.toString(w));
+            }
+        }
     }
 
     public void markCell(int x, int y) {
