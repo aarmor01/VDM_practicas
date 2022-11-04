@@ -58,11 +58,6 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public void setResolution() {
-
-    }
-
-    @Override
     public void setColor(int hexColor) {
         paint.setColor(hexColor);
     }

@@ -21,8 +21,8 @@ public class Board {
         renderMng.setColor(0xFF000000);
         renderMng.drawRectangle(50 + x, y,width*52, (height + 1)*52, false);
         renderMng.drawRectangle(x,50 + y,(width + 1)*52, height*52, false);
-        renderMng.setFont(font);
-        renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)));
+        //renderMng.setFont(font);
+        //renderMng.drawText(50+x, y, Integer.toString(cols[0].get(0)));
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
@@ -91,7 +91,7 @@ public class Board {
         }
 
 
-        font = eng.getRender().loadFont("Assets/Fonts/FFF_Tusj.ttf", FontType.BOLD, 20);
+        //font = eng.getRender().loadFont("fonts/FFF_Tusj.ttf", FontType.BOLD, 20);
     }
 
     public void markCell(int x, int y) {
