@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         eng.setScene(scene);
-        audioManager.startMusic();
+        //audioManager.startMusic();
         eng.resume();
 
         //aMan = this.getBaseContext().getAssets();

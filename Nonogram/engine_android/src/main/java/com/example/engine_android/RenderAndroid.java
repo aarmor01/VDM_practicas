@@ -29,17 +29,20 @@ public class RenderAndroid implements IRender {
         this.holder = this.myView.getHolder();
         this.assetManager = aM;
         this.paint = new Paint();
+        this.fonts = new HashMap<>();
+        this.images = new HashMap<>();
     }
 
-    public void render(IScene currentScene) {
-        // Pintamos el frame
-        while (!this.holder.getSurface().isValid());
+    public boolean surfaceValid() {
+        return this.holder.getSurface().isValid();
+    }
+
+    public void clear() {
         this.canvas = this.holder.lockCanvas();
+        this.canvas.drawColor(0xFF0000FF);
+    }
 
-        // "Borramos" el fondo.
-        this.canvas.drawColor(0xFF0000FF); // ARGB
-        currentScene.render(this);
-
+    public void present() {
         this.holder.unlockCanvasAndPost(canvas);
     }
 
@@ -53,7 +56,7 @@ public class RenderAndroid implements IRender {
     @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
-        fonts.put(fontFile.getName(), new FontAndroid(fontFile, size, type));
+        fonts.put(fontFile.getName(), new FontAndroid(filePath, assetManager, size, type));
         return fontFile.getName();
     }
 

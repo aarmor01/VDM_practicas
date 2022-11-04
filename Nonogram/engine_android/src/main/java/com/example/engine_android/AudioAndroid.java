@@ -22,6 +22,7 @@ public class AudioAndroid implements IAudio {
         assetManager = assetManager_;
         soundPool = new SoundPool.Builder().setMaxStreams(10).build();
         mediaPlayer = new MediaPlayer();
+        sounds = new HashMap<>();
     }
 
     @Override

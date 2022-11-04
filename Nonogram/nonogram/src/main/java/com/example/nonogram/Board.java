@@ -91,7 +91,7 @@ public class Board {
         }
 
 
-        font = eng.getRender().loadFont("Assets/Fonts/arial.ttf", FontType.DEFAULT, 20);
+        font = eng.getRender().loadFont("fonts/FFF_Tusj.ttf", FontType.DEFAULT, 20);
     }
 
     private void printNumbers(IRender renderMng){

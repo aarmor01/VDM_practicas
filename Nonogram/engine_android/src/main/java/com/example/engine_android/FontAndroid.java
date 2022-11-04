@@ -1,5 +1,6 @@
 package com.example.engine_android;
 
+import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
 import com.example.engine_common.interfaces.IFont;
@@ -11,8 +12,8 @@ public class FontAndroid implements IFont {
     Typeface font;
     int size;
 
-    public FontAndroid(File file, int s, FontType t) {
-        font = Typeface.create(Typeface.createFromFile(file), t.ordinal());
+    public FontAndroid(String filePath, AssetManager aMan, int s, FontType t) {
+        font = Typeface.create(Typeface.createFromAsset(aMan, filePath), t.ordinal());
         size = s;
     }
 

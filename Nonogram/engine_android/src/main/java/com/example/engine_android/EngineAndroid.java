@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IEngine;
+import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.shared.InputManager;
@@ -74,33 +75,26 @@ public class EngineAndroid implements IEngine, Runnable {
         while(this.running && render.getWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
-        long lastFrameTime = System.nanoTime();
-
-        long informePrevio = lastFrameTime; // Informes de FPS
-        int frames = 0;
-
+        long currentTime = System.currentTimeMillis();
         // Bucle de juego principal.
         while(running) {
-            long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
+            System.out.printf("Conche su madre que significa chainshaw man");
+            long deltaTime = System.currentTimeMillis() - currentTime;
+            currentTime += deltaTime;
 
-            // Informe de FPS
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            currentScene.update(elapsedTime);
-            render.render(currentScene);
-//            if (currentTime - informePrevio > 1000000000l) {
-//                long fps = frames * 1000000000l / (currentTime - informePrevio);
-//                System.out.println("" + fps + " fps");
-//                frames = 0;
-//                informePrevio = currentTime;
-//            }
-            ++frames;
+            // handle input
+            while(!myInputManager.empty()){
+                IInput input = myInputManager.getInput();
+                this.currentScene.handleInput(input);
+            }
+    
+            currentScene.update(deltaTime);
 
-                /*
-                // Posibilidad: cedemos algo de tiempo. Es una medida conflictiva...
-                try { Thread.sleep(1); } catch(Exception e) {}
-    			*/
+            while (!this.render.surfaceValid());
+
+            this.render.clear();
+            this.currentScene.render(this.render);
+            this.render.present();
         }
     }
 
@@ -134,8 +128,15 @@ public class EngineAndroid implements IEngine, Runnable {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY(), InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
-            myInputManager.addInput(iA);
-            System.out.printf("Bazinga");
+            switch(iA.getType()) {
+                case TOUCH_DOWN:
+                    myInputManager.addInput(iA);
+                    break;
+                case TOUCH_UP:
+                    break;
+                case TOUCH_MOVE:
+                    break;
+            }
             return true;
         }
     }
