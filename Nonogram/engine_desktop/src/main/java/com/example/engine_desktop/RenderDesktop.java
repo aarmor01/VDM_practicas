@@ -151,7 +151,7 @@ public class RenderDesktop implements IRender {
 
     protected void clear() {
         // "Borramos" el fondo.
-        this.myGraphics2D.setColor(Color.blue);
+        this.myGraphics2D.setColor(Color.white);
         this.myGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }
