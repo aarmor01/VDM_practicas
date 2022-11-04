@@ -8,32 +8,29 @@ public class Cell {
 
     public void init(boolean ans) {
         isAnswer = ans;
-        s = State.CROSSED;
+        s = State.EMPTY;
     }
 
     public void render(IRender renderMng, int x, int y, int size){
         int color = 0x1FFFFFF;
         switch (s){
             case EMPTY:
-                color = 0x1B9B9B9;
+                color = 0xFFCCCCCC;
                 break;
             case MARKED:
-                color = 0x12879C5;
+                color = 0xFF2140D1;
                 break;
             case CROSSED:
-                color = 0x1FFFFFF;
+                color = 0xFFFFFFFF;
                 break;
             case CHECKED:
-                color = 0x1EA2525;
+                color = 0xFFFF2F2B;
                 break;
         }
-        if(isAnswer)
+        if(isAnswer)        //hay que quitar esto que es para debug
             color = 0xFFFFFFFF;
-        else
-            color = 0xEA2525FF;
         renderMng.setColor(color);
-        renderMng.drawRectangle(x*size + x*2 + 10, y*size + y*2 + 35, size, size, true);
-        renderMng.setColor(0x1FFFFFF);
+        renderMng.drawRectangle(x, y, size, size, true);
     }
 
     public int changeCell(){
