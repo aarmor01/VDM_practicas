@@ -8,7 +8,7 @@ public class Cell {
 
     public void init(boolean ans) {
         isAnswer = ans;
-        s = State.EMPTY;
+        s = notCheckedS = State.EMPTY;
     }
 
     public void render(IRender renderMng, int x, int y, int size){
@@ -49,6 +49,10 @@ public class Cell {
         return retValue;
     }
 
-    boolean isAnswer;
-    State s;
+    private boolean isAnswer;
+    private State s;
+    private State notCheckedS;
+    public boolean isAnswer(){ return isAnswer;}
+    public State getState(){ return s;}
+    public void setChecked(){ notCheckedS = s; s = State.CHECKED;}
 }
