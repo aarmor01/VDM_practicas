@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import jdk.internal.net.http.common.Pair;
+
 public class Board {
     static int BOARD_CELLSICE = 50;
     static int SEPARATION_MARGIN = 2;
@@ -22,7 +24,7 @@ public class Board {
     private String music;
 
     public void render(IRender renderMng){
-        int x=30, y=50;
+        int x=0, y=0;
         renderMng.setColor(0xFF000000);
         renderMng.drawRectangle(BOARD_CELLSICE + x, y,width*(BOARD_CELLSICE+SEPARATION_MARGIN), (height + 1)*(BOARD_CELLSICE+SEPARATION_MARGIN), false);
         renderMng.drawRectangle(x,BOARD_CELLSICE + y,(width + 1)*(BOARD_CELLSICE+SEPARATION_MARGIN), height*(BOARD_CELLSICE+SEPARATION_MARGIN), false);
@@ -125,4 +127,8 @@ public class Board {
     public void markCell(int x, int y) {
         cellsLeft += board[x][y].changeCell();
     }
+    public int getCellSize(){return BOARD_CELLSICE;}
+    public int getMarginCells(){return SEPARATION_MARGIN;}
+    public int getWidth(){ return cols.length;}
+    public int getHeight(){ return rows.length;}
 }

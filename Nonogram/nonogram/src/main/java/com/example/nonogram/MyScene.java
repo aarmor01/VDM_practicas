@@ -63,8 +63,16 @@ public class MyScene implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP){
-            engRef.getAudio().playSound(sound);
-            board.markCell(0,0);
+            int cellSize = board.getCellSize();
+            int margins = board.getMarginCells();
+            int w = board.getWidth();
+            int h = board.getHeight();
+            int x = (input.getX() - cellSize) - (input.getX() - cellSize) / cellSize * margins;
+            int y = (input.getY() - cellSize) - (input.getY() - cellSize) / cellSize * margins;
+            if(x > 0 && y > 0 && x < w*cellSize && y < h*cellSize){
+                engRef.getAudio().playSound(sound);
+                board.markCell(x/cellSize,y/cellSize);
+            }
         }
     }
 }

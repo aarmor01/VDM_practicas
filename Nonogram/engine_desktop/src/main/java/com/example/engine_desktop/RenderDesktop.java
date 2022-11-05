@@ -47,7 +47,7 @@ public class RenderDesktop implements IRender {
         this.borders = this.myWin.getInsets();
         this.myWin.setSize(this.myWin.getWidth() + this.borders.left + this.borders.right,
                 this.myWin.getHeight() + this.borders.top + this.borders.bottom);
-        this.myGraphics2D.translate(this.borders.top + 30, this.borders.left);
+        this.myGraphics2D.translate(this.borders.top, this.borders.left);
 
         // what does it do when the window gets resized
         this.myWin.addComponentListener(new ComponentAdapter() {
