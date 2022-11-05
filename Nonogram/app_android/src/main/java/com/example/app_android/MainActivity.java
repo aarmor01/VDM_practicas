@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AudioAndroid audioManager;
 
-    private MyListener listener;
-
     private int soundId;
 
     @Override
