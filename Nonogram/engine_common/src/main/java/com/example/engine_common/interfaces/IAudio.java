@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public interface IAudio {
     public void loadMusic(String filePath, float volume);
+
     public String loadSound(String filePath, float volume);
 
     public void playMusic();

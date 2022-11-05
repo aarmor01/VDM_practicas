@@ -26,28 +26,23 @@ public class AudioAndroid implements IAudio {
     }
 
     @Override
-    public void setMusic(String filePath) throws IOException {
+    public void loadMusic(String filePath, float volume) {
         mediaPlayer.reset();
-        AssetFileDescriptor afd = assetManager.openFd(filePath);
-        mediaPlayer.setDataSource(afd.getFileDescriptor(),
-                afd.getStartOffset(), afd.getLength());
-        mediaPlayer.prepare();
+        AssetFileDescriptor afd = null;
+        try {
+            afd = assetManager.openFd(filePath);
+            mediaPlayer.setDataSource(afd.getFileDescriptor(),
+                    afd.getStartOffset(), afd.getLength());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mediaPlayer.setLooping(true);
     }
 
     @Override
-    public void startMusic() {
+    public void playMusic() {
         mediaPlayer.start();
-    }
-
-    @Override
-    public void stopMusic() {
-        mediaPlayer.stop();
-    }
-
-    @Override
-    public void pauseMusic() {
-        mediaPlayer.pause();
     }
 
     @Override
@@ -56,9 +51,8 @@ public class AudioAndroid implements IAudio {
     }
 
     @Override
-    public void setSoundVolume(float volume){
-        for (String clave:sounds.keySet())
-            sounds.get(clave).setVolume(volume);
+    public void setSoundVolume(String name, float volume){
+        sounds.get(name).setVolume(volume);
     }
 
     //COMO SETEAR EL VOLUMEN EN LA CARGA, COMO PARAMETRO DE LOAD SOUND??
