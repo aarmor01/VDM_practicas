@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
+    static int BOARD_CELLSICE = 50;
+    static int SEPARATION_MARGIN = 2;
+
     private Cell[][] board;
     private List<Integer>[] cols;
     private List<Integer>[] rows;
@@ -19,14 +22,14 @@ public class Board {
     public void render(IRender renderMng){
         int x=30, y=50;
         renderMng.setColor(0xFF000000);
-        renderMng.drawRectangle(50 + x, y,width*52, (height + 1)*52, false);
-        renderMng.drawRectangle(x,50 + y,(width + 1)*52, height*52, false);
+        renderMng.drawRectangle(BOARD_CELLSICE + x, y,width*(BOARD_CELLSICE+SEPARATION_MARGIN), (height + 1)*(BOARD_CELLSICE+SEPARATION_MARGIN), false);
+        renderMng.drawRectangle(x,BOARD_CELLSICE + y,(width + 1)*(BOARD_CELLSICE+SEPARATION_MARGIN), height*(BOARD_CELLSICE+SEPARATION_MARGIN), false);
 
         printNumbers(renderMng);
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                board[i][j].render(renderMng, (i + 1)*50 + (i+1)*2 + x, (j + 1)*50 + (j + 1)*2 + y, 50);
+                board[i][j].render(renderMng, (i + 1)*BOARD_CELLSICE + (i+1)*SEPARATION_MARGIN + x, (j + 1)*BOARD_CELLSICE + (j + 1)*SEPARATION_MARGIN + y, BOARD_CELLSICE);
             }
         }
     }
@@ -91,28 +94,28 @@ public class Board {
         }
 
 
-        font = eng.getRender().loadFont("fonts/FFF_Tusj.ttf", FontType.DEFAULT, 20);
+        font = eng.getRender().loadFont("fonts/arial.ttf", FontType.DEFAULT, 20);
     }
 
     private void printNumbers(IRender renderMng){
         renderMng.setFont(font);
         for(int i=0; i< cols.length; i++){
             if(cols[i].size() == 1){
-                renderMng.drawText(50 * (i + 1) + 30 + 20, 90, "0");
+                renderMng.drawText(BOARD_CELLSICE * (i + 1) + 30 + 20 + SEPARATION_MARGIN * i, 90, "0");
             }
             for(int j=cols[i].size()-2; j>=0; j--) {
                 int w = cols[i].get(j);
-                renderMng.drawText(50 * (i + 1) + 30 + 20, 90 - (18*(cols[i].size()-2-j)), Integer.toString(w));
+                renderMng.drawText(BOARD_CELLSICE * (i + 2) + SEPARATION_MARGIN * i, 90 - (18*(cols[i].size()-2-j)), Integer.toString(w));
             }
         }
 
         for(int i=0; i< rows.length; i++){
             if(rows[i].size() == 1){
-                renderMng.drawText(40, 50 * (i + 1) + 30 + 50, "0");
+                renderMng.drawText(60, BOARD_CELLSICE * (i + 2) + 30 + SEPARATION_MARGIN * i, "0");
             }
             for(int j=rows[i].size()-2; j>=0; j--) {
                 int w = rows[i].get(j);
-                renderMng.drawText(40 - (18*(cols[i].size()-2-j)),50 * (i + 1) + 30 + 50, Integer.toString(w));
+                renderMng.drawText(60 - (18*(rows[i].size()-2-j)),BOARD_CELLSICE * (i + 2) + 30 + SEPARATION_MARGIN * i, Integer.toString(w));
             }
         }
     }
