@@ -30,8 +30,8 @@ public class MyScene implements IScene {
         engRef = eng;
 
         sound = eng.getAudio().loadSound("./assets/sounds/doFlauta.wav", 1);
-        eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
-        eng.getAudio().playMusic();
+//        eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
+//        eng.getAudio().playMusic();
     }
 
     @Override

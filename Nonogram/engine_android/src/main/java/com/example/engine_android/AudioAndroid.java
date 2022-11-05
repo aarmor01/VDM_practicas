@@ -30,7 +30,8 @@ public class AudioAndroid implements IAudio {
         mediaPlayer.reset();
         AssetFileDescriptor afd = null;
         try {
-            afd = assetManager.openFd(filePath);
+            String convFilepath = filePath.replaceAll("./assets/", "");
+            afd = assetManager.openFd(convFilepath);
             mediaPlayer.setDataSource(afd.getFileDescriptor(),
                     afd.getStartOffset(), afd.getLength());
             mediaPlayer.setVolume(volume, volume);
@@ -60,7 +61,8 @@ public class AudioAndroid implements IAudio {
     @Override
     public String loadSound(String filePath, float volume) {
         File soundFile = new File(filePath);
-        sounds.put(soundFile.getName(), new SoundAndroid(filePath, assetManager, soundPool,volume));
+        String convFilepath = filePath.replaceAll("./assets/", "");
+        sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, assetManager, soundPool,volume));
         return soundFile.getName();
     }
 

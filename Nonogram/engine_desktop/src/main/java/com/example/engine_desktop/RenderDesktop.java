@@ -7,10 +7,12 @@ import com.example.engine_common.shared.FontType;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +32,8 @@ public class RenderDesktop implements IRender {
     private int baseWidth;
     private int baseHeight;
 
+    private double scaleFactor;
+
     private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
@@ -47,17 +51,19 @@ public class RenderDesktop implements IRender {
         this.borders = this.myWin.getInsets();
         this.myWin.setSize(this.myWin.getWidth() + this.borders.left + this.borders.right,
                 this.myWin.getHeight() + this.borders.top + this.borders.bottom);
-        this.myGraphics2D.translate(this.borders.top, this.borders.left);
+        this.myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
 
         // what does it do when the window gets resized
         this.myWin.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
-                //Component c = (Component)evt.getSource();
-                System.out.println("componentResized: " + evt.getSource());
-                myGraphics2D.dispose();
+//                myGraphics2D.dispose();
+//
+//                myBufferStrategy.show();
+//                myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
 
-                myBufferStrategy.show();
-                myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
+                double scaleX = (myWin.getWidth() - borders.left - borders.right) / (float)baseWidth;
+                double scaleY = (myWin.getHeight() - borders.top - borders.bottom) / (float)baseHeight;
+                scaleFactor = Math.min(scaleX, scaleY);
             }
         });
 
@@ -67,7 +73,26 @@ public class RenderDesktop implements IRender {
     }
 
     public void prepareFrame() {
+
         this.myGraphics2D = (Graphics2D) this.myBufferStrategy.getDrawGraphics();
+
+        AffineTransform at = this.myGraphics2D.getTransform();
+        at.setToScale((scaleFactor / at.getScaleX()),
+                (scaleFactor / at.getScaleX()));
+        this.myGraphics2D.setTransform(at);
+        System.out.println("bW " + baseWidth);
+        System.out.println("bH " + baseHeight);
+
+        System.out.println("sF " + scaleFactor);
+
+        System.out.println("off x " + ((this.myWin.getWidth() - (int)(baseWidth * scaleFactor)) / 2) + this.borders.left);
+        System.out.println("off y " + ((this.myWin.getHeight() - (int)(baseHeight * scaleFactor)) / 2) + this.borders.top);
+        at.setToTranslation(((this.myWin.getWidth() - (baseWidth * scaleFactor)) / 2) + this.borders.left,
+                ((this.myWin.getHeight() - (baseHeight * scaleFactor)) / 2) + this.borders.top);
+        this.myGraphics2D.transform(at);
+//        this.myGraphics2D.translate((this.myWin.getWidth() / 2.) - (baseWidth / 2.) + this.borders.left,
+//                (this.myWin.getHeight() / 2.) - (baseHeight / 2.) + this.borders.bottom);
+
         // "Borramos" el fondo.
         this.myGraphics2D.setColor(Color.white);
         this.myGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());

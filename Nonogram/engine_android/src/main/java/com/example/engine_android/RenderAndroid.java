@@ -49,14 +49,16 @@ public class RenderAndroid implements IRender {
     @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        images.put(imageFile.getName(), new ImageAndroid(filePath, assetManager));
+        String convFilepath = filePath.replaceAll("./assets/", "");
+        images.put(imageFile.getName(), new ImageAndroid(convFilepath, assetManager));
         return imageFile.getName();
     }
 
     @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
-        fonts.put(fontFile.getName(), new FontAndroid(filePath, assetManager, size, type));
+        String convFilepath = filePath.replaceAll("./assets/", "");
+        fonts.put(fontFile.getName(), new FontAndroid(convFilepath, assetManager, size, type));
         return fontFile.getName();
     }
 

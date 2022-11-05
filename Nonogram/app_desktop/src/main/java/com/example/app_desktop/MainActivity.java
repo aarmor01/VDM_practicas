@@ -15,7 +15,7 @@ public class MainActivity {
         renderView.setSize(600, 400);
         renderView.setBackground(Color.GRAY);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        renderView.setIgnoreRepaint(true);
+        renderView.setIgnoreRepaint(false);
         renderView.setVisible(true);
 
         // Intentamos crear el buffer strategy con 2 buffers.
