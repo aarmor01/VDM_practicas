@@ -39,35 +39,12 @@ public class MainActivity extends AppCompatActivity {
         aMan = this.getBaseContext().getAssets();
         eng.init(this.renderView, aMan);
         audioManager = (AudioAndroid)eng.getAudio();
-        try {
-            audioManager.setMusic("sounds/doFlauta.wav");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        eng.setScene(scene);
-        //audioManager.startMusic();
+        audioManager.loadMusic("sounds/doFlauta.wav", 0.5f);
+        scene.init(eng);
+        eng.getSceneManager().pushScene(scene);
+        audioManager.playMusic();
         eng.resume();
 
-        //aMan = this.getBaseContext().getAssets();
-
-        //listener = new MyListener();
-
-        //soundPool = new SoundPool.Builder().setMaxStreams(10).build();
-        //listener.setSoundPool(soundPool);
-        //renderView.setOnTouchListener(listener);
-
-        // id sound
-//        soundId = -1;
-//        try {
-//            AssetFileDescriptor assetDescriptor = aMan.openFd("sounds/doFlauta.wav");
-//            soundId = soundPool.load(assetDescriptor, 0);
-//            listener.setSoundId(soundId);
-//        }catch (IOException e) {
-//            throw new RuntimeException("Couldn't load sound.");
-//        }
-//
-//        render.setAssetManager(aMan);
     }
 
     @Override

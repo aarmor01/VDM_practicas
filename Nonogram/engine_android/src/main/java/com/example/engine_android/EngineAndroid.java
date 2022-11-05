@@ -27,11 +27,6 @@ public class EngineAndroid implements IEngine, Runnable {
     private InputManager myInputManager;
     private AudioAndroid myAudioManager;
 
-    public void setScene(IScene s) {
-        currentScene = s;
-        currentScene.init(this);
-    }
-
     @Override
     public IRender getRender() {
         return render;
@@ -60,6 +55,7 @@ public class EngineAndroid implements IEngine, Runnable {
         this.render.init(this.renderView, assetManager);
         this.myAudioManager = new AudioAndroid();
         this.myAudioManager.init(assetManager);
+        this.mySceneManager = new SceneManager();
     }
 
     @Override
@@ -85,15 +81,15 @@ public class EngineAndroid implements IEngine, Runnable {
             // handle input
             while(!myInputManager.empty()){
                 IInput input = myInputManager.getInput();
-                this.currentScene.handleInput(input);
+                this.mySceneManager.currentScene().handleInput(input);
             }
 
-            currentScene.update(deltaTime);
+            mySceneManager.currentScene().update(deltaTime);
 
             while (!this.render.surfaceValid());
 
             this.render.clear();
-            this.currentScene.render(this.render);
+            this.mySceneManager.currentScene().render(this.render);
             this.render.present();
         }
     }
