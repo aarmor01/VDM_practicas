@@ -43,7 +43,7 @@ public class EngineAndroid implements IEngine, Runnable {
     }
 
     @Override
-    public InputManager getInputManager() {return myInputManager; }
+    public InputManager getInputManager() { return myInputManager; }
 
     @Override
     public SceneManager getSceneManager() {

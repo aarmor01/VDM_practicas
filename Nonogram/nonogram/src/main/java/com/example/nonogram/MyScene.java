@@ -16,6 +16,7 @@ public class MyScene implements IScene {
     private Board board;
 
     private IEngine engRef;
+    private String sound;
 
     @Override
     public void init(IEngine eng) {
@@ -27,6 +28,10 @@ public class MyScene implements IScene {
         board.init(5,7, eng);
 
         engRef = eng;
+
+        sound = eng.getAudio().loadSound("./assets/sounds/doFlauta.wav", 1);
+        eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
+        eng.getAudio().playMusic();
     }
 
     @Override
@@ -58,6 +63,7 @@ public class MyScene implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP){
+            engRef.getAudio().playSound(sound);
             board.markCell(0,0);
         }
     }

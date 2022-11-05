@@ -18,6 +18,8 @@ public class Board {
     private int cellsLeft;
     private int height, width;
     private String font;
+    private String sound;
+    private String music;
 
     public void render(IRender renderMng){
         int x=30, y=50;
@@ -94,7 +96,7 @@ public class Board {
         }
 
 
-        font = eng.getRender().loadFont("fonts/arial.ttf", FontType.DEFAULT, 20);
+        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 20);
     }
 
     private void printNumbers(IRender renderMng){

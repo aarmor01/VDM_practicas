@@ -33,17 +33,21 @@ public class RenderDesktop implements IRender {
     private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
-    public void init(JFrame win) {
+    public RenderDesktop(JFrame win) {
         // obtain window and render data
         this.myWin = win;
         this.myBufferStrategy = this.myWin.getBufferStrategy();
         this.myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
 
+        // safe prev size
+        baseWidth = this.myWin.getWidth();
+        baseHeight = this.myWin.getHeight();
+
         // adjust to JFrame borders
         this.borders = this.myWin.getInsets();
         this.myWin.setSize(this.myWin.getWidth() + this.borders.left + this.borders.right,
                 this.myWin.getHeight() + this.borders.top + this.borders.bottom);
-        this.myGraphics2D.translate(this.borders.top, this.borders.left);
+        this.myGraphics2D.translate(this.borders.top + 30, this.borders.left);
 
         // what does it do when the window gets resized
         this.myWin.addComponentListener(new ComponentAdapter() {
@@ -57,16 +61,16 @@ public class RenderDesktop implements IRender {
             }
         });
 
-        baseWidth = this.myWin.getWidth();
-        baseHeight = this.myWin.getHeight();
-
+        // start resource managers
         fonts = new HashMap<>();
         images = new HashMap<>();
     }
 
     public void prepareFrame() {
         this.myGraphics2D = (Graphics2D) this.myBufferStrategy.getDrawGraphics();
-        this.clear();
+        // "Borramos" el fondo.
+        this.myGraphics2D.setColor(Color.white);
+        this.myGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 
     public void finishFrame() {
@@ -147,11 +151,5 @@ public class RenderDesktop implements IRender {
     @Override
     public int getHeight() {
         return this.baseHeight;
-    }
-
-    protected void clear() {
-        // "Borramos" el fondo.
-        this.myGraphics2D.setColor(Color.white);
-        this.myGraphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }

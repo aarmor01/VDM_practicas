@@ -3,13 +3,12 @@ package com.example.engine_common.interfaces;
 import java.io.IOException;
 
 public interface IAudio {
+    public void loadMusic(String filePath, float volume);
+    public String loadSound(String filePath, float volume);
 
-    public void setMusic(String filePath) throws IOException;
-    public void startMusic();
-    public void stopMusic();
-    public void pauseMusic();
+    public void playMusic();
+    public void playSound(String soundName);
+
     public void setMusicVolume(float volume);
-    public void setSoundVolume(float volume);
-    String loadSound(String filePath) throws IOException;
-    void playSound(String soundName);
+    public void setSoundVolume(String soundName, float volume);
 }

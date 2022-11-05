@@ -23,35 +23,18 @@ public class EngineDesktop implements IEngine, Runnable {
 
     // engine variables
     private RenderDesktop myRenderDesktop;
+    private AudioDesktop myAudioDesktop;
     private SceneManager mySceneManager;
     private InputManager myInputManager;
 
     public EngineDesktop(JFrame myWindow) {
-        myRenderDesktop = new RenderDesktop();
+        myRenderDesktop = new RenderDesktop(myWindow);
+        myAudioDesktop = new AudioDesktop();
         mySceneManager = new SceneManager();
         myInputManager = new InputManager();
 
-        myRenderDesktop.init(myWindow);
-
         // add listeners window
         myWindow.addMouseListener(new InputListenerDesktop(myInputManager));
-    }
-
-    @Override
-    public IRender getRender() {
-        return myRenderDesktop;
-    }
-
-    @Override
-    public IAudio getAudio() {
-        return null;
-    }
-
-    public InputManager getInputManager() {return myInputManager; }
-
-    @Override
-    public SceneManager getSceneManager() {
-        return mySceneManager;
     }
 
     @Override
@@ -65,7 +48,6 @@ public class EngineDesktop implements IEngine, Runnable {
         long currentTime = System.currentTimeMillis();
         while (this.running) {
             long deltaTime = System.currentTimeMillis() - currentTime;
-            //System.out.println(deltaTime);
             currentTime += deltaTime;
 
             // handle input
@@ -115,6 +97,24 @@ public class EngineDesktop implements IEngine, Runnable {
             }
         }
     }
+
+    @Override
+    public IRender getRender() {
+        return myRenderDesktop;
+    }
+
+    @Override
+    public IAudio getAudio() {
+        return myAudioDesktop;
+    }
+
+    @Override
+    public SceneManager getSceneManager() {
+        return mySceneManager;
+    }
+
+    @Override
+    public InputManager getInputManager() { return myInputManager; }
 
     private class InputListenerDesktop implements MouseInputListener {
 
