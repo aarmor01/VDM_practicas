@@ -87,7 +87,7 @@ public class EngineAndroid implements IEngine, Runnable {
                 IInput input = myInputManager.getInput();
                 this.currentScene.handleInput(input);
             }
-    
+
             currentScene.update(deltaTime);
 
             while (!this.render.surfaceValid());

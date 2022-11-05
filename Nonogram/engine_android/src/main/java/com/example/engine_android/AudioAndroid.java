@@ -63,16 +63,9 @@ public class AudioAndroid implements IAudio {
 
     //COMO SETEAR EL VOLUMEN EN LA CARGA, COMO PARAMETRO DE LOAD SOUND??
     @Override
-    public String loadSound(String filePath) {
+    public String loadSound(String filePath, float volume) {
         File soundFile = new File(filePath);
-        AssetFileDescriptor assetDescriptor = null;
-        try {
-            assetDescriptor = assetManager.openFd(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int soundId = soundPool.load(assetDescriptor, 0);
-        sounds.put(soundFile.getName(), new SoundAndroid(soundId, 0.5f, 0, 1, 1));
+        sounds.put(soundFile.getName(), new SoundAndroid(filePath, assetManager, soundPool,volume));
         return soundFile.getName();
     }
 
