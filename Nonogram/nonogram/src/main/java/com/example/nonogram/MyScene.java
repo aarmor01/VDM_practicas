@@ -57,7 +57,8 @@ public class MyScene implements IScene {
 
     @Override
     public void handleInput(IInput input) {
-        if(input.getType() == InputType.TOUCH_UP)
+        if(input.getType() == InputType.TOUCH_UP){
             board.markCell(0,0);
+        }
     }
 }
