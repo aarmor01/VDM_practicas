@@ -33,6 +33,7 @@ public class AudioAndroid implements IAudio {
             afd = assetManager.openFd(filePath);
             mediaPlayer.setDataSource(afd.getFileDescriptor(),
                     afd.getStartOffset(), afd.getLength());
+            mediaPlayer.setVolume(volume, volume);
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
