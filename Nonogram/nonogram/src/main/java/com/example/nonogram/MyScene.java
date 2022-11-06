@@ -30,14 +30,14 @@ public class MyScene implements IScene {
         engRef = eng;
 
         sound = eng.getAudio().loadSound("./assets/sounds/doFlauta.wav", 1);
-//        eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
-//        eng.getAudio().playMusic();
+        //eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
+        //eng.getAudio().playMusic();
     }
 
     @Override
     public void update(double deltaTime) {
         int maxX = this.engRef.getRender().getWidth() - this.radius;
-
+        board.update(deltaTime);
         this.x += this.speed * deltaTime;
         this.y += 2*deltaTime;
         while(this.x < 0 || this.x > maxX-this.radius) {

@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
-    static int BOARD_CELLSIZE = 50;
+    static int BOARD_CELLSIZE = 60;
     static int SEPARATION_MARGIN = 2;
+    static int SEGS_CHECKED = 5;
 
     private Cell[][] board;
     private List<Integer>[] cols;
@@ -21,11 +22,14 @@ public class Board {
     private String sound;
     private String music;
 
+    private List<Cell> checkedCells;
+    private double lastTimeChecked;
+
     public void render(IRender renderMng){
         int x=0, y=0;
-        renderMng.setColor(0xFF000000);
-        renderMng.drawRectangle(BOARD_CELLSIZE + x, y,width*(BOARD_CELLSIZE +SEPARATION_MARGIN), (height + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), false);
-        renderMng.drawRectangle(x, BOARD_CELLSIZE + y,(width + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), height*(BOARD_CELLSIZE +SEPARATION_MARGIN), false);
+        renderMng.setColor(0xFF000000); //Cuadrados alrededor
+        renderMng.drawRectangle(BOARD_CELLSIZE + x, y,width*(BOARD_CELLSIZE +SEPARATION_MARGIN) + 2, (height + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), false);
+        renderMng.drawRectangle(x, BOARD_CELLSIZE + y,(width + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), height*(BOARD_CELLSIZE +SEPARATION_MARGIN) + 2, false);
 
         printNumbers(renderMng);
 
@@ -48,6 +52,8 @@ public class Board {
         cols = new ArrayList[width];
         rows = new ArrayList[height];
         Random random = new Random();
+
+        checkedCells = new ArrayList<Cell>();
 
         for(int i=0; i<height; i++) {
             rows[i] = new ArrayList<Integer>();
@@ -95,29 +101,44 @@ public class Board {
                 rows[i].add(-1);
         }
 
+        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 12);
+        lastTimeChecked = -1;
+    }
 
-        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 20);
+    public void update(double deltaTime){
+        if(lastTimeChecked != -1){
+            if(lastTimeChecked - deltaTime < 0){
+                lastTimeChecked = -1;
+                for(int i=0; i<checkedCells.size(); i++){
+                    checkedCells.get(i).unChecked();
+                }
+                checkedCells.clear();
+            }
+            else
+                lastTimeChecked -= deltaTime;
+        }
     }
 
     private void printNumbers(IRender renderMng){
         renderMng.setFont(font);
         for(int i=0; i< cols.length; i++){
             if(cols[i].size() == 1){
-                renderMng.drawText(BOARD_CELLSIZE * (i + 1) + 30 + 20 + SEPARATION_MARGIN * i, 90, "0");
+                renderMng.drawText(BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - BOARD_CELLSIZE/2, (int)(BOARD_CELLSIZE/1.1), "0");
             }
             for(int j=cols[i].size()-2; j>=0; j--) {
                 int w = cols[i].get(j);
-                renderMng.drawText(BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i, 90 - (18*(cols[i].size()-2-j)), Integer.toString(w));
+                renderMng.drawText(BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - BOARD_CELLSIZE/2, (int)(BOARD_CELLSIZE/1.1) - (12*(cols[i].size()-2-j)), Integer.toString(w));
             }
         }
 
         for(int i=0; i< rows.length; i++){
             if(rows[i].size() == 1){
-                renderMng.drawText(60, BOARD_CELLSIZE * (i + 2) + 30 + SEPARATION_MARGIN * i, "0");
+                renderMng.drawText((int)(BOARD_CELLSIZE/1.4), BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - (int)(BOARD_CELLSIZE/2.5), "0");
             }
             for(int j=rows[i].size()-2; j>=0; j--) {
                 int w = rows[i].get(j);
-                renderMng.drawText(60 - (18*(rows[i].size()-2-j)), BOARD_CELLSIZE * (i + 2) + 30 + SEPARATION_MARGIN * i, Integer.toString(w));
+                renderMng.drawText((int)(BOARD_CELLSIZE/1.4) - (12*(rows[i].size()-2-j)), BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i
+                        - (int)(BOARD_CELLSIZE/2.5), Integer.toString(w));
             }
         }
     }
@@ -125,8 +146,11 @@ public class Board {
     public void checkear(){
         for(int i=0; i<width; i++){
             for(int j=0; j<height; j++){
-                if(!board[i][j].isAnswer() && board[i][j].getState() == Cell.State.MARKED)
+                if(!board[i][j].isAnswer() && board[i][j].getState() == Cell.State.MARKED){
                     board[i][j].setChecked();
+                    checkedCells.add(board[i][j]);
+                    lastTimeChecked = SEGS_CHECKED;
+                }
             }
         }
     }
