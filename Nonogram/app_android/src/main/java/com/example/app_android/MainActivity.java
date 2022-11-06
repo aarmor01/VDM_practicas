@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
         MyScene scene = new MyScene();
-        eng = new EngineAndroid();
         aMan = this.getBaseContext().getAssets();
-        eng.init(this.renderView, aMan);
+        eng = new EngineAndroid(this.renderView, aMan);
         audioManager = (AudioAndroid)eng.getAudio();
         audioManager.loadMusic("./assets/sounds/doFlauta.wav", 0.5f);
         scene.init(eng);

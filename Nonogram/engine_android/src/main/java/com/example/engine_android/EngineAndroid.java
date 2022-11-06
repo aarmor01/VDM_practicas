@@ -45,16 +45,14 @@ public class EngineAndroid implements IEngine, Runnable {
         return mySceneManager;
     }
 
-    public void init(SurfaceView s, AssetManager aM) {
+    public EngineAndroid(SurfaceView s, AssetManager aM) {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = s;
         this.renderView.setOnTouchListener(new myTouchListener());
         this.assetManager = aM;
         this.myInputManager = new InputManager();
-        this.render = new RenderAndroid();
-        this.render.init(this.renderView, assetManager);
-        this.myAudioManager = new AudioAndroid();
-        this.myAudioManager.init(assetManager);
+        this.render = new RenderAndroid(this.renderView, assetManager);
+        this.myAudioManager = new AudioAndroid(assetManager);
         this.mySceneManager = new SceneManager();
     }
 
@@ -124,15 +122,8 @@ public class EngineAndroid implements IEngine, Runnable {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY(), InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
-            switch(iA.getType()) {
-                case TOUCH_DOWN:
-                    myInputManager.addInput(iA);
-                    break;
-                case TOUCH_UP:
-                    break;
-                case TOUCH_MOVE:
-                    break;
-            }
+            if ( InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() || InputType.TOUCH_MOVE == iA.getType())
+                myInputManager.addInput(iA);
             return true;
         }
     }

@@ -18,7 +18,7 @@ public class AudioAndroid implements IAudio {
     private AssetManager assetManager;
     private MediaPlayer mediaPlayer;
 
-    public void init (AssetManager assetManager_) {
+    public  AudioAndroid(AssetManager assetManager_) {
         assetManager = assetManager_;
         soundPool = new SoundPool.Builder().setMaxStreams(10).build();
         mediaPlayer = new MediaPlayer();
