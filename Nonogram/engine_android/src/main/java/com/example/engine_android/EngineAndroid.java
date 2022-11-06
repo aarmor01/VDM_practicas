@@ -66,12 +66,13 @@ public class EngineAndroid implements IEngine, Runnable {
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && render.getWidth() == 0);
+        while(this.running && render.getViewWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long currentTime = System.currentTimeMillis();
 
 
+        //this.render.scaleApp();
 
         // Bucle de juego principal.
         while(running) {

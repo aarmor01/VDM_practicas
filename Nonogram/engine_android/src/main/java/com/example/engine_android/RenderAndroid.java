@@ -3,6 +3,7 @@ package com.example.engine_android;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -46,22 +47,18 @@ public class RenderAndroid implements IRender {
     }
 
     public void scaleApp() {
-//        while (!this.surfaceValid());
-//        this.canvas = this.holder.lockCanvas();
+        //while (!this.surfaceValid());
+        //this.canvas = this.holder.lockCanvas();
         //400x600
-        float w = myView.getWidth();
-        float y = myView.getHeight();
+        //x----y
+        float w = holder.getSurfaceFrame().width();
+        float y = holder.getSurfaceFrame().height();
         float scaleX = w;
         float scaleY = y;
 
-        if (scaleX * 6 < scaleY * 4) {
-            scaleY = scaleX * 6 / 4;
-        }
+        if (scaleX * 6 < scaleY * 4) scaleY = scaleX * 6 / 4;
         else scaleX = scaleY * 4 / 6;
-
-        canvas.scale(scaleX /w, scaleY / y);
-        canvas.translate((w - scaleX) / 2, (y - scaleY) / 2);
-
+        canvas.translate((w - scaleX) / 2, ((y/2) - scaleY / 2));
         this.baseWidth = (int)scaleX;
         this.baseHeight = (int)scaleY;
         //this.holder.unlockCanvasAndPost(canvas);
@@ -152,12 +149,16 @@ public class RenderAndroid implements IRender {
 
     @Override
     public int getWidth() {
+        return baseWidth;
+    }
+
+    public int getViewWidth() {
         return myView.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return myView.getHeight();
+        return baseHeight;
     }
 
     public void changeScreen(boolean vertical) {
