@@ -24,7 +24,7 @@ public class RenderAndroid implements IRender {
     private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
 
-    public void init (SurfaceView myView, AssetManager aM){
+    public RenderAndroid(SurfaceView myView, AssetManager aM) {
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.assetManager = aM;
@@ -39,7 +39,7 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        this.canvas.drawColor(0xFF0000FF);
+        this.canvas.drawColor(0xFFFFFFFF);
     }
 
     public void present() {
@@ -85,6 +85,10 @@ public class RenderAndroid implements IRender {
 
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill) {
+        if (fill)
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        else
+            paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(x, y, x + width, y + height, paint);
     }
 
