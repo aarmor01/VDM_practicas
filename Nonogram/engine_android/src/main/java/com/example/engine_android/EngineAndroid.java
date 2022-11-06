@@ -70,6 +70,9 @@ public class EngineAndroid implements IEngine, Runnable {
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long currentTime = System.currentTimeMillis();
+
+
+
         // Bucle de juego principal.
         while(running) {
             System.out.printf("Conche su madre que significa chainshaw man");

@@ -3,12 +3,15 @@ package com.example.app_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
 
 import com.example.engine_android.AudioAndroid;
 import com.example.engine_android.EngineAndroid;
+import com.example.engine_android.RenderAndroid;
 import com.example.engine_common.interfaces.IAudio;
 import com.example.nonogram.MyScene;
 
@@ -42,6 +45,19 @@ public class MainActivity extends AppCompatActivity {
         audioManager.playMusic();
         eng.resume();
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        Log.d("tag", "config changed");
+        super.onConfigurationChanged(newConfig);
+
+        int orientation = newConfig.orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((RenderAndroid)eng.getRender()).changeScreen(true);
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            ((RenderAndroid)eng.getRender()).changeScreen(false);
     }
 
     @Override

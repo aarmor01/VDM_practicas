@@ -13,6 +13,8 @@ import com.example.engine_common.shared.FontType;
 import java.io.File;
 import java.util.HashMap;
 
+
+
 public class RenderAndroid implements IRender {
 
     private SurfaceView myView;
@@ -23,6 +25,12 @@ public class RenderAndroid implements IRender {
     private HashMap<String, ImageAndroid> images;
     private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
+    private boolean verticalScreen;
+    private boolean changedScreen;
+
+    private int baseWidth;
+    private int baseHeight;
+
 
     public RenderAndroid(SurfaceView myView, AssetManager aM) {
         this.myView = myView;
@@ -31,6 +39,32 @@ public class RenderAndroid implements IRender {
         this.paint = new Paint();
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
+        this.verticalScreen = true;
+        this.changedScreen = false;
+        this.baseWidth = -1;
+        this.baseHeight = -1;
+    }
+
+    public void scaleApp() {
+//        while (!this.surfaceValid());
+//        this.canvas = this.holder.lockCanvas();
+        //400x600
+        float w = myView.getWidth();
+        float y = myView.getHeight();
+        float scaleX = w;
+        float scaleY = y;
+
+        if (scaleX * 6 < scaleY * 4) {
+            scaleY = scaleX * 6 / 4;
+        }
+        else scaleX = scaleY * 4 / 6;
+
+        canvas.scale(scaleX /w, scaleY / y);
+        canvas.translate((w - scaleX) / 2, (y - scaleY) / 2);
+
+        this.baseWidth = (int)scaleX;
+        this.baseHeight = (int)scaleY;
+        //this.holder.unlockCanvasAndPost(canvas);
     }
 
     public boolean surfaceValid() {
@@ -39,10 +73,24 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        this.canvas.drawColor(0xFFFFFFFF);
+        canvas.drawColor(0xFFFFFFFF);
+        scaleApp();
+        setColor(0xFFFF0000);
+        drawRectangle(0, 0, baseWidth, baseHeight, true);
+
     }
 
     public void present() {
+//        if (changedScreen) {;
+//            double scaleX = myView.getWidth()  / (float)baseWidth;
+//            double scaleY = myView.getHeight()  / (float)baseHeight;
+//            double scaleFactor = Math.min(scaleX, scaleY);
+//
+//            if (verticalScreen)
+//                canvas.rotate(-90);
+//            else canvas.rotate(90);
+//
+//        }
         this.holder.unlockCanvasAndPost(canvas);
     }
 
@@ -104,11 +152,20 @@ public class RenderAndroid implements IRender {
 
     @Override
     public int getWidth() {
-        return this.myView.getWidth();
+        return myView.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return this.myView.getHeight();
+        return myView.getHeight();
     }
+
+    public void changeScreen(boolean vertical) {
+        if (verticalScreen == vertical)
+            return;
+
+        changedScreen = true;
+        verticalScreen = vertical;
+    }
+
 }
