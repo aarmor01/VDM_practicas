@@ -78,7 +78,7 @@ public class RenderDesktop implements IRender {
 
         AffineTransform at = this.myGraphics2D.getTransform();
         at.setToScale((scaleFactor / at.getScaleX()),
-                (scaleFactor / at.getScaleX()));
+                (scaleFactor / at.getScaleY()));
         this.myGraphics2D.setTransform(at);
 //        System.out.println("bW " + baseWidth);
 //        System.out.println("bH " + baseHeight);
