@@ -12,7 +12,7 @@ public class MainActivity {
     public static void main(String[] args) {
         JFrame renderView = new JFrame("Nonogram");
 
-        renderView.setSize(600, 400);
+        renderView.setSize(400, 600);
         renderView.setBackground(Color.GRAY);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(false);
