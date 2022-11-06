@@ -126,7 +126,7 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseDragged(MouseEvent mouseEvent) {
-            System.out.println("drg");
+            //System.out.println("drg");
         }
 
         @Override
@@ -143,7 +143,7 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-            System.out.println("clk");
+            //System.out.println("clk");
         }
 
         @Override
@@ -154,12 +154,12 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseEntered(MouseEvent mouseEvent) {
-            System.out.println("ent");
+            //System.out.println("ent");
         }
 
         @Override
         public void mouseExited(MouseEvent mouseEvent) {
-            System.out.println("ext");
+            //System.out.println("ext");
         }
     }
 }

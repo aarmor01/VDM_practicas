@@ -27,10 +27,13 @@ public class Cell {
                 color = 0xFFFF2F2B;
                 break;
         }
-        //if(isAnswer)        //hay que quitar esto que es para debug
-            //color = 0xFF2140D1;
         renderMng.setColor(color);
         renderMng.drawRectangle(x, y, size, size, true);
+        if(s == State.CROSSED){
+            renderMng.setColor(0xFF000000);
+            renderMng.drawRectangle(x, y, size, size, false);
+            renderMng.drawLine(x, y, x + size, y + size);
+        }
     }
 
     public int changeCell(){
@@ -55,4 +58,5 @@ public class Cell {
     public boolean isAnswer(){ return isAnswer;}
     public State getState(){ return s;}
     public void setChecked(){ notCheckedS = s; s = State.CHECKED;}
+    public void unChecked(){ s = notCheckedS; }
 }

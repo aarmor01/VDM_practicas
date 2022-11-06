@@ -80,13 +80,13 @@ public class RenderDesktop implements IRender {
         at.setToScale((scaleFactor / at.getScaleX()),
                 (scaleFactor / at.getScaleX()));
         this.myGraphics2D.setTransform(at);
-        System.out.println("bW " + baseWidth);
-        System.out.println("bH " + baseHeight);
-
-        System.out.println("sF " + scaleFactor);
-
-        System.out.println("off x " + ((this.myWin.getWidth() - (int)(baseWidth * scaleFactor)) / 2) + this.borders.left);
-        System.out.println("off y " + ((this.myWin.getHeight() - (int)(baseHeight * scaleFactor)) / 2) + this.borders.top);
+//        System.out.println("bW " + baseWidth);
+//        System.out.println("bH " + baseHeight);
+//
+//        System.out.println("sF " + scaleFactor);
+//
+//        System.out.println("off x " + ((this.myWin.getWidth() - (int)(baseWidth * scaleFactor)) / 2) + this.borders.left);
+//        System.out.println("off y " + ((this.myWin.getHeight() - (int)(baseHeight * scaleFactor)) / 2) + this.borders.top);
         at.setToTranslation(((this.myWin.getWidth() - (baseWidth * scaleFactor)) / 2) + this.borders.left,
                 ((this.myWin.getHeight() - (baseHeight * scaleFactor)) / 2) + this.borders.top);
         this.myGraphics2D.transform(at);
