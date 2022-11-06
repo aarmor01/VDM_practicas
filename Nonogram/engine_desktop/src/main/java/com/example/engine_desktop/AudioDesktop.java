@@ -26,7 +26,6 @@ public class AudioDesktop implements IAudio {
         try {
             bgMusic = AudioSystem.getClip();
             bgMusic.open(AudioSystem.getAudioInputStream(new File(filePath)));
-            bgMusic.loop(Clip.LOOP_CONTINUOUSLY);
 
             FloatControl gainControl = (FloatControl) bgMusic.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue((float)(10 * Math.log(volume)));
@@ -44,23 +43,21 @@ public class AudioDesktop implements IAudio {
 
     @Override
     public void playMusic() {
+        bgMusic.loop(Clip.LOOP_CONTINUOUSLY);
         bgMusic.start();
     }
 
     @Override
     public void playSound(String soundName) {
-        try {
-            Clip clip = AudioSystem.getClip();
-            clip.open(sounds.get(soundName).getSound());
-            clip.loop(0);
+        Clip clip = sounds.get(soundName).getSound();
+        clip.loop(0);
 
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(sounds.get(soundName).getVolume());
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(sounds.get(soundName).getVolume());
 
-            clip.start();
-        } catch (LineUnavailableException | IOException e) {
-            e.printStackTrace();
-        }
+        if(!clip.isRunning())
+            clip.setFramePosition(0);
+        clip.start();
     }
 
     @Override

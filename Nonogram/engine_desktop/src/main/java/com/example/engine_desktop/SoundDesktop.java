@@ -6,14 +6,18 @@ import java.io.File;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class SoundDesktop implements ISound {
     AudioInputStream audioStream;
+    Clip clip;
     float db;
 
     SoundDesktop(File audioFile, float volume_db) {
         try {
             audioStream =  AudioSystem.getAudioInputStream(audioFile);
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
             e.printStackTrace();
@@ -22,7 +26,7 @@ public class SoundDesktop implements ISound {
         db = volume_db;
     }
 
-    public AudioInputStream getSound() { return audioStream; }
+    public Clip getSound() { return clip; }
 
     @Override
     public float getVolume() {

@@ -31,6 +31,7 @@ public class RenderDesktop implements IRender {
 
     private int baseWidth;
     private int baseHeight;
+    private double baseDPI;
 
     private double scaleFactor;
 
@@ -46,6 +47,7 @@ public class RenderDesktop implements IRender {
         // safe prev size
         baseWidth = this.myWin.getWidth();
         baseHeight = this.myWin.getHeight();
+        baseDPI = this.myGraphics2D.getTransform().getScaleX();
 
         // adjust to JFrame borders
         this.borders = this.myWin.getInsets();
@@ -63,7 +65,7 @@ public class RenderDesktop implements IRender {
 
                 double scaleX = (myWin.getWidth() - borders.left - borders.right) / (float)baseWidth;
                 double scaleY = (myWin.getHeight() - borders.top - borders.bottom) / (float)baseHeight;
-                scaleFactor = Math.min(scaleX, scaleY);
+                scaleFactor = Math.min(scaleX * baseDPI, scaleY * baseDPI);
             }
         });
 
@@ -76,19 +78,12 @@ public class RenderDesktop implements IRender {
 
         this.myGraphics2D = (Graphics2D) this.myBufferStrategy.getDrawGraphics();
 
+        System.out.println(this.borders.top);
         AffineTransform at = this.myGraphics2D.getTransform();
-        at.setToScale((scaleFactor / at.getScaleX()),
-                (scaleFactor / at.getScaleX()));
+        at.setToTranslation(this.borders.left*baseDPI, this.borders.top *baseDPI);
         this.myGraphics2D.setTransform(at);
-//        System.out.println("bW " + baseWidth);
-//        System.out.println("bH " + baseHeight);
-//
-//        System.out.println("sF " + scaleFactor);
-//
-//        System.out.println("off x " + ((this.myWin.getWidth() - (int)(baseWidth * scaleFactor)) / 2) + this.borders.left);
-//        System.out.println("off y " + ((this.myWin.getHeight() - (int)(baseHeight * scaleFactor)) / 2) + this.borders.top);
-        at.setToTranslation(((this.myWin.getWidth() - (baseWidth * scaleFactor)) / 2) + this.borders.left,
-                ((this.myWin.getHeight() - (baseHeight * scaleFactor)) / 2) + this.borders.top);
+        at.setToScale((scaleFactor / at.getScaleX()),
+                (scaleFactor / at.getScaleY()));
         this.myGraphics2D.transform(at);
 //        this.myGraphics2D.translate((this.myWin.getWidth() / 2.) - (baseWidth / 2.) + this.borders.left,
 //                (this.myWin.getHeight() / 2.) - (baseHeight / 2.) + this.borders.bottom);

@@ -30,33 +30,17 @@ public class MyScene implements IScene {
         engRef = eng;
 
         sound = eng.getAudio().loadSound("./assets/sounds/doFlauta.wav", 1);
-        //eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
+        eng.getAudio().loadMusic("./assets/sounds/doFlauta.wav", 1);
         //eng.getAudio().playMusic();
     }
 
     @Override
     public void update(double deltaTime) {
-        int maxX = this.engRef.getRender().getWidth() - this.radius;
         board.update(deltaTime);
-        this.x += this.speed * deltaTime;
-        this.y += 2*deltaTime;
-        while(this.x < 0 || this.x > maxX-this.radius) {
-            // Vamos a pintar fuera de la pantalla. Rectificamos.
-            if (this.x < 0) {
-                // Nos salimos por la izquierda. Rebotamos.
-                this.x = -this.x;
-                this.speed *= -1;
-            } else if (this.x > maxX-this.radius) {
-                // Nos salimos por la derecha. Rebotamos
-                this.x = 2 * (maxX-this.radius) - this.x;
-                this.speed *= -1;
-            }
-        }
     }
 
     @Override
     public void render(IRender renderMng) {
-        //this.engRef.getRender().drawCircle((int)this.x, (int)this.y, this.radius);
         board.render(renderMng);
     }
 
