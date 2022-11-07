@@ -25,7 +25,7 @@ public class MyScene implements IScene {
         this.radius = 50;
         this.speed = 150;
         board = new Board();
-        board.init(5,7, eng);
+        board.init(10,10, eng);
 
         engRef = eng;
 
@@ -50,7 +50,8 @@ public class MyScene implements IScene {
             int cellSize = board.getCellSize();
             int margins = board.getMarginCells();
             int x = (input.getX() - cellSize) - (input.getX() - cellSize) / cellSize * margins;
-            int y = (input.getY() - cellSize) - (input.getY() - cellSize) / cellSize * margins;
+            //AAAAAAAAAAAAA 528/2 esta cableado
+            int y = ((input.getY() - cellSize) - (input.getY() - cellSize) / cellSize * margins) - (528/2);
 
             if(x > 0 && y > 0 && x < board.getWidth()*cellSize && y < board.getHeight()*cellSize){
                 engRef.getAudio().playSound(sound);

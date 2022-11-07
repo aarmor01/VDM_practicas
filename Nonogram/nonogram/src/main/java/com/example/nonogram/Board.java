@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
-    static int BOARD_CELLSIZE = 60;
-    static int SEPARATION_MARGIN = 2;
     static int SEGS_CHECKED = 5;
 
+    private int board_cell_size;
+    private int separation_margin;
     private Cell[][] board;
     private List<Integer>[] cols;
     private List<Integer>[] rows;
@@ -28,19 +28,25 @@ public class Board {
     public void render(IRender renderMng){
         int x=0, y=0;
         renderMng.setColor(0xFF000000); //Cuadrados alrededor
-        renderMng.drawRectangle(BOARD_CELLSIZE + x, y,width*(BOARD_CELLSIZE +SEPARATION_MARGIN) + 2, (height + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), false);
-        renderMng.drawRectangle(x, BOARD_CELLSIZE + y,(width + 1)*(BOARD_CELLSIZE +SEPARATION_MARGIN), height*(BOARD_CELLSIZE +SEPARATION_MARGIN) + 2, false);
+        renderMng.drawRectangle(board_cell_size * 2 + x, y,width*(board_cell_size + separation_margin) + 2, (height + 2)*(board_cell_size + separation_margin), false);
+        renderMng.drawRectangle(x, board_cell_size * 2 + y,(width + 2)*(board_cell_size + separation_margin), height*(board_cell_size + separation_margin) + 2, false);
 
         printNumbers(renderMng);
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                board[i][j].render(renderMng, (i + 1)* BOARD_CELLSIZE + (i+1)*SEPARATION_MARGIN + x, (j + 1)* BOARD_CELLSIZE + (j + 1)*SEPARATION_MARGIN + y, BOARD_CELLSIZE);
+                board[i][j].render(renderMng, (i + 2)* board_cell_size + (i+2)* separation_margin + x, (j + 2)* board_cell_size + (j + 2)* separation_margin + y, board_cell_size);
             }
         }
     }
 
     public void init(int h, int w, IEngine eng) {
+        int winW = eng.getRender().getWidth();
+
+        board_cell_size = eng.getRender().getWidth()/(w + 2);
+        separation_margin = board_cell_size / 25;
+        board_cell_size -= separation_margin;
+
         height = h;
         width = w;
         board = new Cell[width][height];
@@ -101,7 +107,7 @@ public class Board {
                 rows[i].add(-1);
         }
 
-        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 12);
+        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, board_cell_size/3);
         lastTimeChecked = -1;
     }
 
@@ -123,22 +129,23 @@ public class Board {
         renderMng.setFont(font);
         for(int i=0; i< cols.length; i++){
             if(cols[i].size() == 1){
-                renderMng.drawText(BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - BOARD_CELLSIZE/2, (int)(BOARD_CELLSIZE/1.1), "0");
+                renderMng.drawText(board_cell_size * (i + 3) + separation_margin * i - board_cell_size/2, (int)(board_cell_size/0.55), "0");
             }
             for(int j=cols[i].size()-2; j>=0; j--) {
                 int w = cols[i].get(j);
-                renderMng.drawText(BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - BOARD_CELLSIZE/2, (int)(BOARD_CELLSIZE/1.1) - (12*(cols[i].size()-2-j)), Integer.toString(w));
+                renderMng.drawText(board_cell_size * (i + 3) + separation_margin * i - board_cell_size/2, (int)(board_cell_size/0.55)
+                        - (board_cell_size/3*(cols[i].size()-2-j)), Integer.toString(w));
             }
         }
 
         for(int i=0; i< rows.length; i++){
             if(rows[i].size() == 1){
-                renderMng.drawText((int)(BOARD_CELLSIZE/1.4), BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i - (int)(BOARD_CELLSIZE/2.5), "0");
+                renderMng.drawText((int)(board_cell_size/0.6), board_cell_size * (i + 3) + separation_margin * i - (int)(board_cell_size/2.5), "0");
             }
             for(int j=rows[i].size()-2; j>=0; j--) {
                 int w = rows[i].get(j);
-                renderMng.drawText((int)(BOARD_CELLSIZE/1.4) - (12*(rows[i].size()-2-j)), BOARD_CELLSIZE * (i + 2) + SEPARATION_MARGIN * i
-                        - (int)(BOARD_CELLSIZE/2.5), Integer.toString(w));
+                renderMng.drawText((int)(board_cell_size/0.6) - (board_cell_size/3*(rows[i].size()-2-j)), board_cell_size * (i + 3) + separation_margin * i
+                        - (int)(board_cell_size/2.5), Integer.toString(w));
             }
         }
     }
@@ -158,8 +165,8 @@ public class Board {
     public void markCell(int x, int y) {
         cellsLeft += board[x][y].changeCell();
     }
-    public int getCellSize(){return BOARD_CELLSIZE;}
-    public int getMarginCells(){return SEPARATION_MARGIN;}
+    public int getCellSize(){return board_cell_size;}
+    public int getMarginCells(){return separation_margin;}
     public int getWidth(){ return cols.length;}
     public int getHeight(){ return rows.length;}
 }

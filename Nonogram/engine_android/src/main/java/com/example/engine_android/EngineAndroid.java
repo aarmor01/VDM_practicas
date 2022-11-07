@@ -73,7 +73,6 @@ public class EngineAndroid implements IEngine, Runnable {
 
 
         //this.render.scaleApp();
-
         // Bucle de juego principal.
         while(running) {
             System.out.printf("Conche su madre que significa chainshaw man");

@@ -9,8 +9,8 @@ import com.example.engine_common.shared.FontType;
 import java.io.File;
 
 public class FontAndroid implements IFont {
-    Typeface font;
-    int size;
+    private Typeface font;
+    private int size;
 
     public FontAndroid(String filePath, AssetManager aMan, int s, FontType t) {
         font = Typeface.create(Typeface.createFromAsset(aMan, filePath), t.ordinal());

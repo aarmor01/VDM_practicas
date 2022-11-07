@@ -42,8 +42,8 @@ public class RenderAndroid implements IRender {
         this.images = new HashMap<>();
         this.verticalScreen = true;
         this.changedScreen = false;
-        this.baseWidth = -1;
-        this.baseHeight = -1;
+        this.baseWidth = 1080;
+        this.baseHeight = 1620;
     }
 
     public void scaleApp() {
@@ -58,7 +58,7 @@ public class RenderAndroid implements IRender {
 
         if (scaleX * 6 < scaleY * 4) scaleY = scaleX * 6 / 4;
         else scaleX = scaleY * 4 / 6;
-        canvas.translate((w - scaleX) / 2, ((y/2) - scaleY / 2));
+        canvas.translate((w - scaleX) / 2, (y - scaleY)/2);
         this.baseWidth = (int)scaleX;
         this.baseHeight = (int)scaleY;
         //this.holder.unlockCanvasAndPost(canvas);
@@ -70,9 +70,9 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        canvas.drawColor(0xFFFFFFFF);
+        canvas.drawColor(0xFFAAAAAA);
         scaleApp();
-        setColor(0xFFFF0000);
+        setColor(0xFFFFFFFF);
         drawRectangle(0, 0, baseWidth, baseHeight, true);
 
     }
@@ -116,6 +116,7 @@ public class RenderAndroid implements IRender {
     public void setFont(String fontID) {
         FontAndroid font = fonts.get(fontID);
         paint.setTypeface(font.getFont());
+        paint.setTextSize(font.getSize());
     }
 
     @Override
