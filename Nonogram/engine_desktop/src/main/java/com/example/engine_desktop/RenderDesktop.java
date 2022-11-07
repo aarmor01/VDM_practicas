@@ -42,7 +42,7 @@ public class RenderDesktop implements IRender {
         // obtain window and render data
         this.myWin = win;
         this.myBufferStrategy = this.myWin.getBufferStrategy();
-        this.myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
+        this.myGraphics2D = (Graphics2D) myBufferStrategy.getDrawGraphics();
 
         // safe prev size
         baseWidth = this.myWin.getWidth();
@@ -53,21 +53,14 @@ public class RenderDesktop implements IRender {
         this.borders = this.myWin.getInsets();
         this.myWin.setSize(this.myWin.getWidth() + this.borders.left + this.borders.right,
                 this.myWin.getHeight() + this.borders.top + this.borders.bottom);
-        this.myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
+        this.myGraphics2D = (Graphics2D) myBufferStrategy.getDrawGraphics();
 
-        // what does it do when the window gets resized
-        this.myWin.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent evt) {
-//                myGraphics2D.dispose();
+        // what does it do when the window gets resized discarded because stuttering
+//        this.myWin.addComponentListener(new ComponentAdapter() {
+//            public void componentResized(ComponentEvent evt) {
 //
-//                myBufferStrategy.show();
-//                myGraphics2D = (Graphics2D)myBufferStrategy.getDrawGraphics();
-
-                double scaleX = (myWin.getWidth() - borders.left - borders.right) / (float)baseWidth;
-                double scaleY = (myWin.getHeight() - borders.top - borders.bottom) / (float)baseHeight;
-                scaleFactor = Math.min(scaleX * baseDPI, scaleY * baseDPI);
-            }
-        });
+//            }
+//        });
 
         // start resource managers
         fonts = new HashMap<>();
@@ -75,18 +68,19 @@ public class RenderDesktop implements IRender {
     }
 
     public void prepareFrame() {
-
         this.myGraphics2D = (Graphics2D) this.myBufferStrategy.getDrawGraphics();
 
-        System.out.println(this.borders.top);
+        double scaleX = (myWin.getWidth() - borders.left - borders.right) / (float) baseWidth;
+        double scaleY = (myWin.getHeight() - borders.top - borders.bottom) / (float) baseHeight;
+        scaleFactor = Math.min(scaleX * baseDPI, scaleY * baseDPI);
+
         AffineTransform at = this.myGraphics2D.getTransform();
-        at.setToTranslation(this.borders.left*baseDPI, this.borders.top *baseDPI);
+        System.out.println(this.borders.left * scaleFactor + " " + this.borders.top * scaleFactor);
+        at.setToTranslation((this.myWin.getWidth() / 2 - baseWidth * (scaleFactor / baseDPI) / 2) * baseDPI,
+                (((this.myWin.getHeight()) + this.borders.top - this.borders.bottom) / 2 - baseHeight * (scaleFactor / baseDPI) / 2) * baseDPI);
         this.myGraphics2D.setTransform(at);
-        at.setToScale((scaleFactor / at.getScaleX()),
-                (scaleFactor / at.getScaleY()));
+        at.setToScale((scaleFactor / at.getScaleX()), (scaleFactor / at.getScaleY()));
         this.myGraphics2D.transform(at);
-//        this.myGraphics2D.translate((this.myWin.getWidth() / 2.) - (baseWidth / 2.) + this.borders.left,
-//                (this.myWin.getHeight() / 2.) - (baseHeight / 2.) + this.borders.bottom);
 
         // "Borramos" el fondo.
         this.myGraphics2D.setColor(Color.white);
@@ -132,7 +126,7 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
-    public void drawImage(int x, int y, int width, int height, String imageID){
+    public void drawImage(int x, int y, int width, int height, String imageID) {
         IImage image = images.get(imageID);
         this.myGraphics2D.drawImage(images.get(imageID).getImage(), x, y, width, height,
                 0, 0, image.getWidth(), image.getHeight(), null);
@@ -172,4 +166,10 @@ public class RenderDesktop implements IRender {
     public int getHeight() {
         return this.baseHeight;
     }
+
+    public int getOffsetX() { return this.borders.left; }
+
+    public int getOffsetY() { return this.borders.top; }
+
+    public double getDPI() { return this.baseDPI; }
 }
