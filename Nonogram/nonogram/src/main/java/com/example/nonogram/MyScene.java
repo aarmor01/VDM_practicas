@@ -49,9 +49,9 @@ public class MyScene implements IScene {
         if(input.getType() == InputType.TOUCH_UP){
             int cellSize = board.getCellSize();
             int margins = board.getMarginCells();
-            int x = (input.getX() - cellSize) - (input.getX() - cellSize) / cellSize * margins;
+            int x = (input.getX() - cellSize*2) - (input.getX() - cellSize*2) / cellSize * margins;
             //AAAAAAAAAAAAA 528/2 esta cableado
-            int y = ((input.getY() - cellSize) - (input.getY() - cellSize) / cellSize * margins);
+            int y = ((input.getY() - cellSize*2) - (input.getY() - cellSize*2) / cellSize * margins);
 
             if(x > 0 && y > 0 && x < board.getWidth()*cellSize && y < board.getHeight()*cellSize){
                 engRef.getAudio().playSound(sound);

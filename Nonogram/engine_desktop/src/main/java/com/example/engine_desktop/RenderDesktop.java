@@ -35,6 +35,11 @@ public class RenderDesktop implements IRender {
 
     private double scaleFactor;
 
+    private int borderWidth;
+    private int borderHeight;
+
+    private AffineTransform baseTr;
+
     private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
@@ -48,19 +53,13 @@ public class RenderDesktop implements IRender {
         baseWidth = this.myWin.getWidth();
         baseHeight = this.myWin.getHeight();
         baseDPI = this.myGraphics2D.getTransform().getScaleX();
+        baseTr = this.myGraphics2D.getTransform();
 
         // adjust to JFrame borders
         this.borders = this.myWin.getInsets();
         this.myWin.setSize(this.myWin.getWidth() + this.borders.left + this.borders.right,
                 this.myWin.getHeight() + this.borders.top + this.borders.bottom);
         this.myGraphics2D = (Graphics2D) myBufferStrategy.getDrawGraphics();
-
-        // what does it do when the window gets resized discarded because stuttering
-//        this.myWin.addComponentListener(new ComponentAdapter() {
-//            public void componentResized(ComponentEvent evt) {
-//
-//            }
-//        });
 
         // start resource managers
         fonts = new HashMap<>();
@@ -74,10 +73,17 @@ public class RenderDesktop implements IRender {
         double scaleY = (myWin.getHeight() - borders.top - borders.bottom) / (float) baseHeight;
         scaleFactor = Math.min(scaleX * baseDPI, scaleY * baseDPI);
 
+        int tx = (int)((this.myWin.getWidth() / 2 - baseWidth * (scaleFactor / baseDPI) / 2) * baseDPI);
+        int ty = (int)((((this.myWin.getHeight()) + this.borders.top - this.borders.bottom) / 2 - baseHeight * (scaleFactor / baseDPI) / 2) * baseDPI);
+
+        borderWidth = Math.max(tx - this.borders.left, 0);
+        borderHeight = Math.max(ty - this.borders.top, 0);
+
+//        System.out.println(borderWidth);
+//        System.out.println(borderHeight);
+
         AffineTransform at = this.myGraphics2D.getTransform();
-        System.out.println(this.borders.left * scaleFactor + " " + this.borders.top * scaleFactor);
-        at.setToTranslation((this.myWin.getWidth() / 2 - baseWidth * (scaleFactor / baseDPI) / 2) * baseDPI,
-                (((this.myWin.getHeight()) + this.borders.top - this.borders.bottom) / 2 - baseHeight * (scaleFactor / baseDPI) / 2) * baseDPI);
+        at.setToTranslation(tx, ty);
         this.myGraphics2D.setTransform(at);
         at.setToScale((scaleFactor / at.getScaleX()), (scaleFactor / at.getScaleY()));
         this.myGraphics2D.transform(at);
@@ -88,6 +94,14 @@ public class RenderDesktop implements IRender {
     }
 
     public void finishFrame() {
+        setColor(0xFF000000);
+
+        drawRectangle((int)(-borderWidth / scaleFactor), 0, (int)(borderWidth / scaleFactor), baseHeight, true);
+        drawRectangle(baseWidth, 0, (int)(borderWidth / scaleFactor), baseHeight, true);
+
+        drawRectangle(0, (int)(-borderHeight / scaleFactor), baseWidth, (int)(borderHeight / scaleFactor), true);
+        drawRectangle(0, baseHeight, baseWidth, (int)(borderHeight / scaleFactor), true);
+
         this.myBufferStrategy.getDrawGraphics().dispose();
     }
 
@@ -167,9 +181,9 @@ public class RenderDesktop implements IRender {
         return this.baseHeight;
     }
 
-    public int getOffsetX() { return this.borders.left; }
+    public int getOffsetX() { return this.borders.left + (int)(borderWidth * scaleFactor); }
 
-    public int getOffsetY() { return this.borders.top; }
+    public int getOffsetY() { return this.borders.top + (int)(borderHeight * scaleFactor); }
 
-    public double getDPI() { return this.baseDPI; }
+    public double getScale() { return this.scaleFactor; }
 }

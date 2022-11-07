@@ -34,8 +34,7 @@ public class EngineDesktop implements IEngine, Runnable {
         myInputManager = new InputManager();
 
         // add listeners window
-        myWindow.addMouseListener(new InputListenerDesktop(myInputManager, myRenderDesktop.getOffsetX(),
-                myRenderDesktop.getOffsetY(), myRenderDesktop.getDPI()));
+        myWindow.addMouseListener(new InputListenerDesktop(myInputManager, myRenderDesktop));
     }
 
     @Override
@@ -122,14 +121,11 @@ public class EngineDesktop implements IEngine, Runnable {
     private class InputListenerDesktop implements MouseInputListener {
 
         InputManager iM;
-        int offX, offY;
-        double dpi;
+        RenderDesktop rD;
 
-        InputListenerDesktop(InputManager iM, int offtX, int offtY, double dpi) {
+        InputListenerDesktop(InputManager iM, RenderDesktop rD) {
             this.iM = iM;
-            this.offX = offtX;
-            this.offY = offtY;
-            this.dpi = dpi;
+            this.rD = rD;
         }
 
         @Override
@@ -139,15 +135,15 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop((int) (mouseEvent.getX() * dpi) + offX,
-                    (int) (mouseEvent.getY() * dpi) + offY, InputType.TOUCH_MOVE);
+            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
+                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_MOVE);
             this.iM.addInput((ip));
         }
 
         @Override
         public void mouseClicked(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop((int) (mouseEvent.getX() * dpi) + offX,
-                    (int) (mouseEvent.getY() * dpi) + offY, InputType.TOUCH_DOWN);
+            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
+                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_DOWN);
             this.iM.addInput((ip));
         }
 
@@ -158,8 +154,13 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop((int) (mouseEvent.getX() * dpi) + offX,
-                    (int) (mouseEvent.getY() * dpi) + offY, InputType.TOUCH_UP);
+            System.out.println(rD.getOffsetX());
+            System.out.println(mouseEvent.getX() - rD.getOffsetX());
+            System.out.println(rD.getOffsetY());
+            System.out.println(mouseEvent.getY() - rD.getOffsetY());
+
+            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
+                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_UP);
             this.iM.addInput((ip));
         }
 
