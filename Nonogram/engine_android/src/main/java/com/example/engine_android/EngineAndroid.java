@@ -16,6 +16,8 @@ import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
 
+import java.util.LinkedList;
+
 public class EngineAndroid implements IEngine, Runnable {
     private Thread renderThread;
     private boolean running;
@@ -80,10 +82,9 @@ public class EngineAndroid implements IEngine, Runnable {
             currentTime += deltaTime;
 
             // handle input
-            while(!myInputManager.empty()){
-                IInput input = myInputManager.getInput();
-                this.mySceneManager.currentScene().handleInput(input);
-            }
+            LinkedList<IInput> input = myInputManager.getInput();
+            while (!input.isEmpty())
+                this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
             mySceneManager.currentScene().update(deltaTime);
 

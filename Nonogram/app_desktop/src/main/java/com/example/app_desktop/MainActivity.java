@@ -18,23 +18,15 @@ public class MainActivity {
         renderView.setIgnoreRepaint(false);
         renderView.setVisible(true);
 
-        // Intentamos crear el buffer strategy con 2 buffers.
-        int intentos = 100;
-        while(intentos-- > 0) {
+        // load buffer strategy with 2 buffers
+        while(true) {
             try {
                 renderView.createBufferStrategy(2);
                 break;
+            } catch (Exception e) {
+                System.err.println("Couldn't load buffer strategy yet");
+                e.printStackTrace();
             }
-            catch(Exception e) {
-            }
-        } // while pidiendo la creación de la buffeStrategy
-        if (intentos == 0) {
-            System.err.println("No pude crear la BufferStrategy");
-            return;
-        }
-        else {
-            // En "modo debug" podríamos querer escribir esto.
-            //System.out.println("BufferStrategy tras " + (100 - intentos) + " intentos.");
         }
 
         EngineDesktop eng = new EngineDesktop(renderView);

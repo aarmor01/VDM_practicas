@@ -4,14 +4,14 @@ import com.example.engine_common.interfaces.ISound;
 
 import java.io.File;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioInputStream;
 
 public class SoundDesktop implements ISound {
     AudioInputStream audioStream;
     Clip clip;
-    float db;
+    float volume_db;
 
     SoundDesktop(File audioFile, float volume_db) {
         try {
@@ -23,18 +23,18 @@ public class SoundDesktop implements ISound {
             e.printStackTrace();
         }
 
-        db = volume_db;
+        this.volume_db = volume_db;
     }
 
     public Clip getSound() { return clip; }
 
     @Override
     public float getVolume() {
-        return db;
+        return volume_db;
     }
 
     @Override
     public void setVolume(float volume_db) {
-        db = volume_db;
+        this.volume_db = volume_db;
     }
 }

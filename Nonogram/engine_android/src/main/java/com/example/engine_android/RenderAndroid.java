@@ -126,15 +126,13 @@ public class RenderAndroid implements IRender {
 
     @Override
     public void drawText(int x, int y, String text) {
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawText(text, x, y, paint);
     }
 
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill) {
-        if (fill)
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        else
-            paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
         canvas.drawRect(x, y, x + width, y + height, paint);
     }
 
@@ -144,7 +142,8 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public void drawCircle(int x, int y, int r) {
+    public void drawCircle(int x, int y, int r, boolean fill) {
+        paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
         canvas.drawCircle(x, y, r, paint);
     }
 

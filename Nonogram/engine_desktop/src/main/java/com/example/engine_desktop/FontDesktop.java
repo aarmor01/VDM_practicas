@@ -1,15 +1,16 @@
 package com.example.engine_desktop;
 
 import com.example.engine_common.interfaces.IFont;
+
 import com.example.engine_common.shared.FontType;
 
 import java.awt.Font;
-
 import java.awt.FontFormatException;
+
 import java.io.File;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class FontDesktop implements IFont {
     Font font;

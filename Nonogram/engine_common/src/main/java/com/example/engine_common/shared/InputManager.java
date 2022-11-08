@@ -4,6 +4,8 @@ import com.example.engine_common.interfaces.IInput;
 
 import java.util.LinkedList;
 
+import sun.awt.image.ImageWatched;
+
 public class InputManager {
     LinkedList<IInput> bufferInput;
 
@@ -11,7 +13,9 @@ public class InputManager {
 
     public void addInput(IInput newInput) { bufferInput.addLast(newInput); }
 
-    public IInput getInput() { return bufferInput.removeFirst(); }
-
-    public boolean empty() { return bufferInput.isEmpty(); }
+    public LinkedList<IInput> getInput() {
+        LinkedList<IInput> bufferCopy = new LinkedList<>(bufferInput);
+        bufferInput.clear();
+        return bufferCopy;
+    }
 }

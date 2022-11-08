@@ -14,8 +14,8 @@ public class ImageDesktop implements IImage {
     public ImageDesktop(File file) {
         try {
             this.image = ImageIO.read(file);
-        }
-        catch(IOException e) {
+        } catch (Exception e) {
+            System.err.println("Couldn't load image file");
             e.printStackTrace();
         }
     }

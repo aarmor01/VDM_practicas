@@ -13,15 +13,19 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class AudioAndroid implements IAudio {
-    private HashMap<String, SoundAndroid> sounds;
-    private SoundPool soundPool;
     private AssetManager assetManager;
+
     private MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
+
+    private HashMap<String, SoundAndroid> sounds;
 
     public  AudioAndroid(AssetManager assetManager_) {
         assetManager = assetManager_;
+
         soundPool = new SoundPool.Builder().setMaxStreams(10).build();
         mediaPlayer = new MediaPlayer();
+
         sounds = new HashMap<>();
     }
 

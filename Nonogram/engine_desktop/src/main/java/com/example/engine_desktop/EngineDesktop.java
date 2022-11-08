@@ -4,11 +4,12 @@ import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
-import com.example.engine_common.interfaces.IScene;
-import com.example.engine_common.shared.FontType;
+
+import com.example.engine_common.shared.SceneManager;
 import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
-import com.example.engine_common.shared.SceneManager;
+
+import java.util.LinkedList;
 
 import java.awt.event.MouseEvent;
 
@@ -16,16 +17,15 @@ import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 
 public class EngineDesktop implements IEngine, Runnable {
-
-    // thread variables
-    private Thread renderThread;
-    private boolean running;
-
     // engine variables
     private RenderDesktop myRenderDesktop;
     private AudioDesktop myAudioDesktop;
     private SceneManager mySceneManager;
     private InputManager myInputManager;
+
+    // thread variables
+    private Thread renderThread;
+    private boolean running;
 
     public EngineDesktop(JFrame myWindow) {
         myRenderDesktop = new RenderDesktop(myWindow);
@@ -33,7 +33,7 @@ public class EngineDesktop implements IEngine, Runnable {
         mySceneManager = new SceneManager();
         myInputManager = new InputManager();
 
-        // add listeners window
+        // add input listener to window
         myWindow.addMouseListener(new InputListenerDesktop(myInputManager, myRenderDesktop));
     }
 
@@ -42,35 +42,33 @@ public class EngineDesktop implements IEngine, Runnable {
         if (renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while (this.running && this.myRenderDesktop.getWidth() == 0) ;
+        while (this.running && !this.myRenderDesktop.windowCreated());
 
-        // Bucle de juego principal.
         long currentTime = System.currentTimeMillis();
         while (this.running) {
-            long deltaTime = System.currentTimeMillis() - currentTime;
-            currentTime += deltaTime;
+            try {
+                // frame time
+                long deltaTime = System.currentTimeMillis() - currentTime;
+                currentTime += deltaTime;
 
-            // handle input
-            while (!myInputManager.empty()) {
-                IInput input = myInputManager.getInput();
-                this.mySceneManager.currentScene().handleInput(input);
+                // handle input
+                LinkedList<IInput> input = myInputManager.getInput();
+                while (!input.isEmpty())
+                    this.mySceneManager.currentScene().handleInput(input.removeFirst());
+
+                // update
+                this.mySceneManager.currentScene().update(deltaTime / 1000.0);
+
+                // render
+                do {
+                    this.myRenderDesktop.prepareFrame(0xFFFFFFFF);
+                    this.mySceneManager.currentScene().render(this.myRenderDesktop);
+                    this.myRenderDesktop.finishFrame();
+                } while (this.myRenderDesktop.swapBuffer());
+            } catch (Exception e) {
+                System.err.println("Frame lost");
+                e.printStackTrace();
             }
-
-            // update
-            this.mySceneManager.currentScene().update(deltaTime / 1000.0);
-
-            // render
-            do {
-                this.myRenderDesktop.prepareFrame();
-                this.mySceneManager.currentScene().render(this.myRenderDesktop);
-                this.myRenderDesktop.finishFrame();
-            } while (this.myRenderDesktop.swapBuffer());
-
-//            try {
-//                Thread.sleep(16);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 
@@ -91,8 +89,9 @@ public class EngineDesktop implements IEngine, Runnable {
                     this.renderThread.join();
                     this.renderThread = null;
                     break;
-                } catch (InterruptedException ie) {
-                    // Esto no debería ocurrir nunca...
+                } catch (Exception e) {
+                    System.err.println("Thread join error");
+                    e.printStackTrace();
                 }
             }
         }
@@ -119,7 +118,6 @@ public class EngineDesktop implements IEngine, Runnable {
     }
 
     private class InputListenerDesktop implements MouseInputListener {
-
         InputManager iM;
         RenderDesktop rD;
 
@@ -130,50 +128,68 @@ public class EngineDesktop implements IEngine, Runnable {
 
         @Override
         public void mouseDragged(MouseEvent mouseEvent) {
-            //System.out.println("drg");
+            int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
+            int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            if(input_x < 0 || input_y < 0 || input_x > rD.getWidth() || input_y > rD.getHeight())
+                return;
+
+            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_DRAG);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
-                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_MOVE);
+            int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
+            int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            if(input_x < 0 || input_y < 0 || input_x > rD.getWidth() || input_y > rD.getHeight())
+                return;
+
+            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_MOVE);
             this.iM.addInput((ip));
         }
 
         @Override
         public void mouseClicked(MouseEvent mouseEvent) {
-            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
-                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_DOWN);
+            int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
+            int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            if(input_x < 0 || input_y < 0 || input_x > rD.getWidth() || input_y > rD.getHeight())
+                return;
+
+            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_DOWN);
             this.iM.addInput((ip));
         }
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-            //System.out.println("clk");
+            int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
+            int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            if(input_x < 0 || input_y < 0 || input_x > rD.getWidth() || input_y > rD.getHeight())
+                return;
+
+            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_PRESS);
+            this.iM.addInput((ip));
         }
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent) {
-            System.out.println(rD.getOffsetX());
-            System.out.println(mouseEvent.getX() - rD.getOffsetX());
-            System.out.println(rD.getOffsetY());
-            System.out.println(mouseEvent.getY() - rD.getOffsetY());
-
             int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
             int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            if(input_x < 0 || input_y < 0 || input_x > rD.getWidth() || input_y > rD.getHeight())
+                return;
 
             InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_UP);
             this.iM.addInput((ip));
         }
 
         @Override
-        public void mouseEntered(MouseEvent mouseEvent) {
-            //System.out.println("ent");
-        }
+        public void mouseEntered(MouseEvent mouseEvent) {}
 
         @Override
-        public void mouseExited(MouseEvent mouseEvent) {
-            //System.out.println("ext");
-        }
+        public void mouseExited(MouseEvent mouseEvent) {}
     }
 }
