@@ -181,9 +181,9 @@ public class RenderDesktop implements IRender {
         return this.baseHeight;
     }
 
-    public int getOffsetX() { return this.borders.left + (int)(borderWidth * scaleFactor); }
+    public int getOffsetX() { return (int)Math.round((this.borders.left  + borderWidth)/ baseDPI); }
 
-    public int getOffsetY() { return this.borders.top + (int)(borderHeight * scaleFactor); }
+    public int getOffsetY() { return (int)Math.round((this.borders.top + borderHeight)/ baseDPI) ; }
 
-    public double getScale() { return this.scaleFactor; }
+    public double getScale() { return this.scaleFactor / this.baseDPI; }
 }

@@ -159,8 +159,10 @@ public class EngineDesktop implements IEngine, Runnable {
             System.out.println(rD.getOffsetY());
             System.out.println(mouseEvent.getY() - rD.getOffsetY());
 
-            InputDesktop ip = new InputDesktop((int)((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale()),
-                    (int)((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale()),  InputType.TOUCH_UP);
+            int input_x = (int)Math.round((mouseEvent.getX() - rD.getOffsetX()) / rD.getScale());
+            int input_y = (int)Math.round((mouseEvent.getY() - rD.getOffsetY()) / rD.getScale());
+
+            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_UP);
             this.iM.addInput((ip));
         }
 
