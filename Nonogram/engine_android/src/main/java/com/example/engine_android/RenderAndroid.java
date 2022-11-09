@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -142,6 +143,18 @@ public class RenderAndroid implements IRender {
     public void drawText(int x, int y, String text) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawText(text, x, y, paint);
+    }
+
+    @Override
+    public int getTextWidth(String fontID, String text) {
+        Typeface prev_font = paint.getTypeface();
+        FontAndroid font = fonts.get(fontID);
+
+        paint.setTypeface(font.getFont());
+        float width = paint.measureText(text);
+        paint.setTypeface(prev_font);
+
+        return (int)width;
     }
 
     @Override
