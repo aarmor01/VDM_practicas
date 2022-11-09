@@ -131,8 +131,8 @@ public class EngineAndroid implements IEngine, Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int aux = render.getViewHeight() - render.getHeight()/2;
-            InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY() + aux, InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
+            int aux = (render.getViewHeight() - render.getHeight())/2;
+            InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY() - aux, InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
             if ( InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() || InputType.TOUCH_MOVE == iA.getType())
                 myInputManager.addInput(iA);
             return true;
