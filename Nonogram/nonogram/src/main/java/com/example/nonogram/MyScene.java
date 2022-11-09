@@ -29,16 +29,17 @@ public class MyScene implements IScene {
 
         engRef = engine;
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 40);
-        checkButton = new Button(10, 50, 100, 30, "Check" ,engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
-        backButton = new Button(200, 50, 100, 30, "Back", engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+
+        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/7,
+                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/4))*3/4, engRef.getRender().getHeight()/7,
+                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
     }
 
     @Override
-    public void update(double deltaTime) {
-        board.update(deltaTime);
-    }
+    public void update(double deltaTime) {board.update(deltaTime);}
 
     @Override
     public void render(IRender renderMng) {
@@ -56,9 +57,10 @@ public class MyScene implements IScene {
             }
             else if(checkButton.isInBUtton(input.getX(), input.getY())){
                 board.checkear();
+                if(board.win)
+                    engRef.getSceneManager().pushScene(new WinScene(board));
             }
             else if(backButton.isInBUtton(input.getX(), input.getY())){
-
                 engRef.getSceneManager().popScene();
             }
         }

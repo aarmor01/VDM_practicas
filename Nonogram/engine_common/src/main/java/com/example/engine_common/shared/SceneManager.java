@@ -19,4 +19,6 @@ public class SceneManager {
     }
 
     public IScene popScene() { return this.scenes.pop(); }
+
+    public int getStackSize() { return scenes.size();}
 }

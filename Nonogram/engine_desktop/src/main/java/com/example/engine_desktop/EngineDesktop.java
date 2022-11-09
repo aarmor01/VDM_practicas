@@ -109,6 +109,7 @@ public class EngineDesktop implements IEngine, Runnable {
     @Override
     public InputManager getInputManager() { return this.myInputManager; }
 
+    // listener to read input from the JFrame window
     private class InputListenerDesktop implements MouseInputListener {
         InputManager iM;
         RenderDesktop rD;
