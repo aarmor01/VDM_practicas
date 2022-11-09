@@ -27,8 +27,8 @@ public class EngineDesktop implements IEngine, Runnable {
     private Thread renderThread;
     private boolean running;
 
-    public EngineDesktop(JFrame myWindow) {
-        this.myRenderDesktop = new RenderDesktop(myWindow);
+    public EngineDesktop(JFrame myWindow, int bg) {
+        this.myRenderDesktop = new RenderDesktop(myWindow, bg);
         this.myAudioDesktop = new AudioDesktop();
         this.mySceneManager = new SceneManager();
         this.myInputManager = new InputManager();
@@ -98,7 +98,7 @@ public class EngineDesktop implements IEngine, Runnable {
     }
 
     @Override
-    public IRender getRender() { return this.myRenderDesktop; }
+    public IRender getMyRenderManager() { return this.myRenderDesktop; }
 
     @Override
     public IAudio getAudio() { return this.myAudioDesktop; }

@@ -4,7 +4,6 @@ import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IEngine;
-import com.example.engine_common.shared.FontType;
 import com.example.engine_common.shared.InputType;
 
 //Clase interna que representa la escena que queremos pintar
@@ -27,7 +26,7 @@ public class MyScene implements IScene {
         board = new Board();
         board.init(w,h, eng);
 
-        play = new Button(10, 50, 100, 30, "Play" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        play = new Button(10, 50, 100, 30, "Play" ,eng.getMyRenderManager().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 
         engRef = eng;
 

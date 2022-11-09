@@ -1,17 +1,17 @@
 package com.example.engine_android;
 
-import android.content.res.AssetManager;
-import android.media.AudioManager;
-import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+
+import android.content.res.AssetManager;
 
 import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IEngine;
 import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.interfaces.IRender;
 import com.example.engine_common.interfaces.IScene;
+
 import com.example.engine_common.shared.InputManager;
 import com.example.engine_common.shared.InputType;
 import com.example.engine_common.shared.SceneManager;
@@ -19,25 +19,32 @@ import com.example.engine_common.shared.SceneManager;
 import java.util.LinkedList;
 
 public class EngineAndroid implements IEngine, Runnable {
-    private Thread renderThread;
-    private boolean running;
-    private RenderAndroid render;
-    private IScene currentScene;
-    private SurfaceView renderView;
-    private  AssetManager assetManager;
+    // engine variables
+    private RenderAndroid myRenderManager;
     private SceneManager mySceneManager;
     private InputManager myInputManager;
     private AudioAndroid myAudioManager;
 
-    public EngineAndroid(SurfaceView s, AssetManager aM) {
-        //Creamos el SurfaceView que "contendrá" nuestra escena
-        this.renderView = s;
-        this.renderView.setOnTouchListener(new myTouchListener());
-        this.assetManager = aM;
-        this.myInputManager = new InputManager();
-        this.render = new RenderAndroid(this.renderView, this.assetManager, 4.0f/6.0f);
+    // asset manager
+    private AssetManager assetManager;
+
+    // start scene
+    private IScene startScene;
+
+    // thread variables
+    private Thread renderThread;
+    private boolean running;
+
+    public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio) {
+        this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager();
+        this.myInputManager = new InputManager();
+
+        this.assetManager = aM;
+
+        // add input listener to window
+        surface.setOnTouchListener(new InputListener());
     }
 
     @Override
@@ -45,16 +52,12 @@ public class EngineAndroid implements IEngine, Runnable {
         if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while(this.running && render.getViewWidth() == 0);
+        while(this.running && myRenderManager.getViewWidth() == 0);
 
-        this.render.scaleApp();
-//        this.mySceneManager.currentScene().init(this);
         long currentTime = System.currentTimeMillis();
-
-        // Bucle de juego principal.
         while(this.running) {
             try {
-                //System.out.printf("Conche su madre que significa chainshaw man");
+                // frame time
                 long deltaTime = System.currentTimeMillis() - currentTime;
                 currentTime += deltaTime;
 
@@ -63,12 +66,14 @@ public class EngineAndroid implements IEngine, Runnable {
                 while (!input.isEmpty())
                     this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
+                // update
                 this.mySceneManager.currentScene().update(deltaTime/1000.0f);
 
-                while (!this.render.surfaceValid());
-                this.render.clear();
-                this.mySceneManager.currentScene().render(this.render);
-                this.render.present();
+                // render
+                while (!this.myRenderManager.surfaceValid());
+                this.myRenderManager.clear();
+                this.mySceneManager.currentScene().render(this.myRenderManager);
+                this.myRenderManager.present();
             }
             catch (Exception e) {
                 System.err.println("Frame lost");
@@ -103,7 +108,7 @@ public class EngineAndroid implements IEngine, Runnable {
     }
 
     @Override
-    public IRender getRender() { return this.render; }
+    public IRender getMyRenderManager() { return this.myRenderManager; }
 
     @Override
     public IAudio getAudio() { return this.myAudioManager; }
@@ -114,13 +119,13 @@ public class EngineAndroid implements IEngine, Runnable {
     @Override
     public InputManager getInputManager() { return this.myInputManager; }
 
-    private class myTouchListener implements View.OnTouchListener {
+    private class InputListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int input_y = (int)motionEvent.getY() - (render.getViewHeight() - render.getHeight()) / 2;
-            int input_x = (int)motionEvent.getX() - (render.getViewWidth() - render.getWidth()) / 2;
+            int input_y = (int)motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
+            int input_x = (int)motionEvent.getX() - (myRenderManager.getViewWidth() - myRenderManager.getWidth()) / 2;
             
-            if (input_x < 0 ||  input_y < 0 || input_x > render.getWidth() || input_y > render.getHeight() ||)
+            if (input_x < 0 ||  input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
                 return true;
             
             InputAndroid iA = new InputAndroid( input_x, input_y, InputType.values()[motionEvent.getActionMasked()], 

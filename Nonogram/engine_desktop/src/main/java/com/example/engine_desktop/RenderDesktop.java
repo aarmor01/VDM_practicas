@@ -46,7 +46,7 @@ public class RenderDesktop implements IRender {
     private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
-    public RenderDesktop(JFrame win) {
+    public RenderDesktop(JFrame win, int bg) {
         // obtain window and render data
         this.window = win;
         this.bufferStrategy = this.window.getBufferStrategy();
@@ -66,7 +66,8 @@ public class RenderDesktop implements IRender {
         this.canvas = (Graphics2D) bufferStrategy.getDrawGraphics();
 
         // bg color
-        this.bgColor = 0xFF000000;
+        this.bgColor = bg;
+        this.window.setBackground(new Color(bgColor));
 
         // start resource managers
         this.fonts = new HashMap<>();

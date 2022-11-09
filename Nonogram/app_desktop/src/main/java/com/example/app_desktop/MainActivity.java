@@ -9,14 +9,14 @@ import com.example.nonogram.MyScene;
 import java.awt.Color;
 
 public class MainActivity {
-
     public static void main(String[] args) {
+        // create window
         JFrame renderView = new JFrame("Nonogram");
 
+        // make adjustments to it
         renderView.setSize(400, 600);
-        renderView.setBackground(Color.GRAY);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        renderView.setIgnoreRepaint(false);
+        renderView.setIgnoreRepaint(true);
         renderView.setVisible(true);
 
         // load buffer strategy with 2 buffers
@@ -30,9 +30,11 @@ public class MainActivity {
             }
         }
 
-        EngineDesktop eng = new EngineDesktop(renderView);
+        // create engine and scene
+        EngineDesktop eng = new EngineDesktop(renderView, 0xFFFFFFFF);
         MainMenu scene = new MainMenu(eng);
 
+        // start up
         eng.getSceneManager().pushScene(scene);
         eng.resume();
     }

@@ -15,7 +15,7 @@ public class MainMenu implements IScene {
     private IEngine engRef;
     public MainMenu(IEngine eng) {
         engRef = eng;
-        font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
+        font = font = eng.getMyRenderManager().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         playButton = new Button(100, 100, 200, 60, "PLAY", "", font);
         title = "NONOGRAMAS";
     }
