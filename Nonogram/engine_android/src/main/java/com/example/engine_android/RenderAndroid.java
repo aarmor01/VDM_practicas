@@ -132,7 +132,6 @@ public class RenderAndroid implements IRender {
 
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
-        canvas.drawBitmap(images.get(imageID).getImage(), x, y, paint);
         Bitmap image = images.get(imageID).getImage();
         Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
         Rect dst = new Rect(x, y, x + width, y+height);
