@@ -26,14 +26,12 @@ public class MyScene implements IScene {
         board = new Board();
         board.init(dim_w, dim_h, engine);
 
-        checkButton = new Button(10, 50, 100, 30, "Check" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
-        backButton = new Button(200, 50, 100, 30, "Back", eng.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
-
         engRef = engine;
 
+        checkButton = new Button(10, 50, 100, 30, "Check" ,engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        backButton = new Button(200, 50, 100, 30, "Back", engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
-        engine.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 1);
-        engine.getAudio().playMusic();
     }
 
     @Override

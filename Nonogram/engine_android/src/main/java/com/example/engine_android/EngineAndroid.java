@@ -35,13 +35,13 @@ public class EngineAndroid implements IEngine, Runnable {
     private Thread renderThread;
     private boolean running;
 
-    public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio) {
-        this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio);
+    public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio, int bgColor) {
+        this.assetManager = aM;
+
+        this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
-
-        this.assetManager = aM;
 
         // add input listener to window
         surface.setOnTouchListener(new InputListener());

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         // create engine and scene
         AssetManager aMan = this.getBaseContext().getAssets();
-        EngineAndroid eng = new EngineAndroid(renderView, aMan, 4.0f/6.0f);
+        EngineAndroid eng = new EngineAndroid(renderView, aMan, 4.0f/6.0f, 0xFFFFFFFF);
         MainMenu scene = new MainMenu();
 
         // start up

@@ -37,7 +37,10 @@ public class RenderAndroid implements IRender {
     private int baseHeight;
     private float scale;
 
-    public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio) {
+    //background color
+    private int bgColor;
+
+    public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio, int bgColor) {
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
@@ -50,6 +53,9 @@ public class RenderAndroid implements IRender {
 
         // initializes canvas values
         this.scale = ratio;
+
+        // sets the background color
+        this.bgColor = bgColor;
     }
 
     public void adaptScale() {
@@ -75,9 +81,9 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        this.canvas.drawColor(0xFFFFFFFF);
+        this.canvas.drawColor(this.bgColor);
         this.canvas.translate(this.posCanvasX, this.posCanvasY);
-        setColor(0xFFFFFFFF);
+        setColor(this.bgColor);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
     }
 

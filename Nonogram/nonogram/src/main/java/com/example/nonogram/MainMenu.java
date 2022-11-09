@@ -21,8 +21,8 @@ public class MainMenu implements IScene {
                 engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", font);
         title = "NONOGRAMAS";
 
-        eng.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
-        eng.getAudio().playMusic();
+        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
+        engRef.getAudio().playMusic();
     }
 
     @Override
