@@ -15,9 +15,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class ImageAndroid implements IImage {
+    //parameter info of the image
     Bitmap image;
 
     public ImageAndroid(String path, AssetManager assetManager) {
+        //loads the image and stores its info
         try {
             InputStream is = assetManager.open(path);
             image = BitmapFactory.decodeStream(is);
@@ -26,6 +28,7 @@ public class ImageAndroid implements IImage {
         }
     }
 
+    //getters for the image info, and its size
     public Bitmap getImage() {
         return image;
     }

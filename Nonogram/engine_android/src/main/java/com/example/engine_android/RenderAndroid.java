@@ -1,6 +1,7 @@
 package com.example.engine_android;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -17,25 +18,32 @@ import java.util.HashMap;
 
 
 public class RenderAndroid implements IRender {
-
+    //android graphic variables
     private SurfaceView myView;
     private SurfaceHolder holder;
     private Canvas canvas;
     private Paint paint;
 
+    //resource managers
     private HashMap<String, ImageAndroid> images;
     private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
+
+    //screen orientation info
     private boolean verticalScreen;
     private boolean changedScreen;
+
+    //canvas position info
     private int posCanvasX, posCanvasY;
 
+    //canvas scale, height and width
     private int baseWidth;
     private int baseHeight;
     private float scale;
 
 
-    public RenderAndroid(SurfaceView myView, AssetManager aM) {
+    public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio) {
+        //
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.assetManager = aM;
@@ -44,14 +52,13 @@ public class RenderAndroid implements IRender {
         this.images = new HashMap<>();
         this.verticalScreen = true;
         this.changedScreen = false;
-        this.baseWidth = 1080;
-        this.baseHeight = 1620;
-        this.scale = 4.0f/6.0f;
+
+        //initializes canvas values
+        this.scale = ratio;
     }
 
     public void scaleApp() {
-        while (!this.surfaceValid());
-        this.canvas = this.holder.lockCanvas();
+        while(holder.getSurfaceFrame().width() == 0);
         //400x600
         //x----y
         float w = holder.getSurfaceFrame().width();
@@ -60,12 +67,10 @@ public class RenderAndroid implements IRender {
         float scaleY = y;
         if (scaleX * scale < scaleY) scaleY = scaleX / scale;
         else scaleX = scaleY * scale;
-        //canvas.translate((w - scaleX) / 2, (y - scaleY)/2);
         posCanvasX = (int) (w - scaleX) / 2;
         posCanvasY = (int) (y - scaleY) / 2;
         this.baseWidth = (int)scaleX;
         this.baseHeight = (int)scaleY;
-        this.holder.unlockCanvasAndPost(canvas);
     }
 
     public boolean surfaceValid() {
@@ -128,6 +133,10 @@ public class RenderAndroid implements IRender {
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
         canvas.drawBitmap(images.get(imageID).getImage(), x, y, paint);
+        Bitmap image = images.get(imageID).getImage();
+        Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
+        Rect dst = new Rect(x, y, x + width, y+height);
+        canvas.drawBitmap(image, src, dst, paint);
     }
 
     @Override
