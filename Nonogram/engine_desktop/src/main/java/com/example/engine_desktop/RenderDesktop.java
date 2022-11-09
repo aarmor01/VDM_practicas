@@ -104,16 +104,18 @@ public class RenderDesktop implements IRender {
     @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        images.put(imageFile.getName(), new ImageDesktop(imageFile));
+        if(!images.containsKey(imageFile.getName()))
+            images.put(imageFile.getName(), new ImageDesktop(imageFile));
         return imageFile.getName();
     }
 
     @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
-        String id = fontFile.getName() + type.toString() + size;
-        fonts.put(id, new FontDesktop(fontFile, type, size));
-        return id;
+        String fontID = fontFile.getName() + type.toString() + size;
+        if(!fonts.containsKey(fontID))
+            fonts.put(fontID, new FontDesktop(fontFile, type, size));
+        return fontID;
     }
 
     @Override

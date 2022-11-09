@@ -28,7 +28,8 @@ public class AudioDesktop implements IAudio {
     @Override
     public String loadSound(String filePath, float volume) {
         File soundFile = new File(filePath);
-        sounds.put(soundFile.getName(), new SoundDesktop(soundFile, toDB(volume)));
+        if(!sounds.containsKey(soundFile.getName()))
+            sounds.put(soundFile.getName(), new SoundDesktop(soundFile, toDB(volume)));
         return soundFile.getName();
     }
 

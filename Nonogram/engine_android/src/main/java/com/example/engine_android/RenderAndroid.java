@@ -95,16 +95,19 @@ public class RenderAndroid implements IRender {
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
-        images.put(imageFile.getName(), new ImageAndroid(convFilepath, assetManager));
+        if(!images.containsKey(imageFile.getName()))
+            images.put(imageFile.getName(), new ImageAndroid(convFilepath, assetManager));
         return imageFile.getName();
     }
 
     @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
+        String fontID = fontFile.getName() + type.toString() + size;
         String convFilepath = filePath.replaceAll("./assets/", "");
-        fonts.put(fontFile.getName(), new FontAndroid(convFilepath, assetManager, size, type));
-        return fontFile.getName();
+        if(!fonts.containsKey(fontID))
+            fonts.put(fontFile.getName(), new FontAndroid(convFilepath, assetManager, size, type));
+        return fontID;
     }
 
     @Override

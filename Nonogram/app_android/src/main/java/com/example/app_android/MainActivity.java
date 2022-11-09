@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onFocusStart(){
+
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         Log.d("tag", "config changed");
