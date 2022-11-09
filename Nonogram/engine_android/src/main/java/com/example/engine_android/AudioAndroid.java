@@ -66,7 +66,8 @@ public class AudioAndroid implements IAudio {
     public String loadSound(String filePath, float volume) {
         File soundFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
-        sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, assetManager, soundPool,volume));
+        if(!sounds.containsKey(soundFile.getName()))
+            sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, assetManager, soundPool,volume));
         return soundFile.getName();
     }
 
