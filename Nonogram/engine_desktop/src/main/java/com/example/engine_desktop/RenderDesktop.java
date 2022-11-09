@@ -151,7 +151,7 @@ public class RenderDesktop implements IRender {
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
         IImage image = images.get(imageID);
-        this.canvas.drawImage(images.get(imageID).getImage(), x, y, width, height,
+        this.canvas.drawImage(images.get(imageID).getImage(), x, y, x + width, y + height,
                 0, 0, image.getWidth(), image.getHeight(), null);
         this.canvas.setPaintMode();
     }
@@ -203,9 +203,9 @@ public class RenderDesktop implements IRender {
         return this.canvasHeight;
     }
 
-    public int getOffsetX() { return (int)Math.round((this.borders.left  + marginWidth)/ ogDPI); }
+    public int getOffsetX() { return (int)Math.round((this.borders.left + marginWidth) / ogDPI); }
 
-    public int getOffsetY() { return (int)Math.round((this.borders.top + marginHeight)/ ogDPI) ; }
+    public int getOffsetY() { return (int)Math.round((this.borders.top + marginHeight) / ogDPI) ; }
 
     public double getScale() { return this.scaleFactor / this.ogDPI; }
 }
