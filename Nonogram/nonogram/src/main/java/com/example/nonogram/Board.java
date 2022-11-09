@@ -28,6 +28,8 @@ public class Board {
     private List<Cell> checkedCells;
     private double lastTimeChecked;
 
+    public boolean win = false;
+
     public void render(IRender renderMng) {
         renderMng.setColor(0xFF000000); //Cuadrados alrededor
         renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + 1,
@@ -50,6 +52,17 @@ public class Board {
             int x2 = renderMng.getTextWidth(font, "Tienes mal " + checkedCells.size() + " casillas");
             renderMng.drawText((renderMng.getWidth() - x) / 2, posY - renderMng.getHeight() / 10, "Te faltan " + cellsLeft + " casillas");
             renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + fontSize * 2, "Tienes mal " + checkedCells.size() + " casillas");
+        }
+    }
+
+    public void renderWin(IRender renderMng){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(board[i][j].isAnswer()){
+                    board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
+                        j * board_cell_size + (j + 1) * separation_margin + posY, board_cell_size);
+                }
+            }
         }
     }
 
@@ -185,6 +198,8 @@ public class Board {
             }
         }
         lastTimeChecked = SEGS_CHECKED;
+        if(checkedCells.size() == 0 && cellsLeft == 0)
+            win = true;
     }
 
     public boolean isInBoard(int posX, int posY) {

@@ -35,9 +35,7 @@ public class MyScene implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) {
-        board.update(deltaTime);
-    }
+    public void update(double deltaTime) {board.update(deltaTime);}
 
     @Override
     public void render(IRender renderMng) {
@@ -55,9 +53,10 @@ public class MyScene implements IScene {
             }
             else if(checkButton.isInBUtton(input.getX(), input.getY())){
                 board.checkear();
+                if(board.win)
+                    engRef.getSceneManager().pushScene(new WinScene(board));
             }
             else if(backButton.isInBUtton(input.getX(), input.getY())){
-
                 engRef.getSceneManager().popScene();
             }
         }
