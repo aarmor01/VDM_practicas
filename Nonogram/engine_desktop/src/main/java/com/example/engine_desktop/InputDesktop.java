@@ -11,22 +11,14 @@ public class InputDesktop implements IInput {
     InputDesktop(int x, int y, InputType type) { this.x = x;  this.y = y; this.type = type; }
 
     @Override
-    public int getX() {
-        return this.x;
-    }
+    public int getX() { return this.x; }
 
     @Override
-    public int getY() {
-        return this.y;
-    }
+    public int getY() { return this.y; }
 
     @Override
-    public InputType getType() {
-        return this.type;
-    }
+    public InputType getType() { return this.type; }
 
     @Override
-    public int getID() {
-        return 0;
-    }
+    public int getID() { return 0; }
 }

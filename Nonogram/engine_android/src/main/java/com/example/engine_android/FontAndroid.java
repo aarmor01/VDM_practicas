@@ -23,19 +23,13 @@ public class FontAndroid implements IFont {
     public Typeface getFont() { return this.font; }
 
     @Override
-    public int getSize() {
-        return this.size;
-    }
+    public int getSize() { return this.size; }
 
     // returns if the font modifier bold is activated
     @Override
-    public boolean isBold() {
-        return this.font.isBold();
-    }
+    public boolean isBold() { return this.font.isBold(); }
 
     // returns if the font modifier italic is activated
     @Override
-    public boolean isItalic() {
-        return this.font.isItalic();
-    }
+    public boolean isItalic() { return this.font.isItalic(); }
 }

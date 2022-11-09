@@ -46,7 +46,7 @@ public class RenderDesktop implements IRender {
     private HashMap<String, FontDesktop> fonts;
     private HashMap<String, ImageDesktop> images;
 
-    public RenderDesktop(JFrame win) {
+    public RenderDesktop(JFrame win, int bg) {
         // obtain window and render data
         this.window = win;
         this.bufferStrategy = this.window.getBufferStrategy();
@@ -66,7 +66,8 @@ public class RenderDesktop implements IRender {
         this.canvas = (Graphics2D) bufferStrategy.getDrawGraphics();
 
         // bg color
-        this.bgColor = 0xFF000000;
+        this.bgColor = bg;
+        this.window.setBackground(new Color(bgColor));
 
         // start resource managers
         this.fonts = new HashMap<>();
@@ -162,6 +163,29 @@ public class RenderDesktop implements IRender {
         this.canvas.drawString(text, x, y);
     }
 
+    @Override
+    public int getTextWidth(String fontID, String text) {
+        Font currFont = this.fonts.get(fontID).getFont();
+        return this.canvas.getFontMetrics(currFont).stringWidth(text);
+    }
+
+    @Override
+    public int getTextHeight(String fontID) { return this.fonts.get(fontID).getFont().getSize(); }
+
+    @Override
+    public int getWidth() { return this.canvasWidth; }
+
+    @Override
+    public int getHeight() { return this.canvasHeight; }
+
+    public boolean windowCreated() { return this.window.getWidth() != 0; }
+
+    public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
+
+    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
+
+    public double getScale() { return this.scaleFactor / this.ogDPI; }
+
     private void scaleCanvas() {
         // select the lower scale to make proportion viable
         double scaleX = (window.getWidth() - this.borders.left - this.borders.right) / (float) this.canvasWidth;
@@ -193,33 +217,4 @@ public class RenderDesktop implements IRender {
                 this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
         drawRectangle(0, this.canvasHeight, this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
     }
-
-    public boolean windowCreated() { return this.window.getWidth() != 0; }
-
-    @Override
-    public int getWidth() {
-        return this.canvasWidth;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.canvasHeight;
-    }
-
-    @Override
-    public int getTextWidth(String fontID, String text) {
-        Font currFont = this.fonts.get(fontID).getFont();
-        return this.canvas.getFontMetrics(currFont).stringWidth(text);
-    }
-
-    @Override
-    public int getTextHeight(String fontID) {
-        return this.fonts.get(fontID).getFont().getSize();
-    }
-
-    public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
-
-    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
-
-    public double getScale() { return this.scaleFactor / this.ogDPI; }
 }

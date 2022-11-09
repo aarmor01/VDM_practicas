@@ -34,38 +34,22 @@ public class SoundAndroid implements ISound {
         this.rate = 1.0f;
     }
 
-    public int getSoundId(){
-        return this.soundId;
-    }
+    public int getSoundId() { return this.soundId; }
 
-    public int getLoop() {
-        return this.loop;
-    }
+    public int getLoop() { return this.loop; }
 
-    public void setLoop(int loop) {
-        this.loop = loop;
-    }
+    public void setLoop(int loop) { this.loop = loop; }
 
-    public int getPriority() {
-        return this.priority;
-    }
+    public int getPriority() { return this.priority; }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+    public void setPriority(int priority) { this.priority = priority; }
 
-    public float getRate() {
-        return this.rate;
-    }
+    public float getRate() { return this.rate; }
 
-    public void setRate(float rate) {
-        this.rate = rate;
-    }
+    public void setRate(float rate) { this.rate = rate; }
 
     @Override
-    public float getVolume() {
-        return this.volume;
-    }
+    public float getVolume() { return this.volume; }
 
     @Override
     public void setVolume(float v) {

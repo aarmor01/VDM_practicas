@@ -5,12 +5,10 @@ import com.example.engine_common.interfaces.IFont;
 import com.example.engine_common.shared.FontType;
 
 import java.awt.Font;
-import java.awt.FontFormatException;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 public class FontDesktop implements IFont {
     private Font font;
@@ -19,8 +17,8 @@ public class FontDesktop implements IFont {
         try {
             InputStream is = new FileInputStream(file);
             this.font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(type.ordinal(), size);
-        }
-        catch(IOException | FontFormatException e) {
+        } catch (Exception e) {
+            System.err.println("Couldn't load font file");
             e.printStackTrace();
         }
     }

@@ -20,8 +20,9 @@ public class SelectionMenu implements IScene {
 
     private IEngine engRef;
 
-    public SelectionMenu(IEngine eng) {
-        engRef = eng;
+    @Override
+    public void init(IEngine engine) {
+        engRef = engine;
         font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         int x = engRef.getRender().getWidth()/3;
         int y = engRef.getRender().getHeight()/6;
@@ -84,7 +85,7 @@ public class SelectionMenu implements IScene {
             }
 
             if(x != 0)
-                engRef.getSceneManager().pushScene(new MyScene(engRef, x, y));
+                engRef.getSceneManager().pushScene(new MyScene(x, y));
         }
     }
 }

@@ -13,8 +13,9 @@ public class MainMenu implements IScene {
     String font;
 
     private IEngine engRef;
-    public MainMenu(IEngine eng) {
-        engRef = eng;
+    @Override
+    public void init(IEngine engine) {
+        engRef = engine;
         font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 40);
         playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth()/3 )/2, (engRef.getRender().getHeight() - engRef.getRender().getHeight()/8)/2,
                 engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", font);
@@ -41,7 +42,7 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInBUtton(input.getX(), input.getY())){
-            engRef.getSceneManager().pushScene(new SelectionMenu(engRef));
+            engRef.getSceneManager().pushScene(new SelectionMenu());
         }
     }
 }

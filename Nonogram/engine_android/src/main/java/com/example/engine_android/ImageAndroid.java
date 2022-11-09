@@ -24,17 +24,11 @@ public class ImageAndroid implements IImage {
         }
     }
 
-    public Bitmap getImage() {
-        return this.image;
-    }
+    public Bitmap getImage() { return this.image; }
 
     @Override
-    public int getWidth() {
-        return this.image.getWidth();
-    }
+    public int getWidth() { return this.image.getWidth(); }
 
     @Override
-    public int getHeight() {
-        return this.image.getHeight();
-    }
+    public int getHeight() { return this.image.getHeight(); }
 }

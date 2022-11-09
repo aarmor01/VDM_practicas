@@ -3,7 +3,5 @@ package com.example.engine_common.shared;
 public enum InputType {
     TOUCH_DOWN,
     TOUCH_UP,
-    TOUCH_MOVE,
-    TOUCH_DRAG,
-    TOUCH_PRESS
+    TOUCH_MOVE
 }

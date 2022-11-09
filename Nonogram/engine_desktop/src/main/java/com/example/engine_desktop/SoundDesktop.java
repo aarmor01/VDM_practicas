@@ -29,12 +29,8 @@ public class SoundDesktop implements ISound {
     public Clip getSound() { return this.audioClip; }
 
     @Override
-    public float getVolume() {
-        return this.volume_db;
-    }
+    public float getVolume() { return this.volume_db; }
 
     @Override
-    public void setVolume(float volume_db) {
-        this.volume_db = volume_db;
-    }
+    public void setVolume(float volume_db) { this.volume_db = volume_db; }
 }

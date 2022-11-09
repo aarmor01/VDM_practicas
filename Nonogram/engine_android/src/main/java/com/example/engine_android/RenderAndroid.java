@@ -10,7 +10,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.engine_common.interfaces.IRender;
-import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.shared.FontType;
 
 import java.io.File;
@@ -30,10 +29,6 @@ public class RenderAndroid implements IRender {
     private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
 
-    //screen orientation info
-    private boolean verticalScreen;
-    private boolean changedScreen;
-
     //canvas position info
     private int posCanvasX, posCanvasY;
 
@@ -42,34 +37,34 @@ public class RenderAndroid implements IRender {
     private int baseHeight;
     private float scale;
 
-
     public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio) {
-        //
         this.myView = myView;
         this.holder = this.myView.getHolder();
-        this.assetManager = aM;
         this.paint = new Paint();
+
+        this.assetManager = aM;
+
+        // resources
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
-        this.verticalScreen = true;
-        this.changedScreen = false;
 
-        //initializes canvas values
+        // initializes canvas values
         this.scale = ratio;
     }
 
-    public void scaleApp() {
-        while(holder.getSurfaceFrame().width() == 0);
-        //400x600
-        //x----y
-        float w = holder.getSurfaceFrame().width();
-        float y = holder.getSurfaceFrame().height();
+    public void adaptScale() {
+        while(this.holder.getSurfaceFrame().width() == 0);
+
+        float w = this.holder.getSurfaceFrame().width();
+        float y = this.holder.getSurfaceFrame().height();
         float scaleX = w;
         float scaleY = y;
-        if (scaleX * scale < scaleY) scaleY = scaleX / scale;
-        else scaleX = scaleY * scale;
-        posCanvasX = (int) (w - scaleX) / 2;
-        posCanvasY = (int) (y - scaleY) / 2;
+
+        if (scaleX * this.scale < scaleY) scaleY = scaleX / scale;
+        else scaleX = scaleY * this.scale;
+
+        this.posCanvasX = (int) (w - scaleX) / 2;
+        this.posCanvasY = (int) (y - scaleY) / 2;
         this.baseWidth = (int)scaleX;
         this.baseHeight = (int)scaleY;
     }
@@ -80,32 +75,22 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        canvas.drawColor(0xFFAAAAAA);
-        canvas.translate(posCanvasX, posCanvasY);
+        this.canvas.drawColor(0xFFFFFFFF);
+        this.canvas.translate(this.posCanvasX, this.posCanvasY);
         setColor(0xFFFFFFFF);
-        drawRectangle(0, 0, baseWidth, baseHeight, true);
+        drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
     }
 
     public void present() {
-//        if (changedScreen) {;
-//            double scaleX = myView.getWidth()  / (float)baseWidth;
-//            double scaleY = myView.getHeight()  / (float)baseHeight;
-//            double scaleFactor = Math.min(scaleX, scaleY);
-//
-//            if (verticalScreen)
-//                canvas.rotate(-90);
-//            else canvas.rotate(90);
-//
-//        }
-        this.holder.unlockCanvasAndPost(canvas);
+        this.holder.unlockCanvasAndPost(this.canvas);
     }
 
     @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
-        if(!images.containsKey(imageFile.getName()))
-            images.put(imageFile.getName(), new ImageAndroid(convFilepath, assetManager));
+        if(!this.images.containsKey(imageFile.getName()))
+            this.images.put(imageFile.getName(), new ImageAndroid(convFilepath, this.assetManager));
         return imageFile.getName();
     }
 
@@ -114,92 +99,76 @@ public class RenderAndroid implements IRender {
         File fontFile = new File(filePath);
         String fontID = fontFile.getName() + type.toString() + size;
         String convFilepath = filePath.replaceAll("./assets/", "");
-        if(!fonts.containsKey(fontID))
-            fonts.put(fontID, new FontAndroid(convFilepath, assetManager, size, type));
+        if(!this.fonts.containsKey(fontID))
+            this.fonts.put(fontID, new FontAndroid(convFilepath, this.assetManager, size, type));
         return fontID;
     }
 
     @Override
     public void setColor(int hexColor) {
-        paint.setColor(hexColor);
+        this.paint.setColor(hexColor);
     }
 
     @Override
     public void setFont(String fontID) {
-        FontAndroid font = fonts.get(fontID);
-        paint.setTypeface(font.getFont());
-        paint.setTextSize(font.getSize());
+        FontAndroid font = this.fonts.get(fontID);
+        this.paint.setTypeface(font.getFont());
+        this.paint.setTextSize(font.getSize());
+    }
+
+    @Override
+    public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
+        this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
+    }
+
+    @Override
+    public void drawRectangle(int x, int y, int width, int height, boolean fill) {
+        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
+        this.canvas.drawRect(x, y, x + width, y + height, this.paint);
+    }
+
+    @Override
+    public void drawCircle(int x, int y, int r, boolean fill) {
+        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
+        this.canvas.drawCircle(x, y, r, this.paint);
     }
 
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
-        Bitmap image = images.get(imageID).getImage();
+        Bitmap image = this.images.get(imageID).getImage();
         Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
         Rect dst = new Rect(x, y, x + width, y+height);
-        canvas.drawBitmap(image, src, dst, paint);
+        this.canvas.drawBitmap(image, src, dst, this.paint);
     }
 
     @Override
     public void drawText(int x, int y, String text) {
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        canvas.drawText(text, x, y, paint);
+        this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.canvas.drawText(text, x, y, this.paint);
     }
 
     @Override
     public int getTextWidth(String fontID, String text) {
-        Typeface prev_font = paint.getTypeface();
-        FontAndroid font = fonts.get(fontID);
+        Typeface prev_font = this.paint.getTypeface();
+        FontAndroid font = this.fonts.get(fontID);
 
-        paint.setTypeface(font.getFont());
-        float width = paint.measureText(text);
-        paint.setTypeface(prev_font);
+        this.paint.setTypeface(font.getFont());
+        float width = this.paint.measureText(text);
+        this.paint.setTypeface(prev_font);
 
         return (int)width;
     }
 
     @Override
-    public int getTextHeight(String fontID) {
-        return fonts.get(fontID).getSize();
-    }
+    public int getTextHeight(String fontID) { return this.fonts.get(fontID).getSize(); }
 
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean fill) {
-        paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
-        canvas.drawRect(x, y, x + width, y + height, paint);
-    }
+    public int getWidth() { return this.baseWidth; }
 
     @Override
-    public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
-        canvas.drawLine(og_x, og_y, dst_x, dst_y, paint);
-    }
+    public int getHeight() { return this.baseHeight; }
 
-    @Override
-    public void drawCircle(int x, int y, int r, boolean fill) {
-        paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
-        canvas.drawCircle(x, y, r, paint);
-    }
+    public int getViewWidth() { return this.myView.getWidth(); }
 
-    @Override
-    public int getWidth() {
-        return baseWidth;
-    }
-
-    public int getViewWidth() {
-        return myView.getWidth();
-    }
-
-    public int getViewHeight() { return myView.getHeight(); }
-    @Override
-    public int getHeight() {
-        return baseHeight;
-    }
-
-    public void changeScreen(boolean vertical) {
-        if (verticalScreen == vertical)
-            return;
-
-        changedScreen = true;
-        verticalScreen = vertical;
-    }
-
+    public int getViewHeight() { return this.myView.getHeight(); }
 }
