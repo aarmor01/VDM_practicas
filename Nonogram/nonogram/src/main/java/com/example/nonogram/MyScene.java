@@ -31,9 +31,9 @@ public class MyScene implements IScene {
 
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 18);
 
-        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/7,
+        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/9,
                 engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/checkbutton.png"), fontButtons);
-        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/4))*3/4, engRef.getRender().getHeight()/7,
+        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/4))*3/4, engRef.getRender().getHeight()/9,
                 engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons);
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
