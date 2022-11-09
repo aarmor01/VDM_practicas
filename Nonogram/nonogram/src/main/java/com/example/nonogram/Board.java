@@ -19,7 +19,7 @@ public class Board {
     private List<Integer>[] rows;
     private int cellsLeft;
     private int height, width;
-    private int x=0, y=0;
+    private int posX =0, posY =0;
     private String font;
     private String sound;
     private String music;
@@ -30,18 +30,24 @@ public class Board {
 
     public void render(IRender renderMng){
         renderMng.setColor(0xFF000000); //Cuadrados alrededor
-        renderMng.drawRectangle(maxNumbers*fontSize + x , y + maxNumbers*fontSize,width*(board_cell_size + separation_margin) + 1,
+        renderMng.drawRectangle(maxNumbers*fontSize + posX, posY + maxNumbers*fontSize,width*(board_cell_size + separation_margin) + 1,
                 height*(board_cell_size + separation_margin) + 1, false);
-        renderMng.drawRectangle(x + maxNumbers*fontSize, maxNumbers*fontSize + y,width*(board_cell_size + separation_margin) + 1,
+        renderMng.drawRectangle(posX + maxNumbers*fontSize, maxNumbers*fontSize + posY,width*(board_cell_size + separation_margin) + 1,
                 height*(board_cell_size + separation_margin) + 1, false);
 
         printNumbers(renderMng);
 
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + x + maxNumbers*fontSize,
-                        j * board_cell_size + (j + 1) * separation_margin + y + maxNumbers*fontSize, board_cell_size);
+                board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers*fontSize,
+                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers*fontSize, board_cell_size);
             }
+        }
+
+        if(lastTimeChecked != -1){
+            renderMng.setColor(0xFFFF0000);
+            renderMng.drawText((renderMng.getWidth() - 21*fontSize/2)/2, posY - renderMng.getHeight()/10, "Te faltan " + cellsLeft + " casillas");
+            renderMng.drawText((renderMng.getWidth() - 22*fontSize/2)/2, posY - renderMng.getHeight()/10 + fontSize*2, "Tienes mal " + checkedCells.size() + " casillas");
         }
     }
 
@@ -122,8 +128,8 @@ public class Board {
         board_cell_size -= separation_margin;
         fontSize = board_cell_size/3;
 
-        x = (eng.getRender().getWidth() - (board_cell_size+separation_margin)*width - maxNumbers*fontSize)/2;
-        y = ((int)(eng.getRender().getHeight()/0.85f) - (board_cell_size+separation_margin)*height - maxNumbers*fontSize)/2;
+        posX = (eng.getRender().getWidth() - (board_cell_size+separation_margin)*width - maxNumbers*fontSize)/2;
+        posY = ((int)(eng.getRender().getHeight()/0.85f) - (board_cell_size+separation_margin)*height - maxNumbers*fontSize)/2;
 
         font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, fontSize);
         lastTimeChecked = -1;
@@ -147,44 +153,52 @@ public class Board {
         renderMng.setFont(font);
         for(int i=0; i< cols.length; i++){
             if(cols[i].size() == 1){
-                renderMng.drawText(x + board_cell_size * (i + 1) + separation_margin * i - board_cell_size/2 + maxNumbers*fontSize,
-                        y +(int)(maxNumbers*(fontSize/2)/0.5), "0");
+                renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size/2 + maxNumbers*fontSize,
+                        posY +(int)(maxNumbers*(fontSize/2)/0.5), "0");
             }
             for(int j=cols[i].size()-2; j>=0; j--) {
                 int w = cols[i].get(j);
-                renderMng.drawText(x + board_cell_size * (i + 1) + separation_margin * i - board_cell_size/2 + maxNumbers*fontSize,
-                        y + (int)(maxNumbers*(fontSize/2)/0.5) - (fontSize*(cols[i].size()-2-j)), Integer.toString(w));
+                renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size/2 + maxNumbers*fontSize,
+                        posY + (int)(maxNumbers*(fontSize/2)/0.5) - (fontSize*(cols[i].size()-2-j)), Integer.toString(w));
             }
         }
 
         for(int i=0; i< rows.length; i++){
             if(rows[i].size() == 1){
-                renderMng.drawText(x + (int)(maxNumbers*(fontSize/2)/0.7),
-                        y + board_cell_size * (i + 1) + separation_margin * i - (int)(board_cell_size/2.5) + maxNumbers*fontSize, "0");
+                renderMng.drawText(posX + (int)(maxNumbers*(fontSize/2)/0.7),
+                        posY + board_cell_size * (i + 1) + separation_margin * i - (int)(board_cell_size/2.5) + maxNumbers*fontSize, "0");
             }
             for(int j=rows[i].size()-2; j>=0; j--) {
                 int w = rows[i].get(j);
-                renderMng.drawText(x + (int)(maxNumbers*(fontSize/2)/0.7) - (fontSize*(rows[i].size()-2-j)),
-                        y + board_cell_size * (i + 1) + separation_margin * i - (int)(board_cell_size/2.5) + maxNumbers*fontSize, Integer.toString(w));
+                renderMng.drawText(posX + (int)(maxNumbers*(fontSize/2)/0.7) - (fontSize*(rows[i].size()-2-j)),
+                        posY + board_cell_size * (i + 1) + separation_margin * i - (int)(board_cell_size/2.5) + maxNumbers*fontSize, Integer.toString(w));
             }
         }
     }
 
     public void checkear(){
-        for(int i=0; i<width; i++){
-            for(int j=0; j<height; j++){
-                if(!board[i][j].isAnswer() && board[i][j].getState() == Cell.State.MARKED){
+        for(int i=0; i<width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (!board[i][j].isAnswer() && board[i][j].getState() == Cell.State.MARKED) {
                     board[i][j].setChecked();
                     checkedCells.add(board[i][j]);
-                    lastTimeChecked = SEGS_CHECKED;
                 }
             }
         }
+        lastTimeChecked = SEGS_CHECKED;
+    }
+
+    public boolean isInBoard(int posX, int posY){
+        return posX > (separation_margin + this.posX + maxNumbers*fontSize) && posX < (width * board_cell_size + width * separation_margin + this.posX + maxNumbers*fontSize)
+                && posY > (separation_margin + this.posY + maxNumbers*fontSize) && posY < (height * board_cell_size + height * separation_margin + this.posY + maxNumbers*fontSize);
     }
 
     public void markCell(int x, int y) {
-        cellsLeft += board[x][y].changeCell();
+        int boardX = (x - posX - separation_margin - maxNumbers*fontSize) - (x - posX - separation_margin - maxNumbers*fontSize)/board_cell_size*separation_margin;
+        int boardY = (y - posY - separation_margin - maxNumbers*fontSize) - (y - posY - separation_margin - maxNumbers*fontSize)/board_cell_size*separation_margin;
+        cellsLeft -= board[boardX/board_cell_size][boardY/board_cell_size].changeCell();
     }
+
     public int getCellSize(){return board_cell_size;}
     public int getMarginCells(){return separation_margin;}
     public int getWidth(){ return cols.length;}

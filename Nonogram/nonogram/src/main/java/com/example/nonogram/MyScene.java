@@ -25,7 +25,7 @@ public class MyScene implements IScene {
         this.radius = 50;
         this.speed = 150;
         board = new Board();
-        board.init(10,10, eng);
+        board.init(8,8, eng);
 
         engRef = eng;
 
@@ -47,15 +47,9 @@ public class MyScene implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP){
-            int cellSize = board.getCellSize();
-            int margins = board.getMarginCells();
-            int x = (input.getX() - cellSize*2) - (input.getX() - cellSize*2) / cellSize * margins;
-            //AAAAAAAAAAAAA 528/2 esta cableado
-            int y = ((input.getY() - cellSize*2) - (input.getY() - cellSize*2) / cellSize * margins);
-
-            if(x > 0 && y > 0 && x < board.getWidth()*cellSize && y < board.getHeight()*cellSize){
+            if(board.isInBoard(input.getX(), input.getY())){
                 engRef.getAudio().playSound(sound);
-                board.markCell(x/cellSize,y/cellSize);
+                board.markCell(input.getX(),input.getY());
             }
             else{
                 board.checkear();
