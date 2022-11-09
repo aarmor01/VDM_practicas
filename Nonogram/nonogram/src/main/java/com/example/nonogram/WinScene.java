@@ -24,7 +24,7 @@ public class WinScene implements IScene {
         engRef = engine;
         winText = "¡¡Victoria!!";
         font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 50);
-        backButton = new Button((engRef.getRender().getWidth()-80)/2, engRef.getRender().getHeight()*7/8, 80, 50, "Back", "", font);
+        backButton = new Button((engRef.getRender().getWidth()-engRef.getRender().getWidth()/5)/2, engRef.getRender().getHeight()*7/8, engRef.getRender().getWidth()/5, engRef.getRender().getHeight()/12, "Back", "", font);
     }
 
     @Override

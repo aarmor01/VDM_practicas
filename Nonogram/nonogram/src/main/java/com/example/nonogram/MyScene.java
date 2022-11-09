@@ -28,8 +28,10 @@ public class MyScene implements IScene {
 
         engRef = engine;
 
-        checkButton = new Button(10, 50, 100, 30, "Check" ,engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
-        backButton = new Button(200, 50, 100, 30, "Back", engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/7,
+                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/4))*3/4, engRef.getRender().getHeight()/7,
+                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
     }
