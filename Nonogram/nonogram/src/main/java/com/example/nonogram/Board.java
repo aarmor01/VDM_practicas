@@ -49,10 +49,11 @@ public class Board {
 
         if (lastTimeChecked != -1) {
             renderMng.setColor(0xFFFF0000);
-            int x = renderMng.getTextWidth(font, "Te faltan " + checkedCells.size() + " casillas");
-            int x2 = renderMng.getTextWidth(font, "Tienes mal " + checkedCells.size() + " casillas");
+            int x = renderMng.getTextWidth(fontWrongText, "Te faltan " + checkedCells.size() + " casillas");
+            int x2 = renderMng.getTextWidth(fontWrongText, "Tienes mal " + checkedCells.size() + " casillas");
+            int y = renderMng.getTextHeight(fontWrongText);
             renderMng.drawText((renderMng.getWidth() - x) / 2, posY - renderMng.getHeight() / 10, "Te faltan " + cellsLeft + " casillas");
-            renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + fontSize * 2, "Tienes mal " + checkedCells.size() + " casillas");
+            renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + y * 2, "Tienes mal " + checkedCells.size() + " casillas");
         }
     }
 
@@ -147,7 +148,7 @@ public class Board {
         posY = ((int) (eng.getRender().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
 
         font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
-        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 15);
+        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, eng.getRender().getWidth() / 20);
         lastTimeChecked = -1;
     }
 

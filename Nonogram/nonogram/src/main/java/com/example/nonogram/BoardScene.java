@@ -8,7 +8,7 @@ import com.example.engine_common.shared.FontType;
 import com.example.engine_common.shared.InputType;
 
 //Clase interna que representa la escena que queremos pintar
-public class MyScene implements IScene {
+public class BoardScene implements IScene {
     private int dim_w, dim_h;
 
     private Board board;
@@ -18,7 +18,7 @@ public class MyScene implements IScene {
     private IEngine engRef;
     private String sound;
 
-    public MyScene(int w, int h) {
+    public BoardScene(int w, int h) {
         this.dim_w = w; this.dim_h = h;
     }
 
@@ -29,7 +29,7 @@ public class MyScene implements IScene {
 
         engRef = engine;
 
-        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 18);
+        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
 
         checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/9,
                 engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/checkbutton.png"), fontButtons);

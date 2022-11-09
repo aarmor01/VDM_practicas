@@ -20,8 +20,9 @@ public class Button {
     }
 
     public void render(IRender renderMng){
-        renderMng.setColor(0xFF000000);
-        renderMng.drawRectangle(posX, posY, width, height, false);
+        renderMng.setColor(0xFFCCCCCC);
+        renderMng.setFont(font);
+        renderMng.drawRectangle(posX, posY, width, height, true);
         int x = posX;
         if(image != ""){
             x += height-2;
@@ -29,10 +30,10 @@ public class Button {
         }
 
         int lg = renderMng.getTextWidth(font, text);
-        renderMng.setFont(font);
+
+        renderMng.setColor(0xFF000000);
         renderMng.drawText(x + (width - (x-posX))/2 - lg/2, posY + height/2 + renderMng.getTextHeight(font)/2, text);
     }
-
     public boolean isInBUtton(int x, int y){
         return x > posX && x < posX + width && y > posY && y < posY + height;
     }

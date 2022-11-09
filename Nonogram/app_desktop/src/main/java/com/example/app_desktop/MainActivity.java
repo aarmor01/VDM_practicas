@@ -4,9 +4,6 @@ import javax.swing.JFrame;
 
 import com.example.engine_desktop.EngineDesktop;
 import com.example.nonogram.MainMenu;
-import com.example.nonogram.MyScene;
-
-import java.awt.Color;
 
 public class MainActivity {
     public static void main(String[] args) {

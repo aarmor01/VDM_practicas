@@ -23,7 +23,7 @@ public class SelectionMenu implements IScene {
     @Override
     public void init(IEngine engine) {
         engRef = engine;
-        font = font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 15);
+        font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         int x = engRef.getRender().getWidth()/3;
         int y = engRef.getRender().getHeight()/6;
         t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font);
@@ -32,7 +32,7 @@ public class SelectionMenu implements IScene {
         t8x8 = new Button(x / 4, y*3, x/2, x/2, "8x8", "", font);
         t10x10 = new Button(x * 5 / 4, y*3, x/2, x/2, "10x10", "", font);
         t10x15 = new Button(x * 9 / 4, y*3, x/2, x/2, "10x15", "", font);
-        backButton = new Button(x, y*4, x, 50, "Back", "", font);
+        backButton = new Button(x, y*5, x, y/3, "Back", "", font);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class SelectionMenu implements IScene {
             }
 
             if(x != 0)
-                engRef.getSceneManager().pushScene(new MyScene(x, y));
+                engRef.getSceneManager().pushScene(new BoardScene(x, y));
         }
     }
 }
