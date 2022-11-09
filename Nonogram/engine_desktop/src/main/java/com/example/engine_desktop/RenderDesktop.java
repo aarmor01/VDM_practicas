@@ -205,10 +205,9 @@ public class RenderDesktop implements IRender {
     }
 
     @Override
-    public void getTextSize(String fontID, String text, int text_width, int text_height) {
+    public int getTextWidth(String fontID, String text) {
         Font currFont = fonts.get(fontID).getFont();
-        text_width = this.canvas.getFontMetrics(currFont).stringWidth(text);
-        text_height = this.canvas.getFontMetrics(currFont).stringWidth(text);
+        return this.canvas.getFontMetrics(currFont).stringWidth(text);
     }
 
     public int getOffsetX() { return (int)Math.round((this.borders.left + marginWidth) / ogDPI); }

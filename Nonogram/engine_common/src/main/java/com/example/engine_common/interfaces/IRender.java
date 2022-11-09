@@ -18,7 +18,7 @@ public interface IRender {
     public void drawImage(int x, int y, int width, int height, String imageID);
     public void drawText(int x, int y, String text);
 
-    public void getTextSize(String fontID, String text, int text_width, int text_height);
+    public int getTextWidth(String fontID, String text);
 
     public int getWidth();
     public int getHeight();
