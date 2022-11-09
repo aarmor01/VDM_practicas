@@ -15,6 +15,7 @@ public class SelectionMenu implements IScene {
     Button t8x8;
     Button t10x10;
     Button t10x15;
+    Button backButton;
     String font;
 
     private IEngine engRef;
@@ -22,12 +23,15 @@ public class SelectionMenu implements IScene {
     public SelectionMenu(IEngine eng) {
         engRef = eng;
         font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
-        t4x4 = new Button(100, 100, 200, 60, "4x4", "", font);
-        t5x5 = new Button(100, 150, 200, 60, "5x5", "", font);
-        t5x10 = new Button(100, 200, 200, 60, "5x10", "", font);
-        t8x8 = new Button(100, 250, 200, 60, "8x8", "", font);
-        t10x10 = new Button(100, 300, 200, 60, "10x10", "", font);
-        t10x15 = new Button(100, 350, 200, 60, "10x15", "", font);
+        int x = engRef.getRender().getWidth()/3;
+        int y = engRef.getRender().getHeight()/6;
+        t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font);
+        t5x5 = new Button(x * 5 / 4, y*2, x/2, x/2, "5x5", "", font);
+        t5x10 = new Button(x * 9 / 4, y*2, x/2, x/2, "5x10", "", font);
+        t8x8 = new Button(x / 4, y*3, x/2, x/2, "8x8", "", font);
+        t10x10 = new Button(x * 5 / 4, y*3, x/2, x/2, "10x10", "", font);
+        t10x15 = new Button(x * 9 / 4, y*3, x/2, x/2, "10x15", "", font);
+        backButton = new Button(x, y*4, x, 50, "Back", "", font);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class SelectionMenu implements IScene {
         t8x8.render(renderMng);
         t10x10.render(renderMng);
         t10x15.render(renderMng);
+        backButton.render(renderMng);
     }
 
     @Override
@@ -73,6 +78,9 @@ public class SelectionMenu implements IScene {
             else if(t10x15.isInBUtton(input.getX(), input.getY())){
                 x=10;
                 y=15;
+            }
+            else if(backButton.isInBUtton(input.getX(), input.getY())){
+                engRef.getSceneManager().popScene();
             }
 
             if(x != 0)

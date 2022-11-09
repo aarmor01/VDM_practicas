@@ -15,9 +15,13 @@ public class MainMenu implements IScene {
     private IEngine engRef;
     public MainMenu(IEngine eng) {
         engRef = eng;
-        font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
-        playButton = new Button(100, 100, 200, 60, "PLAY", "", font);
+        font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 40);
+        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth()/3 )/2, (engRef.getRender().getHeight() - engRef.getRender().getHeight()/8)/2,
+                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", font);
         title = "NONOGRAMAS";
+
+        eng.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
+        eng.getAudio().playMusic();
     }
 
     @Override
@@ -28,7 +32,9 @@ public class MainMenu implements IScene {
     @Override
     public void render(IRender renderMng) {
         renderMng.setColor(0xFF000000);
-        renderMng.drawText(50, 50, title);
+        renderMng.setFont(font);
+        int wi = engRef.getRender().getTextWidth(font, title);
+        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, title);
         playButton.render(renderMng);
     }
 
