@@ -8,31 +8,30 @@ import com.example.engine_common.shared.InputType;
 
 //Clase interna que representa la escena que queremos pintar
 public class MyScene implements IScene {
-    private float x;
-    private float y;
-    private int radius;
-    private int speed;
+    private int dim_w, dim_h;
+
     private Board board;
     private Button play;
 
     private IEngine engRef;
     private String sound;
 
-    public MyScene(IEngine eng, int w, int h) {
-        this.x=50;
-        this.y=50;
-        this.radius = 50;
-        this.speed = 150;
+    public MyScene(int w, int h) {
+        this.dim_w = w; this.dim_h = h;
+    }
+
+    @Override
+    public void init(IEngine engine) {
         board = new Board();
-        board.init(w,h, eng);
+        board.init(dim_w, dim_h, engine);
 
-        play = new Button(10, 50, 100, 30, "Play" ,eng.getMyRenderManager().loadImage("./assets/images/nomires.jpeg"), board.getFont());
+        play = new Button(10, 50, 100, 30, "Play" ,engine.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 
-        engRef = eng;
+        engRef = engine;
 
-        sound = eng.getAudio().loadSound("./assets/sounds/click.wav", 1);
-        eng.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 1);
-        eng.getAudio().playMusic();
+        sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
+        engine.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 1);
+        engine.getAudio().playMusic();
     }
 
     @Override

@@ -13,9 +13,11 @@ public class MainMenu implements IScene {
     String font;
 
     private IEngine engRef;
-    public MainMenu(IEngine eng) {
-        engRef = eng;
-        font = font = eng.getMyRenderManager().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
+
+    @Override
+    public void init(IEngine engine) {
+        engRef = engine;
+        font = font = engine.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         playButton = new Button(100, 100, 200, 60, "PLAY", "", font);
         title = "NONOGRAMAS";
     }
@@ -35,7 +37,7 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInBUtton(input.getX(), input.getY())){
-            engRef.getSceneManager().pushScene(new SelectionMenu(engRef));
+            engRef.getSceneManager().pushScene(new SelectionMenu());
         }
     }
 }

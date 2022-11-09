@@ -10,7 +10,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.engine_common.interfaces.IRender;
-import com.example.engine_common.interfaces.IScene;
 import com.example.engine_common.shared.FontType;
 
 import java.io.File;
@@ -53,10 +52,10 @@ public class RenderAndroid implements IRender {
 
         //initializes canvas values
         this.scale = ratio;
-        this.scaleApp();
+        this.adaptScale();
     }
 
-    public void scaleApp() {
+    public void adaptScale() {
         while(holder.getSurfaceFrame().width() == 0);
 
         float w = this.holder.getSurfaceFrame().width();

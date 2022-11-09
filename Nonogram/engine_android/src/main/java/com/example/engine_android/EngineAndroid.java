@@ -38,7 +38,7 @@ public class EngineAndroid implements IEngine, Runnable {
     public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio) {
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio);
         this.myAudioManager = new AudioAndroid(this.assetManager);
-        this.mySceneManager = new SceneManager();
+        this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
 
         this.assetManager = aM;
@@ -54,6 +54,8 @@ public class EngineAndroid implements IEngine, Runnable {
 
         while(this.running && myRenderManager.getViewWidth() == 0);
 
+        this.myRenderManager.adaptScale();
+        this.mySceneManager.currentScene().init(this);
         long currentTime = System.currentTimeMillis();
         while(this.running) {
             try {
@@ -108,7 +110,7 @@ public class EngineAndroid implements IEngine, Runnable {
     }
 
     @Override
-    public IRender getMyRenderManager() { return this.myRenderManager; }
+    public IRender getRender() { return this.myRenderManager; }
 
     @Override
     public IAudio getAudio() { return this.myAudioManager; }

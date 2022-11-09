@@ -31,11 +31,12 @@ public class MainActivity {
         }
 
         // create engine and scene
-        EngineDesktop eng = new EngineDesktop(renderView, 0xFFFFFFFF);
-        MainMenu scene = new MainMenu(eng);
+        EngineDesktop engine = new EngineDesktop(renderView, 0xFFFFFFFF);
+        MainMenu mainMenu = new MainMenu();
 
         // start up
-        eng.getSceneManager().pushScene(scene);
-        eng.resume();
+        mainMenu.init(engine);
+        engine.getSceneManager().pushScene(mainMenu);
+        engine.resume();
     }
 }

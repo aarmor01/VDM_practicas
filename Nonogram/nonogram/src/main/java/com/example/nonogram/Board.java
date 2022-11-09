@@ -122,18 +122,18 @@ public class Board {
                 rows[i].add(-1);
         }
 
-        int winW = eng.getMyRenderManager().getWidth()/(w);
-        int winH = (int)(eng.getMyRenderManager().getHeight()/1.75)/(h);
+        int winW = eng.getRender().getWidth()/(w);
+        int winH = (int)(eng.getRender().getHeight()/1.75)/(h);
 
         board_cell_size = Math.min(winH, winW);
         separation_margin = board_cell_size / 25;
         board_cell_size -= separation_margin;
         fontSize = board_cell_size/3;
 
-        posX = (eng.getMyRenderManager().getWidth() - (board_cell_size+separation_margin)*width - maxNumbers*fontSize)/2;
-        posY = ((int)(eng.getMyRenderManager().getHeight()/0.85f) - (board_cell_size+separation_margin)*height - maxNumbers*fontSize)/2;
+        posX = (eng.getRender().getWidth() - (board_cell_size+separation_margin)*width - maxNumbers*fontSize)/2;
+        posY = ((int)(eng.getRender().getHeight()/0.85f) - (board_cell_size+separation_margin)*height - maxNumbers*fontSize)/2;
 
-        font = eng.getMyRenderManager().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, fontSize);
+        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, fontSize);
         lastTimeChecked = -1;
     }
 

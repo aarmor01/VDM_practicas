@@ -19,9 +19,10 @@ public class SelectionMenu implements IScene {
 
     private IEngine engRef;
 
-    public SelectionMenu(IEngine eng) {
-        engRef = eng;
-        font = font = eng.getMyRenderManager().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
+    @Override
+    public void init(IEngine engine) {
+        engRef = engine;
+        font = font = engine.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         t4x4 = new Button(100, 100, 200, 60, "4x4", "", font);
         t5x5 = new Button(100, 150, 200, 60, "5x5", "", font);
         t5x10 = new Button(100, 200, 200, 60, "5x10", "", font);
@@ -76,7 +77,7 @@ public class SelectionMenu implements IScene {
             }
 
             if(x != 0)
-                engRef.getSceneManager().pushScene(new MyScene(engRef, x, y));
+                engRef.getSceneManager().pushScene(new MyScene(x, y));
         }
     }
 }
