@@ -7,6 +7,7 @@ import com.example.engine_common.shared.FontType;
 
 import javax.swing.JFrame;
 
+import java.awt.Font;
 import java.awt.image.BufferStrategy;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -201,6 +202,13 @@ public class RenderDesktop implements IRender {
     @Override
     public int getHeight() {
         return this.canvasHeight;
+    }
+
+    @Override
+    public void getTextSize(String fontID, String text, int text_width, int text_height) {
+        Font currFont = fonts.get(fontID).getFont();
+        text_width = this.canvas.getFontMetrics(currFont).stringWidth(text);
+        text_height = this.canvas.getFontMetrics(currFont).stringWidth(text);
     }
 
     public int getOffsetX() { return (int)Math.round((this.borders.left + marginWidth) / ogDPI); }
