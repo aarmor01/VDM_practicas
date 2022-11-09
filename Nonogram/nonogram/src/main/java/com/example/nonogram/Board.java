@@ -21,6 +21,7 @@ public class Board {
     private int height, width;
     private int posX = 0, posY = 0;
     private String font;
+    private String fontButtons;
     private String sound;
     private String music;
 
@@ -131,7 +132,7 @@ public class Board {
         posX = (eng.getRender().getWidth() - (board_cell_size + separation_margin) * width - maxNumbers * fontSize) / 2;
         posY = ((int) (eng.getRender().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
 
-        font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, fontSize);
+        font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
         lastTimeChecked = -1;
     }
 

@@ -23,7 +23,7 @@ public class SelectionMenu implements IScene {
     @Override
     public void init(IEngine engine) {
         engRef = engine;
-        font = font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
+        font = font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 15);
         int x = engRef.getRender().getWidth()/3;
         int y = engRef.getRender().getHeight()/6;
         t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font);

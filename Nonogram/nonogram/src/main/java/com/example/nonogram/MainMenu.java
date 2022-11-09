@@ -16,9 +16,10 @@ public class MainMenu implements IScene {
     @Override
     public void init(IEngine engine) {
         engRef = engine;
-        font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 40);
+        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, 40);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, 40);
         playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth()/3 )/2, (engRef.getRender().getHeight() - engRef.getRender().getHeight()/8)/2,
-                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", font);
+                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", fontButton);
         title = "NONOGRAMAS";
 
         engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);

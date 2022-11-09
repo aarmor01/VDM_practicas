@@ -29,6 +29,7 @@ public class Button {
         }
 
         int lg = renderMng.getTextWidth(font, text);
+        renderMng.setFont(font);
         renderMng.drawText(x + (width - (x-posX))/2 - lg/2, posY + height/2 + renderMng.getTextHeight(font)/2, text);
     }
 
