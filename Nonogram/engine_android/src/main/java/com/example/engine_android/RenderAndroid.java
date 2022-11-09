@@ -15,8 +15,6 @@ import com.example.engine_common.shared.FontType;
 import java.io.File;
 import java.util.HashMap;
 
-
-
 public class RenderAndroid implements IRender {
     //android graphic variables
     private SurfaceView myView;
