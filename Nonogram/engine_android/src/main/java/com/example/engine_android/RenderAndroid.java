@@ -28,9 +28,11 @@ public class RenderAndroid implements IRender {
     private AssetManager assetManager;
     private boolean verticalScreen;
     private boolean changedScreen;
+    private int posCanvasX, posCanvasY;
 
     private int baseWidth;
     private int baseHeight;
+    private float scale;
 
 
     public RenderAndroid(SurfaceView myView, AssetManager aM) {
@@ -44,24 +46,26 @@ public class RenderAndroid implements IRender {
         this.changedScreen = false;
         this.baseWidth = 1080;
         this.baseHeight = 1620;
+        this.scale = 4.0f/6.0f;
     }
 
     public void scaleApp() {
-        //while (!this.surfaceValid());
-        //this.canvas = this.holder.lockCanvas();
+        while (!this.surfaceValid());
+        this.canvas = this.holder.lockCanvas();
         //400x600
         //x----y
         float w = holder.getSurfaceFrame().width();
         float y = holder.getSurfaceFrame().height();
         float scaleX = w;
         float scaleY = y;
-
-        if (scaleX * 6 < scaleY * 4) scaleY = scaleX * 6 / 4;
-        else scaleX = scaleY * 4 / 6;
-        canvas.translate((w - scaleX) / 2, (y - scaleY)/2);
+        if (scaleX * scale < scaleY) scaleY = scaleX / scale;
+        else scaleX = scaleY * scale;
+        //canvas.translate((w - scaleX) / 2, (y - scaleY)/2);
+        posCanvasX = (int) (w - scaleX) / 2;
+        posCanvasY = (int) (y - scaleY) / 2;
         this.baseWidth = (int)scaleX;
         this.baseHeight = (int)scaleY;
-        //this.holder.unlockCanvasAndPost(canvas);
+        this.holder.unlockCanvasAndPost(canvas);
     }
 
     public boolean surfaceValid() {
@@ -71,10 +75,9 @@ public class RenderAndroid implements IRender {
     public void clear() {
         this.canvas = this.holder.lockCanvas();
         canvas.drawColor(0xFFAAAAAA);
-        scaleApp();
+        canvas.translate(posCanvasX, posCanvasY);
         setColor(0xFFFFFFFF);
         drawRectangle(0, 0, baseWidth, baseHeight, true);
-
     }
 
     public void present() {
@@ -106,7 +109,7 @@ public class RenderAndroid implements IRender {
         String fontID = fontFile.getName() + type.toString() + size;
         String convFilepath = filePath.replaceAll("./assets/", "");
         if(!fonts.containsKey(fontID))
-            fonts.put(fontFile.getName(), new FontAndroid(convFilepath, assetManager, size, type));
+            fonts.put(fontID, new FontAndroid(convFilepath, assetManager, size, type));
         return fontID;
     }
 
@@ -159,6 +162,7 @@ public class RenderAndroid implements IRender {
         return myView.getWidth();
     }
 
+    public int getViewHeight() { return myView.getHeight(); }
     @Override
     public int getHeight() {
         return baseHeight;
