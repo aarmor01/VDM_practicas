@@ -162,6 +162,29 @@ public class RenderDesktop implements IRender {
         this.canvas.drawString(text, x, y);
     }
 
+    @Override
+    public int getTextWidth(String fontID, String text) {
+        Font currFont = this.fonts.get(fontID).getFont();
+        return this.canvas.getFontMetrics(currFont).stringWidth(text);
+    }
+
+    @Override
+    public int getTextHeight(String fontID) { return this.fonts.get(fontID).getFont().getSize(); }
+
+    @Override
+    public int getWidth() { return this.canvasWidth; }
+
+    @Override
+    public int getHeight() { return this.canvasHeight; }
+
+    public boolean windowCreated() { return this.window.getWidth() != 0; }
+
+    public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
+
+    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
+
+    public double getScale() { return this.scaleFactor / this.ogDPI; }
+
     private void scaleCanvas() {
         // select the lower scale to make proportion viable
         double scaleX = (window.getWidth() - this.borders.left - this.borders.right) / (float) this.canvasWidth;
@@ -193,33 +216,4 @@ public class RenderDesktop implements IRender {
                 this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
         drawRectangle(0, this.canvasHeight, this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
     }
-
-    public boolean windowCreated() { return this.window.getWidth() != 0; }
-
-    @Override
-    public int getWidth() {
-        return this.canvasWidth;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.canvasHeight;
-    }
-
-    @Override
-    public int getTextWidth(String fontID, String text) {
-        Font currFont = this.fonts.get(fontID).getFont();
-        return this.canvas.getFontMetrics(currFont).stringWidth(text);
-    }
-
-    @Override
-    public int getTextHeight(String fontID) {
-        return this.fonts.get(fontID).getFont().getSize();
-    }
-
-    public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
-
-    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
-
-    public double getScale() { return this.scaleFactor / this.ogDPI; }
 }

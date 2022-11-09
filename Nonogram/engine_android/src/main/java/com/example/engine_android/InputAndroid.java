@@ -12,22 +12,14 @@ public class InputAndroid implements IInput {
     public InputAndroid(int x, int y, InputType type, int id) { this.x = x; this.y = y; this.type = type; this.id = id; }
 
     @Override
-    public int getX() {
-        return this.x;
-    }
+    public int getX() { return this.x; }
 
     @Override
-    public int getY() {
-        return this.y;
-    }
+    public int getY() { return this.y; }
 
     @Override
-    public InputType getType() {
-        return this.type;
-    }
+    public InputType getType() { return this.type; }
 
     @Override
-    public int getID() {
-        return this.id;
-    }
+    public int getID() { return this.id; }
 }

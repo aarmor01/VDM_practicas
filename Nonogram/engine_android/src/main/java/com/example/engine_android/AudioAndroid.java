@@ -13,59 +13,49 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class AudioAndroid implements IAudio {
-    //asset Manager to obtain the resources
+    // manager to obtain the resources
     private AssetManager assetManager;
-    //audio players
+
+    // audio players
     private MediaPlayer mediaPlayer;
     private SoundPool soundPool;
-    //audio resources
+
+    // audio resources
     private HashMap<String, SoundAndroid> sounds;
 
-    public  AudioAndroid(AssetManager assetManager_) {
-        //obtain the Asset Manager
-        assetManager = assetManager_;
+    public AudioAndroid(AssetManager assetManager) {
+        //obtain the AssetManager
+        this.assetManager = assetManager;
+
         //create the audio players
-        soundPool = new SoundPool.Builder().setMaxStreams(10).build();
-        mediaPlayer = new MediaPlayer();
+        this.soundPool = new SoundPool.Builder().setMaxStreams(10).build();
+        this.mediaPlayer = new MediaPlayer();
+
         //start resource managers
-        sounds = new HashMap<>();
+        this.sounds = new HashMap<>();
     }
 
     @Override
     public void loadMusic(String filePath, float volume) {
-        //reset the audio player for background music
-        mediaPlayer.reset();
-        AssetFileDescriptor afd = null;
+        // reset the audio player for background music
+        this.mediaPlayer.reset();
+        AssetFileDescriptor assetFD = null;
         try {
-            //load the music resource from assets folder
+            // load the music resource from assets folder
             String convFilepath = filePath.replaceAll("./assets/", "");
-            afd = assetManager.openFd(convFilepath);
-            mediaPlayer.setDataSource(afd.getFileDescriptor(),
-                    afd.getStartOffset(), afd.getLength());
-            //sets volume
-            mediaPlayer.setVolume(volume, volume);
-            //prepares the audio player
-            mediaPlayer.prepare();
-        } catch (IOException e) {
+            assetFD = this.assetManager.openFd(convFilepath);
+            this.mediaPlayer.setDataSource(assetFD.getFileDescriptor(),
+                    assetFD.getStartOffset(), assetFD.getLength());
+
+            this.mediaPlayer.setVolume(volume, volume); // sets volume
+            this.mediaPlayer.prepare();                 // prepares the audio player
+        } catch (Exception e) {
+            System.err.println("Couldn't load music file");
             e.printStackTrace();
         }
-        //actives the loop option, as it has to loop indefinitely
-        mediaPlayer.setLooping(true);
-    }
 
-    @Override
-    public void playMusic() {
-        mediaPlayer.start();
-    }
-
-    @Override
-    public void setMusicVolume(float volume) {
-        mediaPlayer.setVolume(volume, volume);
-    }
-
-    @Override
-    public void setSoundVolume(String name, float volume){
-        sounds.get(name).setVolume(volume);
+        // actives the loop option, as it has to loop indefinitely
+        this.mediaPlayer.setLooping(true);
     }
 
     @Override
@@ -74,15 +64,30 @@ public class AudioAndroid implements IAudio {
         File soundFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
         //if the sound has not been already been loaded, it is stored in the sounds manager
-        if(!sounds.containsKey(soundFile.getName()))
-            sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, assetManager, soundPool,volume));
-        //it returns the name of the sound in order to looking for it when you need to play it
-        return soundFile.getName();
+        if(!this.sounds.containsKey(soundFile.getName()))
+            this.sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, this.assetManager, this.soundPool,volume));
+        return soundFile.getName(); //it returns the name of the sound in order to looking for it when you need to play it
     }
 
+    @Override
+    public void playMusic() {
+        this.mediaPlayer.start();
+    }
+
+    @Override
     public void playSound(String soundName) {
         //looks for the sound in the sound manager, and plays it on the audio player of sound effects
-        SoundAndroid s = sounds.get(soundName);
-        soundPool.play(s.getSoundId(), s.getVolume(),  s.getVolume(), s.getPriority(), s.getLoop(), s.getRate());
+        SoundAndroid s = this.sounds.get(soundName);
+        this.soundPool.play(s.getSoundId(), s.getVolume(),  s.getVolume(), s.getPriority(), s.getLoop(), s.getRate());
+    }
+
+    @Override
+    public void setMusicVolume(float volume) {
+        this.mediaPlayer.setVolume(volume, volume);
+    }
+
+    @Override
+    public void setSoundVolume(String name, float volume){
+        this.sounds.get(name).setVolume(volume);
     }
 }

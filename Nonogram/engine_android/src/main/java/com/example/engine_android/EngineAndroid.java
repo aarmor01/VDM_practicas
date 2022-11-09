@@ -29,66 +29,43 @@ public class EngineAndroid implements IEngine, Runnable {
     private InputManager myInputManager;
     private AudioAndroid myAudioManager;
 
-    @Override
-    public IRender getRender() {
-        return render;
-    }
-
-    @Override
-    public IAudio getAudio() {
-        return myAudioManager;
-    }
-
-    @Override
-    public InputManager getInputManager() { return myInputManager; }
-
-    @Override
-    public SceneManager getSceneManager() {
-        return mySceneManager;
-    }
-
     public EngineAndroid(SurfaceView s, AssetManager aM) {
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = s;
         this.renderView.setOnTouchListener(new myTouchListener());
         this.assetManager = aM;
         this.myInputManager = new InputManager();
-        this.render = new RenderAndroid(this.renderView, assetManager, 4.0f/6.0f);
-        this.myAudioManager = new AudioAndroid(assetManager);
+        this.render = new RenderAndroid(this.renderView, this.assetManager, 4.0f/6.0f);
+        this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager();
     }
 
     @Override
     public void run() {
-        if (renderThread != Thread.currentThread()) {
-            // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
-            // Programación defensiva
+        if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
-        }
 
-        // Si el Thread se pone en marcha
-        // muy rápido, la vista podría todavía no estar inicializada.
         while(this.running && render.getViewWidth() == 0);
 
         this.render.scaleApp();
-        this.mySceneManager.currentScene().init(this);
+//        this.mySceneManager.currentScene().init(this);
         long currentTime = System.currentTimeMillis();
 
         // Bucle de juego principal.
-        while(running) {
+        while(this.running) {
             try {
                 //System.out.printf("Conche su madre que significa chainshaw man");
                 long deltaTime = System.currentTimeMillis() - currentTime;
                 currentTime += deltaTime;
 
                 // handle input
-                LinkedList<IInput> input = myInputManager.getInput();
+                LinkedList<IInput> input = this.myInputManager.getInput();
                 while (!input.isEmpty())
                     this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
-                mySceneManager.currentScene().update(deltaTime/1000.0f);
-                while (!this.render.surfaceValid());
+                this.mySceneManager.currentScene().update(deltaTime/1000.0f);
 
+                while (!this.render.surfaceValid());
                 this.render.clear();
                 this.mySceneManager.currentScene().render(this.render);
                 this.render.present();
@@ -102,10 +79,8 @@ public class EngineAndroid implements IEngine, Runnable {
 
     public void resume() {
         if (!this.running) {
-            // Solo hacemos algo si no nos estábamos ejecutando ya
-            // (programación defensiva)
             this.running = true;
-            // Lanzamos la ejecución de nuestro método run() en un nuevo Thread.
+
             this.renderThread = new Thread(this);
             this.renderThread.start();
         }
@@ -119,22 +94,41 @@ public class EngineAndroid implements IEngine, Runnable {
                     this.renderThread.join();
                     this.renderThread = null;
                     break;
-                } catch (InterruptedException ie) {
-                    // Esto no debería ocurrir nunca...
+                } catch (Exception e) {
+                    System.err.println("Thread join error");
+                    e.printStackTrace();
                 }
             }
         }
     }
-    private class myTouchListener implements View.OnTouchListener {
 
+    @Override
+    public IRender getRender() { return this.render; }
+
+    @Override
+    public IAudio getAudio() { return this.myAudioManager; }
+
+    @Override
+    public SceneManager getSceneManager() { return this.mySceneManager; }
+
+    @Override
+    public InputManager getInputManager() { return this.myInputManager; }
+
+    private class myTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int Y = (int)motionEvent.getY() - (render.getViewHeight() - render.getHeight())/2;
-            int X = (int)motionEvent.getX() - (render.getViewWidth() - render.getWidth())/2;
-            if ( X < 0 ||  Y < 0 || X > render.getWidth() || Y > render.getHeight()) return true;
-            InputAndroid iA = new InputAndroid( X, Y, InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
-            if ( InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() || InputType.TOUCH_MOVE == iA.getType())
+            int input_y = (int)motionEvent.getY() - (render.getViewHeight() - render.getHeight()) / 2;
+            int input_x = (int)motionEvent.getX() - (render.getViewWidth() - render.getWidth()) / 2;
+            
+            if (input_x < 0 ||  input_y < 0 || input_x > render.getWidth() || input_y > render.getHeight() ||)
+                return true;
+            
+            InputAndroid iA = new InputAndroid( input_x, input_y, InputType.values()[motionEvent.getActionMasked()], 
+                    motionEvent.getActionIndex());
+            if (InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() ||
+                    InputType.TOUCH_MOVE == iA.getType())
                 myInputManager.addInput(iA);
+            
             return true;
         }
     }

@@ -22,12 +22,8 @@ public class ImageDesktop implements IImage {
     public Image getImage() { return this.image; }
 
     @Override
-    public int getWidth() {
-        return this.image.getWidth(null);
-    }
+    public int getWidth() { return this.image.getWidth(null); }
 
     @Override
-    public int getHeight() {
-        return this.image.getHeight(null);
-    }
+    public int getHeight() { return this.image.getHeight(null); }
 }

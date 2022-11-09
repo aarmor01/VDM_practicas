@@ -17,13 +17,9 @@ public class SceneManager {
 
     public IScene popScene() { return this.scenes.pop(); }
 
-    public void update(double deltaTime) {
-        this.scenes.peek().update(deltaTime);
-    }
+    public void update(double deltaTime) { this.scenes.peek().update(deltaTime); }
 
-    public void render(IRender renderManager) {
-        this.scenes.peek().render(renderManager);
-    }
+    public void render(IRender renderManager) { this.scenes.peek().render(renderManager); }
 
     public void handleInput(IInput input) { this.scenes.peek().handleInput(input); }
 }

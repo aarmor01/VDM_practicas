@@ -3,35 +3,19 @@ package com.example.app_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.example.engine_android.AudioAndroid;
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.RenderAndroid;
-import com.example.engine_common.interfaces.IAudio;
 import com.example.nonogram.MainMenu;
-import com.example.nonogram.MyScene;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-
     private SurfaceView renderView;
-
     private EngineAndroid eng;
-
     private AssetManager aMan;
-
-    private AudioAndroid audioManager;
-
-    private int soundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,34 +40,5 @@ public class MainActivity extends AppCompatActivity {
         eng.getSceneManager().pushScene(scene);
         eng.resume();
 
-    }
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        Log.d("tag", "config changed");
-        super.onConfigurationChanged(newConfig);
-
-        int orientation = newConfig.orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ((RenderAndroid)eng.getRender()).changeScreen(true);
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-            ((RenderAndroid)eng.getRender()).changeScreen(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //this.render.resume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //this.render.pause();
     }
 }

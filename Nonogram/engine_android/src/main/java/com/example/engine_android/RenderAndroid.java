@@ -32,7 +32,6 @@ public class RenderAndroid implements IRender {
 
     //screen orientation info
     private boolean verticalScreen;
-    private boolean changedScreen;
 
     //canvas position info
     private int posCanvasX, posCanvasY;
@@ -41,7 +40,6 @@ public class RenderAndroid implements IRender {
     private int baseWidth;
     private int baseHeight;
     private float scale;
-
 
     public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio) {
         //
@@ -52,7 +50,6 @@ public class RenderAndroid implements IRender {
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
         this.verticalScreen = true;
-        this.changedScreen = false;
 
         //initializes canvas values
         this.scale = ratio;
@@ -87,16 +84,6 @@ public class RenderAndroid implements IRender {
     }
 
     public void present() {
-//        if (changedScreen) {;
-//            double scaleX = myView.getWidth()  / (float)baseWidth;
-//            double scaleY = myView.getHeight()  / (float)baseHeight;
-//            double scaleFactor = Math.min(scaleX, scaleY);
-//
-//            if (verticalScreen)
-//                canvas.rotate(-90);
-//            else canvas.rotate(90);
-//
-//        }
         this.holder.unlockCanvasAndPost(this.canvas);
     }
 
@@ -132,6 +119,23 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
+    public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
+        this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
+    }
+
+    @Override
+    public void drawRectangle(int x, int y, int width, int height, boolean fill) {
+        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
+        this.canvas.drawRect(x, y, x + width, y + height, this.paint);
+    }
+
+    @Override
+    public void drawCircle(int x, int y, int r, boolean fill) {
+        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
+        this.canvas.drawCircle(x, y, r, this.paint);
+    }
+
+    @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
         Bitmap image = this.images.get(imageID).getImage();
         Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
@@ -158,48 +162,15 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public int getTextHeight(String fontID) {
-        return fonts.get(fontID).getSize();
-    }
+    public int getTextHeight(String fontID) { return fonts.get(fontID).getSize(); }
 
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean fill) {
-        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
-        this.canvas.drawRect(x, y, x + width, y + height, this.paint);
-    }
+    public int getWidth() { return this.baseWidth; }
 
     @Override
-    public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
-        this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
-    }
+    public int getHeight() { return this.baseHeight; }
 
-    @Override
-    public void drawCircle(int x, int y, int r, boolean fill) {
-        this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
-        this.canvas.drawCircle(x, y, r, this.paint);
-    }
-
-    @Override
-    public int getWidth() {
-        return this.baseWidth;
-    }
-
-    public int getViewWidth() {
-        return this.myView.getWidth();
-    }
+    public int getViewWidth() { return this.myView.getWidth(); }
 
     public int getViewHeight() { return this.myView.getHeight(); }
-    @Override
-    public int getHeight() {
-        return this.baseHeight;
-    }
-
-    public void changeScreen(boolean vertical) {
-        if (this.verticalScreen == vertical)
-            return;
-
-        this.changedScreen = true;
-        this.verticalScreen = vertical;
-    }
-
 }

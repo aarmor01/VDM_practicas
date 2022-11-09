@@ -98,24 +98,16 @@ public class EngineDesktop implements IEngine, Runnable {
     }
 
     @Override
-    public IRender getRender() {
-        return this.myRenderDesktop;
-    }
+    public IRender getRender() { return this.myRenderDesktop; }
 
     @Override
-    public IAudio getAudio() {
-        return this.myAudioDesktop;
-    }
+    public IAudio getAudio() { return this.myAudioDesktop; }
 
     @Override
-    public SceneManager getSceneManager() {
-        return this.mySceneManager;
-    }
+    public SceneManager getSceneManager() { return this.mySceneManager; }
 
     @Override
-    public InputManager getInputManager() {
-        return this.myInputManager;
-    }
+    public InputManager getInputManager() { return this.myInputManager; }
 
     private class InputListenerDesktop implements MouseInputListener {
         InputManager iM;
@@ -127,16 +119,7 @@ public class EngineDesktop implements IEngine, Runnable {
         }
 
         @Override
-        public void mouseDragged(MouseEvent mouseEvent) {
-            int input_x = (int)Math.round((mouseEvent.getX() - this.rD.getOffsetX()) / this.rD.getScale());
-            int input_y = (int)Math.round((mouseEvent.getY() - this.rD.getOffsetY()) / this.rD.getScale());
-
-            if(input_x < 0 || input_y < 0 || input_x > this.rD.getWidth() || input_y > this.rD.getHeight())
-                return;
-
-            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_DRAG);
-            this.iM.addInput((ip));
-        }
+        public void mouseDragged(MouseEvent mouseEvent) {}
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent) {
@@ -163,16 +146,7 @@ public class EngineDesktop implements IEngine, Runnable {
         }
 
         @Override
-        public void mousePressed(MouseEvent mouseEvent) {
-            int input_x = (int)Math.round((mouseEvent.getX() - this.rD.getOffsetX()) / this.rD.getScale());
-            int input_y = (int)Math.round((mouseEvent.getY() - this.rD.getOffsetY()) / this.rD.getScale());
-
-            if(input_x < 0 || input_y < 0 || input_x > this.rD.getWidth() || input_y > this.rD.getHeight())
-                return;
-
-            InputDesktop ip = new InputDesktop(input_x, input_y, InputType.TOUCH_PRESS);
-            this.iM.addInput((ip));
-        }
+        public void mousePressed(MouseEvent mouseEvent) {}
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent) {
