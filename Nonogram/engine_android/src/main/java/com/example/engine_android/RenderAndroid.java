@@ -80,7 +80,7 @@ public class RenderAndroid implements IRender {
 
     public void clear() {
         this.canvas = this.holder.lockCanvas();
-        this.canvas.drawColor(0xFFAAAAAA);
+        this.canvas.drawColor(0xFFFFFFFF);
         this.canvas.translate(this.posCanvasX, this.posCanvasY);
         setColor(0xFFFFFFFF);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
