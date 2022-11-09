@@ -52,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
         MyScene scene = new MyScene();
         aMan = this.getBaseContext().getAssets();
         eng = new EngineAndroid(this.renderView, aMan);
-        audioManager = (AudioAndroid)eng.getAudio();
-        audioManager.loadMusic("./assets/sounds/doFlauta.wav", 0.5f);
-        scene.init(eng);
         eng.getSceneManager().pushScene(scene);
-        audioManager.playMusic();
         eng.resume();
 
     }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig)

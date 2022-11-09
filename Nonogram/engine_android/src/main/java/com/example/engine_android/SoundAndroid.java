@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class SoundAndroid implements ISound {
+    //sound parameters
     private float volume;
     private int soundId;
     private int loop;
@@ -17,6 +18,7 @@ public class SoundAndroid implements ISound {
     private float rate;
 
     public SoundAndroid(String filePath, AssetManager aMan, SoundPool soundPool, float volume_) {
+        //loads the sound into the sound pool and stores the iD
         AssetFileDescriptor assetDescriptor = null;
         try {
             assetDescriptor = aMan.openFd(filePath);
@@ -24,12 +26,14 @@ public class SoundAndroid implements ISound {
             e.printStackTrace();
         }
         soundId = soundPool.load(assetDescriptor, 0);
+        //sets all sound parameters
         volume = volume_;
         loop = 0;
         priority = 0;
         rate = 1.0f;
     }
 
+    //setters and getters of every sound parameter
     public int getSoundId(){
         return soundId;
     }

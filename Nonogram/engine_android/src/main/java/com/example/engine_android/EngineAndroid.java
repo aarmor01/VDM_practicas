@@ -53,7 +53,7 @@ public class EngineAndroid implements IEngine, Runnable {
         this.renderView.setOnTouchListener(new myTouchListener());
         this.assetManager = aM;
         this.myInputManager = new InputManager();
-        this.render = new RenderAndroid(this.renderView, assetManager);
+        this.render = new RenderAndroid(this.renderView, assetManager, 4.0f/6.0f);
         this.myAudioManager = new AudioAndroid(assetManager);
         this.mySceneManager = new SceneManager();
     }
@@ -69,14 +69,12 @@ public class EngineAndroid implements IEngine, Runnable {
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
         while(this.running && render.getViewWidth() == 0);
-        // Espera activa. Sería más elegante al menos dormir un poco.
 
+        this.render.scaleApp();
+        this.mySceneManager.currentScene().init(this);
         long currentTime = System.currentTimeMillis();
 
-
-        //this.render.scaleApp();
         // Bucle de juego principal.
-        render.scaleApp();
         while(running) {
             try {
                 //System.out.printf("Conche su madre que significa chainshaw man");
@@ -89,7 +87,7 @@ public class EngineAndroid implements IEngine, Runnable {
                     this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
                 mySceneManager.currentScene().update(deltaTime/1000.0f);
-                //while (!this.render.surfaceValid());
+                while (!this.render.surfaceValid());
 
                 this.render.clear();
                 this.mySceneManager.currentScene().render(this.render);
@@ -131,8 +129,10 @@ public class EngineAndroid implements IEngine, Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int aux = (render.getViewHeight() - render.getHeight())/2;
-            InputAndroid iA = new InputAndroid((int)motionEvent.getX(), (int)motionEvent.getY() - aux, InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
+            int Y = (int)motionEvent.getY() - (render.getViewHeight() - render.getHeight())/2;
+            int X = (int)motionEvent.getX() - (render.getViewWidth() - render.getWidth())/2;
+            if ( X < 0 ||  Y < 0 || X > render.getWidth() || Y > render.getHeight()) return true;
+            InputAndroid iA = new InputAndroid( X, Y, InputType.values()[motionEvent.getActionMasked()], motionEvent.getActionIndex());
             if ( InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() || InputType.TOUCH_MOVE == iA.getType())
                 myInputManager.addInput(iA);
             return true;
