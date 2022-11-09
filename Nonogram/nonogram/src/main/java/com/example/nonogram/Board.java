@@ -21,9 +21,6 @@ public class Board {
     private int height, width;
     private int posX = 0, posY = 0;
     private String font;
-    private String fontButtons;
-    private String sound;
-    private String music;
 
     private int maxNumbers;
     private List<Cell> checkedCells;
@@ -57,11 +54,12 @@ public class Board {
     }
 
     public void renderWin(IRender renderMng){
+        posX = (renderMng.getWidth() - board_cell_size*width - separation_margin*(width+1))/2;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if(board[i][j].isAnswer()){
                     board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                        j * board_cell_size + (j + 1) * separation_margin + posY, board_cell_size);
+                        j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight()/10, board_cell_size);
                 }
             }
         }

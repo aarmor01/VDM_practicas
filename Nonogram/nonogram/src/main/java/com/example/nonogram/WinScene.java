@@ -23,8 +23,10 @@ public class WinScene implements IScene {
     public void init(IEngine engine) {
         engRef = engine;
         winText = "¡¡Victoria!!";
-        font = engRef.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 50);
-        backButton = new Button((engRef.getRender().getWidth()-engRef.getRender().getWidth()/5)/2, engRef.getRender().getHeight()*7/8, engRef.getRender().getWidth()/5, engRef.getRender().getHeight()/12, "Back", "", font);
+        font = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, 50);
+        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 18);
+        backButton = new Button((engRef.getRender().getWidth()-engRef.getRender().getWidth()/4)/2, engRef.getRender().getHeight()*7/8,
+                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons);
     }
 
     @Override
