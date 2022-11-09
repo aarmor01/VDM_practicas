@@ -29,9 +29,6 @@ public class RenderAndroid implements IRender {
     private HashMap<String, FontAndroid> fonts;
     private AssetManager assetManager;
 
-    //screen orientation info
-    private boolean verticalScreen;
-
     //canvas position info
     private int posCanvasX, posCanvasY;
 
@@ -41,22 +38,22 @@ public class RenderAndroid implements IRender {
     private float scale;
 
     public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio) {
-        //
         this.myView = myView;
         this.holder = this.myView.getHolder();
-        this.assetManager = aM;
         this.paint = new Paint();
+
+        this.assetManager = aM;
+
+        // resources
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
-        this.verticalScreen = true;
 
-        //initializes canvas values
+        // initializes canvas values
         this.scale = ratio;
-        this.adaptScale();
     }
 
     public void adaptScale() {
-        while(holder.getSurfaceFrame().width() == 0);
+        while(this.holder.getSurfaceFrame().width() == 0);
 
         float w = this.holder.getSurfaceFrame().width();
         float y = this.holder.getSurfaceFrame().height();
@@ -163,7 +160,7 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
-    public int getTextHeight(String fontID) { return fonts.get(fontID).getSize(); }
+    public int getTextHeight(String fontID) { return this.fonts.get(fontID).getSize(); }
 
     @Override
     public int getWidth() { return this.baseWidth; }
