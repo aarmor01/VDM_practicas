@@ -17,6 +17,7 @@ public class AudioDesktop implements IAudio {
         this.sounds = new HashMap<>();
     }
 
+    // always returns key to obtain the object. If present, it won't load again
     @Override
     public void loadMusic(String filePath, float volume) {
         this.bgMusic = new SoundDesktop(new File(filePath), toDB(volume));
@@ -25,6 +26,7 @@ public class AudioDesktop implements IAudio {
         gainControl.setValue(this.bgMusic.getVolume());
     }
 
+    // always returns key to obtain the object. If present, it won't load again
     @Override
     public String loadSound(String filePath, float volume) {
         File soundFile = new File(filePath);
@@ -44,6 +46,7 @@ public class AudioDesktop implements IAudio {
         Clip clip = this.sounds.get(soundName).getSound();
         clip.loop(0);
 
+        // set volume to current one
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(this.sounds.get(soundName).getVolume());
 
@@ -53,6 +56,7 @@ public class AudioDesktop implements IAudio {
 
     @Override
     public void setMusicVolume(float volume) {
+        // set volume to current one
         FloatControl gainControl = (FloatControl)this.bgMusic.getSound().getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(toDB(volume));
     }

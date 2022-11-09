@@ -182,7 +182,7 @@ public class RenderDesktop implements IRender {
 
     public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
 
-    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
+    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI); }
 
     public double getScale() { return this.scaleFactor / this.ogDPI; }
 
@@ -192,13 +192,18 @@ public class RenderDesktop implements IRender {
         double scaleY = (window.getHeight() - this.borders.top - this.borders.bottom) / (float) this.canvasHeight;
         this.scaleFactor = Math.min(scaleX * this.ogDPI, scaleY * this.ogDPI);
 
+        // we translate with the scale in mind since when you scale below, it does with upper left
+        // portion as the center, so we take the logic width/height scale into account so it truly fits
+        // in the center
         int tx = (int)((this.window.getWidth() / 2 - this.canvasWidth * (this.scaleFactor / this.ogDPI) / 2) * this.ogDPI);
         int ty = (int)((((this.window.getHeight()) + this.borders.top - this.borders.bottom) / 2 -
                 this.canvasHeight * (this.scaleFactor / this.ogDPI) / 2) * this.ogDPI);
 
+        // we also get the margins width and height data to print them afterwards
         this.marginWidth = Math.max(tx - this.borders.left, 0);
         this.marginHeight = Math.max(ty - this.borders.top, 0);
 
+        // set translation and scale to the transformation matrix
         AffineTransform at = this.canvas.getTransform();
         at.setToTranslation(tx, ty);
         this.canvas.setTransform(at);
@@ -207,14 +212,14 @@ public class RenderDesktop implements IRender {
     }
 
     private void drawMargins() {
-        setColor(this.bgColor);
+        this.setColor(this.bgColor);
 
-        drawRectangle((int)(-this.marginWidth / this.scaleFactor), 0,
+        this.drawRectangle((int)(-this.marginWidth / this.scaleFactor), 0,
                 (int)(this.marginWidth / this.scaleFactor), this.canvasHeight, true);
-        drawRectangle(this.canvasWidth, 0, (int)(this.marginWidth / this.scaleFactor), this.canvasHeight, true);
+        this.drawRectangle(this.canvasWidth, 0, (int)(this.marginWidth / this.scaleFactor), this.canvasHeight, true);
 
-        drawRectangle(0, (int)(-this.marginHeight / this.scaleFactor),
+        this.drawRectangle(0, (int)(-this.marginHeight / this.scaleFactor),
                 this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
-        drawRectangle(0, this.canvasHeight, this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
+        this.drawRectangle(0, this.canvasHeight, this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
     }
 }

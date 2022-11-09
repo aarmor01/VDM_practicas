@@ -15,7 +15,7 @@ public class SoundDesktop implements ISound {
 
     SoundDesktop(File audioFile, float volume_db) {
         try {
-            this.audioStream =  AudioSystem.getAudioInputStream(audioFile);
+            this.audioStream = AudioSystem.getAudioInputStream(audioFile);
             this.audioClip = AudioSystem.getClip();
             this.audioClip.open(this.audioStream);
         } catch (Exception e) {
