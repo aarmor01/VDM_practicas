@@ -21,6 +21,7 @@ public class Board {
     private int height, width;
     private int posX = 0, posY = 0;
     private String font;
+    private String fontWrongText;
 
     private int maxNumbers;
     private List<Cell> checkedCells;
@@ -43,6 +44,8 @@ public class Board {
                         j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
             }
         }
+
+        renderMng.setFont(fontWrongText);
 
         if (lastTimeChecked != -1) {
             renderMng.setColor(0xFFFF0000);
@@ -144,6 +147,7 @@ public class Board {
         posY = ((int) (eng.getRender().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
 
         font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
+        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, 15);
         lastTimeChecked = -1;
     }
 
