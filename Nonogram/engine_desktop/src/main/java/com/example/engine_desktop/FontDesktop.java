@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class FontDesktop implements IFont {
-    Font font;
+    private Font font;
 
     public FontDesktop(File file, FontType type, int size){
         try {

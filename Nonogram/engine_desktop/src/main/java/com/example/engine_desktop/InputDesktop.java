@@ -5,10 +5,10 @@ import com.example.engine_common.interfaces.IInput;
 import com.example.engine_common.shared.InputType;
 
 public class InputDesktop implements IInput {
-    int x, y;
-    InputType type;
+    private int x, y;       // input coords
+    private InputType type; // input type
 
-    InputDesktop(int x_, int y_, InputType t_) { x = x_;  y = y_; type = t_; }
+    InputDesktop(int x, int y, InputType type) { this.x = x;  this.y = y; this.type = type; }
 
     @Override
     public int getX() {

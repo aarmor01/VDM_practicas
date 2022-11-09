@@ -3,7 +3,6 @@ package com.example.engine_desktop;
 import com.example.engine_common.interfaces.IImage;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.awt.Image;
 import javax.imageio.ImageIO;

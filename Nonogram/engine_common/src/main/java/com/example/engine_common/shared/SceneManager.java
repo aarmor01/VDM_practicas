@@ -11,9 +11,7 @@ public class SceneManager {
 
     public SceneManager() { scenes = new Stack<>(); }
 
-    public IScene currentScene() {
-        return scenes.peek();
-    }
+    public IScene currentScene() { return scenes.peek(); }
 
     public void pushScene(IScene newScene) { scenes.push(newScene); }
 

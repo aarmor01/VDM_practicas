@@ -1,31 +1,32 @@
 package com.example.engine_android;
 
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.media.SoundPool;
-
 import com.example.engine_common.interfaces.ISound;
 
-import java.io.File;
-import java.io.IOException;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+
+import android.media.SoundPool;
 
 public class SoundAndroid implements ISound {
     //sound parameters
-    private float volume;
     private int soundId;
+    private float volume;
+
     private int loop;
     private int priority;
     private float rate;
 
     public SoundAndroid(String filePath, AssetManager aMan, SoundPool soundPool, float volume_) {
-        //loads the sound into the sound pool and stores the iD
-        AssetFileDescriptor assetDescriptor = null;
+        // load the sound into the sound pool and stores the iD
         try {
+            AssetFileDescriptor assetDescriptor = null;
             assetDescriptor = aMan.openFd(filePath);
-        } catch (IOException e) {
+            soundId = soundPool.load(assetDescriptor, 0);
+        } catch (Exception e) {
+            System.err.println("Couldn't load audio file");
             e.printStackTrace();
         }
-        soundId = soundPool.load(assetDescriptor, 0);
+
         //sets all sound parameters
         volume = volume_;
         loop = 0;
@@ -33,7 +34,6 @@ public class SoundAndroid implements ISound {
         rate = 1.0f;
     }
 
-    //setters and getters of every sound parameter
     public int getSoundId(){
         return soundId;
     }

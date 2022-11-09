@@ -4,8 +4,6 @@ import com.example.engine_common.interfaces.IInput;
 
 import java.util.LinkedList;
 
-import sun.awt.image.ImageWatched;
-
 public class InputManager {
     LinkedList<IInput> bufferInput;
 
