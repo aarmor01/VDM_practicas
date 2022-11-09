@@ -14,6 +14,7 @@ public class MyScene implements IScene {
     private int radius;
     private int speed;
     private Board board;
+    private Button play;
 
     private IEngine engRef;
     private String sound;
@@ -27,11 +28,13 @@ public class MyScene implements IScene {
         board = new Board();
         board.init(8,8, eng);
 
+        play = new Button(10, 50, 100, 30, "Play" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"));
+
         engRef = eng;
 
         sound = eng.getAudio().loadSound("./assets/sounds/click.wav", 1);
         eng.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 1);
-        //eng.getAudio().playMusic();
+        eng.getAudio().playMusic();
     }
 
     @Override
@@ -42,6 +45,7 @@ public class MyScene implements IScene {
     @Override
     public void render(IRender renderMng) {
         board.render(renderMng);
+        play.render(renderMng);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class MyScene implements IScene {
                 engRef.getAudio().playSound(sound);
                 board.markCell(input.getX(),input.getY());
             }
-            else{
+            else if(play.isInBUtton(input.getX(), input.getY())){
                 board.checkear();
             }
         }

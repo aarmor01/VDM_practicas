@@ -1,6 +1,7 @@
 package com.example.engine_android;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -127,7 +128,10 @@ public class RenderAndroid implements IRender {
 
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
-        canvas.drawBitmap(images.get(imageID).getImage(), x, y, paint);
+        Bitmap image = images.get(imageID).getImage();
+        Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
+        Rect dst = new Rect(x, y, x + width, y+height);
+        canvas.drawBitmap(image, src, dst, paint);
     }
 
     @Override
