@@ -21,25 +21,25 @@ public class SoundAndroid implements ISound {
         try {
             AssetFileDescriptor assetDescriptor = null;
             assetDescriptor = aMan.openFd(filePath);
-            soundId = soundPool.load(assetDescriptor, 0);
+            this.soundId = soundPool.load(assetDescriptor, 0);
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
             e.printStackTrace();
         }
 
         //sets all sound parameters
-        volume = volume_;
-        loop = 0;
-        priority = 0;
-        rate = 1.0f;
+        this.volume = volume_;
+        this.loop = 0;
+        this.priority = 0;
+        this.rate = 1.0f;
     }
 
     public int getSoundId(){
-        return soundId;
+        return this.soundId;
     }
 
     public int getLoop() {
-        return loop;
+        return this.loop;
     }
 
     public void setLoop(int loop) {
@@ -47,7 +47,7 @@ public class SoundAndroid implements ISound {
     }
 
     public int getPriority() {
-        return priority;
+        return this.priority;
     }
 
     public void setPriority(int priority) {
@@ -55,7 +55,7 @@ public class SoundAndroid implements ISound {
     }
 
     public float getRate() {
-        return rate;
+        return this.rate;
     }
 
     public void setRate(float rate) {
@@ -64,11 +64,11 @@ public class SoundAndroid implements ISound {
 
     @Override
     public float getVolume() {
-        return volume;
+        return this.volume;
     }
 
     @Override
     public void setVolume(float v) {
-        volume = v;
+        this.volume = v;
     }
 }

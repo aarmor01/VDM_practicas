@@ -69,8 +69,8 @@ public class RenderDesktop implements IRender {
         this.bgColor = 0xFF000000;
 
         // start resource managers
-        fonts = new HashMap<>();
-        images = new HashMap<>();
+        this.fonts = new HashMap<>();
+        this.images = new HashMap<>();
     }
 
     public void prepareFrame(int bgCanvasColor) {
@@ -78,16 +78,16 @@ public class RenderDesktop implements IRender {
         this.canvas = (Graphics2D)this.bufferStrategy.getDrawGraphics();
 
         // adapt canvas to scale
-        scaleCanvas();
+        this.scaleCanvas();
 
         // clear
-        setColor(bgCanvasColor);
-        drawRectangle(0, 0, this.getWidth(), this.getHeight(), true);
+        this.setColor(bgCanvasColor);
+        this.drawRectangle(0, 0, this.getWidth(), this.getHeight(), true);
     }
 
     public void finishFrame() {
         // draw margins above everything else
-        drawMargins();
+        this.drawMargins();
 
         // flag buffer as available
         this.bufferStrategy.getDrawGraphics().dispose();
@@ -105,8 +105,8 @@ public class RenderDesktop implements IRender {
     @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        if(!images.containsKey(imageFile.getName()))
-            images.put(imageFile.getName(), new ImageDesktop(imageFile));
+        if(!this.images.containsKey(imageFile.getName()))
+            this.images.put(imageFile.getName(), new ImageDesktop(imageFile));
         return imageFile.getName();
     }
 
@@ -114,8 +114,8 @@ public class RenderDesktop implements IRender {
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
         String fontID = fontFile.getName() + type.toString() + size;
-        if(!fonts.containsKey(fontID))
-            fonts.put(fontID, new FontDesktop(fontFile, type, size));
+        if(!this.fonts.containsKey(fontID))
+            this.fonts.put(fontID, new FontDesktop(fontFile, type, size));
         return fontID;
     }
 
@@ -126,7 +126,7 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void setFont(String fontID) {
-        this.canvas.setFont(fonts.get(fontID).getFont());
+        this.canvas.setFont(this.fonts.get(fontID).getFont());
     }
 
     @Override
@@ -151,8 +151,8 @@ public class RenderDesktop implements IRender {
 
     @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
-        IImage image = images.get(imageID);
-        this.canvas.drawImage(images.get(imageID).getImage(), x, y, x + width, y + height,
+        ImageDesktop image = this.images.get(imageID);
+        this.canvas.drawImage(image.getImage(), x, y, x + width, y + height,
                 0, 0, image.getWidth(), image.getHeight(), null);
         this.canvas.setPaintMode();
     }
@@ -164,32 +164,34 @@ public class RenderDesktop implements IRender {
 
     private void scaleCanvas() {
         // select the lower scale to make proportion viable
-        double scaleX = (window.getWidth() - borders.left - borders.right) / (float) canvasWidth;
-        double scaleY = (window.getHeight() - borders.top - borders.bottom) / (float) canvasHeight;
-        scaleFactor = Math.min(scaleX * ogDPI, scaleY * ogDPI);
+        double scaleX = (window.getWidth() - this.borders.left - this.borders.right) / (float) this.canvasWidth;
+        double scaleY = (window.getHeight() - this.borders.top - this.borders.bottom) / (float) this.canvasHeight;
+        this.scaleFactor = Math.min(scaleX * this.ogDPI, scaleY * this.ogDPI);
 
-        int tx = (int)((this.window.getWidth() / 2 - canvasWidth * (scaleFactor / ogDPI) / 2) * ogDPI);
+        int tx = (int)((this.window.getWidth() / 2 - this.canvasWidth * (this.scaleFactor / this.ogDPI) / 2) * this.ogDPI);
         int ty = (int)((((this.window.getHeight()) + this.borders.top - this.borders.bottom) / 2 -
-                canvasHeight * (scaleFactor / ogDPI) / 2) * ogDPI);
+                this.canvasHeight * (this.scaleFactor / this.ogDPI) / 2) * this.ogDPI);
 
-        marginWidth = Math.max(tx - this.borders.left, 0);
-        marginHeight = Math.max(ty - this.borders.top, 0);
+        this.marginWidth = Math.max(tx - this.borders.left, 0);
+        this.marginHeight = Math.max(ty - this.borders.top, 0);
 
         AffineTransform at = this.canvas.getTransform();
         at.setToTranslation(tx, ty);
         this.canvas.setTransform(at);
-        at.setToScale((scaleFactor / at.getScaleX()), (scaleFactor / at.getScaleY()));
+        at.setToScale((this.scaleFactor / at.getScaleX()), (this.scaleFactor / at.getScaleY()));
         this.canvas.transform(at);
     }
 
     private void drawMargins() {
         setColor(this.bgColor);
 
-        drawRectangle((int)(-marginWidth / scaleFactor), 0, (int)(marginWidth / scaleFactor), canvasHeight, true);
-        drawRectangle(canvasWidth, 0, (int)(marginWidth / scaleFactor), canvasHeight, true);
+        drawRectangle((int)(-this.marginWidth / this.scaleFactor), 0,
+                (int)(this.marginWidth / this.scaleFactor), this.canvasHeight, true);
+        drawRectangle(this.canvasWidth, 0, (int)(this.marginWidth / this.scaleFactor), this.canvasHeight, true);
 
-        drawRectangle(0, (int)(-marginHeight / scaleFactor), canvasWidth, (int)(marginHeight / scaleFactor), true);
-        drawRectangle(0, canvasHeight, canvasWidth, (int)(marginHeight / scaleFactor), true);
+        drawRectangle(0, (int)(-this.marginHeight / this.scaleFactor),
+                this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
+        drawRectangle(0, this.canvasHeight, this.canvasWidth, (int)(this.marginHeight / this.scaleFactor), true);
     }
 
     public boolean windowCreated() { return this.window.getWidth() != 0; }
@@ -206,18 +208,18 @@ public class RenderDesktop implements IRender {
 
     @Override
     public int getTextWidth(String fontID, String text) {
-        Font currFont = fonts.get(fontID).getFont();
+        Font currFont = this.fonts.get(fontID).getFont();
         return this.canvas.getFontMetrics(currFont).stringWidth(text);
     }
 
     @Override
     public int getTextHeight(String fontID) {
-        return fonts.get(fontID).getFont().getSize();
+        return this.fonts.get(fontID).getFont().getSize();
     }
 
-    public int getOffsetX() { return (int)Math.round((this.borders.left + marginWidth) / ogDPI); }
+    public int getOffsetX() { return (int)Math.round((this.borders.left + this.marginWidth) / this.ogDPI); }
 
-    public int getOffsetY() { return (int)Math.round((this.borders.top + marginHeight) / ogDPI) ; }
+    public int getOffsetY() { return (int)Math.round((this.borders.top + this.marginHeight) / this.ogDPI) ; }
 
     public double getScale() { return this.scaleFactor / this.ogDPI; }
 }

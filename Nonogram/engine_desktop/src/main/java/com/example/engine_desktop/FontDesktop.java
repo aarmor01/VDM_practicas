@@ -18,21 +18,21 @@ public class FontDesktop implements IFont {
     public FontDesktop(File file, FontType type, int size){
         try {
             InputStream is = new FileInputStream(file);
-            font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(type.ordinal(), size);
+            this.font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(type.ordinal(), size);
         }
         catch(IOException | FontFormatException e) {
             e.printStackTrace();
         }
     }
 
-    public Font getFont() { return font; }
+    public Font getFont() { return this.font; }
 
     @Override
-    public int getSize() { return font.getSize(); }
+    public int getSize() { return this.font.getSize(); }
 
     @Override
-    public boolean isBold() { return font.isBold(); }
+    public boolean isBold() { return this.font.isBold(); }
 
     @Override
-    public boolean isItalic() { return font.isItalic(); }
+    public boolean isItalic() { return this.font.isItalic(); }
 }

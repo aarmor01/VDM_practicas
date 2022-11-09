@@ -15,9 +15,9 @@ public class SoundDesktop implements ISound {
 
     SoundDesktop(File audioFile, float volume_db) {
         try {
-            audioStream =  AudioSystem.getAudioInputStream(audioFile);
-            audioClip = AudioSystem.getClip();
-            audioClip.open(audioStream);
+            this.audioStream =  AudioSystem.getAudioInputStream(audioFile);
+            this.audioClip = AudioSystem.getClip();
+            this.audioClip.open(this.audioStream);
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
             e.printStackTrace();
@@ -26,11 +26,11 @@ public class SoundDesktop implements ISound {
         this.volume_db = volume_db;
     }
 
-    public Clip getSound() { return audioClip; }
+    public Clip getSound() { return this.audioClip; }
 
     @Override
     public float getVolume() {
-        return volume_db;
+        return this.volume_db;
     }
 
     @Override

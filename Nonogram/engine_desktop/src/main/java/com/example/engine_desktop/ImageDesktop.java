@@ -19,7 +19,7 @@ public class ImageDesktop implements IImage {
         }
     }
 
-    public Image getImage() { return image; }
+    public Image getImage() { return this.image; }
 
     @Override
     public int getWidth() {

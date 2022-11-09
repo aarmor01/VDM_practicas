@@ -16,26 +16,26 @@ public class FontAndroid implements IFont {
     public FontAndroid(String filePath, AssetManager aMan, int s, FontType t) {
         // creates a font using a font asset in the assets folder,
         // and an enum that identifies it's type (bold, italic or default)
-        font = Typeface.create(Typeface.createFromAsset(aMan, filePath), t.ordinal());
-        size = s; // store size of the font
+        this.font = Typeface.create(Typeface.createFromAsset(aMan, filePath), t.ordinal());
+        this.size = s; // store size of the font
     }
 
-    public Typeface getFont() { return font; }
+    public Typeface getFont() { return this.font; }
 
     @Override
     public int getSize() {
-        return size;
+        return this.size;
     }
 
     // returns if the font modifier bold is activated
     @Override
     public boolean isBold() {
-        return font.isBold();
+        return this.font.isBold();
     }
 
     // returns if the font modifier italic is activated
     @Override
     public boolean isItalic() {
-        return font.isItalic();
+        return this.font.isItalic();
     }
 }

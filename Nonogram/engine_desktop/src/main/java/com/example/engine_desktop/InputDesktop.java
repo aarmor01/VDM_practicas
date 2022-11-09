@@ -12,17 +12,17 @@ public class InputDesktop implements IInput {
 
     @Override
     public int getX() {
-        return x;
+        return this.x;
     }
 
     @Override
     public int getY() {
-        return y;
+        return this.y;
     }
 
     @Override
     public InputType getType() {
-        return type;
+        return this.type;
     }
 
     @Override

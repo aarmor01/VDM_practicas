@@ -9,23 +9,21 @@ import java.util.Stack;
 public class SceneManager {
     Stack<IScene> scenes;
 
-    public SceneManager() { scenes = new Stack<>(); }
+    public SceneManager() { this.scenes = new Stack<>(); }
 
-    public IScene currentScene() { return scenes.peek(); }
+    public IScene currentScene() { return this.scenes.peek(); }
 
-    public void pushScene(IScene newScene) { scenes.push(newScene); }
+    public void pushScene(IScene newScene) { this.scenes.push(newScene); }
 
-    public IScene popScene() { return scenes.pop(); }
+    public IScene popScene() { return this.scenes.pop(); }
 
     public void update(double deltaTime) {
-        scenes.peek().update(deltaTime);
+        this.scenes.peek().update(deltaTime);
     }
 
     public void render(IRender renderManager) {
-        scenes.peek().render(renderManager);
+        this.scenes.peek().render(renderManager);
     }
 
-    public void handleInput(IInput input) {
-        scenes.peek().handleInput(input);
-    }
+    public void handleInput(IInput input) { this.scenes.peek().handleInput(input); }
 }

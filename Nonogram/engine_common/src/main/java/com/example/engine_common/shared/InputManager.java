@@ -5,15 +5,15 @@ import com.example.engine_common.interfaces.IInput;
 import java.util.LinkedList;
 
 public class InputManager {
-    LinkedList<IInput> bufferInput;
+    private LinkedList<IInput> bufferInput;
 
-    public InputManager() { bufferInput = new LinkedList<>(); }
+    public InputManager() { this.bufferInput = new LinkedList<>(); }
 
-    public void addInput(IInput newInput) { bufferInput.addLast(newInput); }
+    public void addInput(IInput newInput) { this.bufferInput.addLast(newInput); }
 
     public LinkedList<IInput> getInput() {
         LinkedList<IInput> bufferCopy = new LinkedList<>(bufferInput);
-        bufferInput.clear();
+        this.bufferInput.clear();
         return bufferCopy;
     }
 }

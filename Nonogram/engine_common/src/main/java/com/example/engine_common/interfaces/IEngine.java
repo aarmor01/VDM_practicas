@@ -4,9 +4,9 @@ import com.example.engine_common.shared.SceneManager;
 import com.example.engine_common.shared.InputManager;
 
 public interface IEngine {
-    IRender getRender();
-    IAudio getAudio();
+    public IRender getRender();
+    public IAudio getAudio();
 
-    SceneManager getSceneManager();
-    InputManager getInputManager();
+    public SceneManager getSceneManager();
+    public InputManager getInputManager();
 }

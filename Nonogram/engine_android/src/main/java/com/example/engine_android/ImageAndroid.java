@@ -17,7 +17,7 @@ public class ImageAndroid implements IImage {
         // loads the image and stores its info
         try {
             InputStream is = assetManager.open(path);
-            image = BitmapFactory.decodeStream(is);
+            this.image = BitmapFactory.decodeStream(is);
         } catch (Exception e) {
             System.err.println("Couldn't load image file");
             e.printStackTrace();
@@ -25,16 +25,16 @@ public class ImageAndroid implements IImage {
     }
 
     public Bitmap getImage() {
-        return image;
+        return this.image;
     }
 
     @Override
     public int getWidth() {
-        return image.getWidth();
+        return this.image.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return image.getHeight();
+        return this.image.getHeight();
     }
 }
