@@ -158,6 +158,11 @@ public class RenderAndroid implements IRender {
     }
 
     @Override
+    public int getTextHeight(String fontID) {
+        return fonts.get(fontID).getSize();
+    }
+
+    @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill) {
         paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
         canvas.drawRect(x, y, x + width, y + height, paint);

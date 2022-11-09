@@ -28,7 +28,7 @@ public class MyScene implements IScene {
         board = new Board();
         board.init(8,8, eng);
 
-        play = new Button(10, 50, 100, 30, "Play" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"));
+        play = new Button(10, 50, 100, 30, "Play" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 
         engRef = eng;
 

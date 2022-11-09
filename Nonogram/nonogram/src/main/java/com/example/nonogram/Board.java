@@ -46,10 +46,11 @@ public class Board {
 
         if(lastTimeChecked != -1){
             renderMng.setColor(0xFFFF0000);
-            int x =  renderMng.getTextWidth(font, "Tienes mal " + checkedCells.size() + " casillas");
-            System.out.println(x + " " + fontSize);
-            renderMng.drawText((renderMng.getWidth() - 21*fontSize/2)/2, posY - renderMng.getHeight()/10, "Te faltan " + cellsLeft + " casillas");
-            renderMng.drawText((renderMng.getWidth() - 22*fontSize/2)/2, posY - renderMng.getHeight()/10 + fontSize*2, "Tienes mal " + checkedCells.size() + " casillas");
+            int x =  renderMng.getTextWidth(font, "Te faltan " + checkedCells.size() + " casillas");
+            int x2 =  renderMng.getTextWidth(font, "Tienes mal " + checkedCells.size() + " casillas");
+            System.out.println((renderMng.getWidth() - x)/2 + " " + (renderMng.getWidth()/2 - x2/2));
+            renderMng.drawText((renderMng.getWidth() - x)/2, posY - renderMng.getHeight()/10, "Te faltan " + cellsLeft + " casillas");
+            renderMng.drawText((renderMng.getWidth() - x2)/2, posY - renderMng.getHeight()/10 + fontSize*2, "Tienes mal " + checkedCells.size() + " casillas");
         }
     }
 
@@ -205,4 +206,5 @@ public class Board {
     public int getMarginCells(){return separation_margin;}
     public int getWidth(){ return cols.length;}
     public int getHeight(){ return rows.length;}
+    public String getFont(){ return font; }
 }

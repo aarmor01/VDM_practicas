@@ -22,4 +22,5 @@ public interface IRender {
     public int getHeight();
 
     public int getTextWidth(String fontID, String text);
+    public int getTextHeight(String fontID);
 }
