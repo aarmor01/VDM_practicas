@@ -19,14 +19,13 @@ public class MyScene implements IScene {
     private IEngine engRef;
     private String sound;
 
-    @Override
-    public void init(IEngine eng) {
+    public MyScene(IEngine eng, int w, int h) {
         this.x=50;
         this.y=50;
         this.radius = 50;
         this.speed = 150;
         board = new Board();
-        board.init(8,8, eng);
+        board.init(w,h, eng);
 
         play = new Button(10, 50, 100, 30, "Play" ,eng.getRender().loadImage("./assets/images/nomires.jpeg"), board.getFont());
 

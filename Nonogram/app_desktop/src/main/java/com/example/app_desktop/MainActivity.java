@@ -3,6 +3,7 @@ package com.example.app_desktop;
 import javax.swing.JFrame;
 
 import com.example.engine_desktop.EngineDesktop;
+import com.example.nonogram.MainMenu;
 import com.example.nonogram.MyScene;
 
 import java.awt.Color;
@@ -30,9 +31,8 @@ public class MainActivity {
         }
 
         EngineDesktop eng = new EngineDesktop(renderView);
-        MyScene scene = new MyScene();
+        MainMenu scene = new MainMenu(eng);
 
-        scene.init(eng);
         eng.getSceneManager().pushScene(scene);
         eng.resume();
     }

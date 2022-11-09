@@ -16,6 +16,7 @@ import com.example.engine_android.AudioAndroid;
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.RenderAndroid;
 import com.example.engine_common.interfaces.IAudio;
+import com.example.nonogram.MainMenu;
 import com.example.nonogram.MyScene;
 
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(uiOptions);
         }
         setContentView(this.renderView);
-        MyScene scene = new MyScene();
+        MainMenu scene = new MainMenu(eng);
         aMan = this.getBaseContext().getAssets();
         eng = new EngineAndroid(this.renderView, aMan);
         eng.getSceneManager().pushScene(scene);

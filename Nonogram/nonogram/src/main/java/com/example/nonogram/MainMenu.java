@@ -11,8 +11,10 @@ public class MainMenu implements IScene {
     Button playButton;
     String title;
     String font;
-    @Override
-    public void init(IEngine eng) {
+
+    private IEngine engRef;
+    public MainMenu(IEngine eng) {
+        engRef = eng;
         font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         playButton = new Button(100, 100, 200, 60, "PLAY", "", font);
         title = "NONOGRAMAS";
@@ -33,8 +35,7 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(IInput input) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInBUtton(input.getX(), input.getY())){
-            System.out.println("Cambia de escena");
-            //Pasar a myscene
+            engRef.getSceneManager().pushScene(new SelectionMenu(engRef));
         }
     }
 }

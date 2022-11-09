@@ -17,8 +17,10 @@ public class SelectionMenu implements IScene {
     Button t10x15;
     String font;
 
-    @Override
-    public void init(IEngine eng) {
+    private IEngine engRef;
+
+    public SelectionMenu(IEngine eng) {
+        engRef = eng;
         font = font = eng.getRender().loadFont("./assets/fonts/arial.ttf", FontType.DEFAULT, 15);
         t4x4 = new Button(100, 100, 200, 60, "4x4", "", font);
         t5x5 = new Button(100, 150, 200, 60, "5x5", "", font);
@@ -74,7 +76,7 @@ public class SelectionMenu implements IScene {
             }
 
             if(x != 0)
-                System.out.println("Cambiar a escena de juego");
+                engRef.getSceneManager().pushScene(new MyScene(engRef, x, y));
         }
     }
 }

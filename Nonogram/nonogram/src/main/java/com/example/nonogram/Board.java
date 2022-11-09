@@ -48,7 +48,6 @@ public class Board {
             renderMng.setColor(0xFFFF0000);
             int x =  renderMng.getTextWidth(font, "Te faltan " + checkedCells.size() + " casillas");
             int x2 =  renderMng.getTextWidth(font, "Tienes mal " + checkedCells.size() + " casillas");
-            System.out.println((renderMng.getWidth() - x)/2 + " " + (renderMng.getWidth()/2 - x2/2));
             renderMng.drawText((renderMng.getWidth() - x)/2, posY - renderMng.getHeight()/10, "Te faltan " + cellsLeft + " casillas");
             renderMng.drawText((renderMng.getWidth() - x2)/2, posY - renderMng.getHeight()/10 + fontSize*2, "Tienes mal " + checkedCells.size() + " casillas");
         }
