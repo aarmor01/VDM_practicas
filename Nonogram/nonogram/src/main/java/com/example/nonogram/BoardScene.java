@@ -30,11 +30,11 @@ public class BoardScene implements IScene {
         engRef = engine;
 
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
-
-        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/4))/4, engRef.getRender().getHeight()/9,
-                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/checkbutton.png"), fontButtons);
-        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/4))*3/4, engRef.getRender().getHeight()/9,
-                engRef.getRender().getWidth()/4, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons);
+        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
+        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth()/3))/5, engRef.getRender().getHeight()/9,
+                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/12, "Check" ,engRef.getRender().loadImage("./assets/images/checkbutton.png"), fontButtons, btAudio);
+        backButton = new Button((engRef.getRender().getWidth()- (engRef.getRender().getWidth()/3))*4/5, engRef.getRender().getHeight()/9,
+                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/12, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons, btAudio);
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
     }
@@ -56,12 +56,14 @@ public class BoardScene implements IScene {
                 engRef.getAudio().playSound(sound);
                 board.markCell(input.getX(),input.getY());
             }
-            else if(checkButton.isInBUtton(input.getX(), input.getY())){
+            else if(checkButton.isInButton(input.getX(), input.getY())){
                 board.checkear();
+                checkButton.clicked(engRef.getAudio());
                 if(board.win)
                     engRef.getSceneManager().pushScene(new WinScene(board));
             }
-            else if(backButton.isInBUtton(input.getX(), input.getY())){
+            else if(backButton.isInButton(input.getX(), input.getY())){
+                backButton.clicked(engRef.getAudio());
                 engRef.getSceneManager().popScene();
             }
         }

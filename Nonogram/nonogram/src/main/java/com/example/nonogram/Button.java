@@ -1,5 +1,6 @@
 package com.example.nonogram;
 
+import com.example.engine_common.interfaces.IAudio;
 import com.example.engine_common.interfaces.IRender;
 
 public class Button {
@@ -8,8 +9,9 @@ public class Button {
     private String image;
     private int posX, posY;
     private int width, height;
+    private String sound;
 
-    public Button(int x, int y, int w, int h, String tx, String im, String f){
+    public Button(int x, int y, int w, int h, String tx, String im, String f, String s){
         posX = x;
         posY = y;
         width = w;
@@ -17,6 +19,7 @@ public class Button {
         text = tx;
         font = f;
         image = im;
+        sound = s;
     }
 
     public void render(IRender renderMng){
@@ -34,7 +37,11 @@ public class Button {
         renderMng.setColor(0xFF000000);
         renderMng.drawText(x + (width - (x-posX))/2 - lg/2, posY + height/2 + renderMng.getTextHeight(font)/2, text);
     }
-    public boolean isInBUtton(int x, int y){
+    public boolean isInButton(int x, int y){
         return x > posX && x < posX + width && y > posY && y < posY + height;
+    }
+
+    public void clicked(IAudio soundMng){
+        soundMng.playSound(sound);
     }
 }

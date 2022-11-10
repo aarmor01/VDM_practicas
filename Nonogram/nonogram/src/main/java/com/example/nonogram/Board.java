@@ -170,23 +170,23 @@ public class Board {
         for (int i = 0; i < cols.length; i++) {
             if (cols[i].size() == 1) {
                 renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size / 2 + maxNumbers * fontSize,
-                        posY + (int) (maxNumbers * (fontSize / 2) / 0.5), "0");
+                        posY + maxNumbers * fontSize - 2 * separation_margin, "0");
             }
             for (int j = cols[i].size() - 2; j >= 0; j--) {
                 int w = cols[i].get(j);
                 renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size / 2 + maxNumbers * fontSize,
-                        posY + (int) (maxNumbers * (fontSize / 2) / 0.5) - (fontSize * (cols[i].size() - 2 - j)), Integer.toString(w));
+                        posY + maxNumbers * fontSize  - 2 * separation_margin - (fontSize * (cols[i].size() - 2 - j)), Integer.toString(w));
             }
         }
 
         for (int i = 0; i < rows.length; i++) {
             if (rows[i].size() == 1) {
-                renderMng.drawText(posX + (int) (maxNumbers * (fontSize / 2) / 0.7),
+                renderMng.drawText(posX + maxNumbers * fontSize - 8 * separation_margin,
                         posY + board_cell_size * (i + 1) + separation_margin * i - (int) (board_cell_size / 2.5) + maxNumbers * fontSize, "0");
             }
             for (int j = rows[i].size() - 2; j >= 0; j--) {
                 int w = rows[i].get(j);
-                renderMng.drawText(posX + (int) (maxNumbers * (fontSize / 2) / 0.7) - (fontSize * (rows[i].size() - 2 - j)),
+                renderMng.drawText(posX + maxNumbers * fontSize - 8 * separation_margin - (fontSize * (rows[i].size() - 2 - j)),
                         posY + board_cell_size * (i + 1) + separation_margin * i - (int) (board_cell_size / 2.5) + maxNumbers * fontSize, Integer.toString(w));
             }
         }
