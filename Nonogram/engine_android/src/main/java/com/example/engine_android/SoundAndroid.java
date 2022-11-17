@@ -1,13 +1,11 @@
 package com.example.engine_android;
 
-import com.example.engine_common.interfaces.ISound;
-
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 
 import android.media.SoundPool;
 
-public class SoundAndroid implements ISound {
+public class SoundAndroid {
     //sound parameters
     private int soundId;
     private float volume;
@@ -48,10 +46,8 @@ public class SoundAndroid implements ISound {
 
     public void setRate(float rate) { this.rate = rate; }
 
-    @Override
     public float getVolume() { return this.volume; }
 
-    @Override
     public void setVolume(float v) {
         this.volume = v;
     }

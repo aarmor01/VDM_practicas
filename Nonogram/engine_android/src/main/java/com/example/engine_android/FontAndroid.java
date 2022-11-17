@@ -1,14 +1,10 @@
 package com.example.engine_android;
 
-import com.example.engine_common.interfaces.IFont;
-
-import com.example.engine_common.shared.FontType;
-
 import android.graphics.Typeface;
 
 import android.content.res.AssetManager;
 
-public class FontAndroid implements IFont {
+public class FontAndroid {
     // font data (type and size)
     private Typeface font;
     private int size;
@@ -22,14 +18,11 @@ public class FontAndroid implements IFont {
 
     public Typeface getFont() { return this.font; }
 
-    @Override
     public int getSize() { return this.size; }
 
     // returns if the font modifier bold is activated
-    @Override
     public boolean isBold() { return this.font.isBold(); }
 
     // returns if the font modifier italic is activated
-    @Override
     public boolean isItalic() { return this.font.isItalic(); }
 }

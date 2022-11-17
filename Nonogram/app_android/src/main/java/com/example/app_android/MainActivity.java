@@ -12,7 +12,6 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.nonogram.MainMenu;
 
 public class MainActivity extends AppCompatActivity {
     @Override

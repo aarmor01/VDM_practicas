@@ -6,19 +6,9 @@ import android.view.View;
 
 import android.content.res.AssetManager;
 
-import com.example.engine_common.interfaces.IAudio;
-import com.example.engine_common.interfaces.IEngine;
-import com.example.engine_common.interfaces.IInput;
-import com.example.engine_common.interfaces.IRender;
-import com.example.engine_common.interfaces.IScene;
-
-import com.example.engine_common.shared.InputManager;
-import com.example.engine_common.shared.InputType;
-import com.example.engine_common.shared.SceneManager;
-
 import java.util.LinkedList;
 
-public class EngineAndroid implements IEngine, Runnable {
+public class EngineAndroid implements Runnable {
     // engine variables
     private RenderAndroid myRenderManager;
     private SceneManager mySceneManager;
@@ -64,7 +54,7 @@ public class EngineAndroid implements IEngine, Runnable {
                 currentTime += deltaTime;
 
                 // handle input
-                LinkedList<IInput> input = this.myInputManager.getInput();
+                LinkedList<InputAndroid> input = this.myInputManager.getInput();
                 while (!input.isEmpty())
                     this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
@@ -109,16 +99,12 @@ public class EngineAndroid implements IEngine, Runnable {
         }
     }
 
-    @Override
-    public IRender getRender() { return this.myRenderManager; }
+    public RenderAndroid getRender() { return this.myRenderManager; }
 
-    @Override
-    public IAudio getAudio() { return this.myAudioManager; }
+    public AudioAndroid getAudio() { return this.myAudioManager; }
 
-    @Override
     public SceneManager getSceneManager() { return this.mySceneManager; }
 
-    @Override
     public InputManager getInputManager() { return this.myInputManager; }
 
     private class InputListener implements View.OnTouchListener {

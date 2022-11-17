@@ -1,7 +1,5 @@
 package com.example.engine_android;
 
-import com.example.engine_common.interfaces.IImage;
-
 import java.io.InputStream;
 
 import android.content.res.AssetManager;
@@ -9,7 +7,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class ImageAndroid implements IImage {
+public class ImageAndroid {
     // data of the image
     Bitmap image;
 
@@ -26,9 +24,7 @@ public class ImageAndroid implements IImage {
 
     public Bitmap getImage() { return this.image; }
 
-    @Override
     public int getWidth() { return this.image.getWidth(); }
 
-    @Override
     public int getHeight() { return this.image.getHeight(); }
 }

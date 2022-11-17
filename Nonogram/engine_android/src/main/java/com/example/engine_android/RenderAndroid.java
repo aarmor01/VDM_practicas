@@ -9,13 +9,10 @@ import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.engine_common.interfaces.IRender;
-import com.example.engine_common.shared.FontType;
-
 import java.io.File;
 import java.util.HashMap;
 
-public class RenderAndroid implements IRender {
+public class RenderAndroid {
     //android graphic variables
     private SurfaceView myView;
     private SurfaceHolder holder;
@@ -89,7 +86,6 @@ public class RenderAndroid implements IRender {
         this.holder.unlockCanvasAndPost(this.canvas);
     }
 
-    @Override
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
@@ -98,7 +94,6 @@ public class RenderAndroid implements IRender {
         return imageFile.getName();
     }
 
-    @Override
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
         String fontID = fontFile.getName() + type.toString() + size;
@@ -108,36 +103,30 @@ public class RenderAndroid implements IRender {
         return fontID;
     }
 
-    @Override
     public void setColor(int hexColor) {
         this.paint.setColor(hexColor);
     }
 
-    @Override
     public void setFont(String fontID) {
         FontAndroid font = this.fonts.get(fontID);
         this.paint.setTypeface(font.getFont());
         this.paint.setTextSize(font.getSize());
     }
 
-    @Override
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
     }
 
-    @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill) {
         this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
         this.canvas.drawRect(x, y, x + width, y + height, this.paint);
     }
 
-    @Override
     public void drawCircle(int x, int y, int r, boolean fill) {
         this.paint.setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
         this.canvas.drawCircle(x, y, r, this.paint);
     }
 
-    @Override
     public void drawImage(int x, int y, int width, int height, String imageID) {
         Bitmap image = this.images.get(imageID).getImage();
         Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
@@ -145,13 +134,11 @@ public class RenderAndroid implements IRender {
         this.canvas.drawBitmap(image, src, dst, this.paint);
     }
 
-    @Override
     public void drawText(int x, int y, String text) {
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.canvas.drawText(text, x, y, this.paint);
     }
 
-    @Override
     public int getTextWidth(String fontID, String text) {
         Typeface prev_font = this.paint.getTypeface();
         FontAndroid font = this.fonts.get(fontID);
@@ -163,13 +150,10 @@ public class RenderAndroid implements IRender {
         return (int)width;
     }
 
-    @Override
     public int getTextHeight(String fontID) { return this.fonts.get(fontID).getSize(); }
 
-    @Override
     public int getWidth() { return this.baseWidth; }
 
-    @Override
     public int getHeight() { return this.baseHeight; }
 
     public int getViewWidth() { return this.myView.getWidth(); }
