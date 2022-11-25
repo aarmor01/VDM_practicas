@@ -1,5 +1,6 @@
 package com.example.engine_android;
 
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -25,6 +26,9 @@ public class EngineAndroid implements Runnable {
     private Thread renderThread;
     private boolean running;
 
+    // input variables
+    private Handler handler;
+
     public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio, int bgColor) {
         this.assetManager = aM;
 
@@ -32,7 +36,7 @@ public class EngineAndroid implements Runnable {
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
-
+        handler = new Handler();
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
     }
@@ -108,6 +112,21 @@ public class EngineAndroid implements Runnable {
     public InputManager getInputManager() { return this.myInputManager; }
 
     private class InputListener implements View.OnTouchListener {
+
+        private int input_x_original;
+        private int input_y_original;
+        private boolean goneFlag;
+        private int idLongTouch;
+        private Runnable mLongPressed = new Runnable() {
+            @Override
+            public void run() {
+                InputAndroid iA = new InputAndroid( input_x_original, input_y_original, InputType.TOUCH_LONG,
+                        idLongTouch);
+                goneFlag = true;
+                myInputManager.addInput(iA);
+            }
+        };
+
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             int input_y = (int)motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
@@ -115,13 +134,30 @@ public class EngineAndroid implements Runnable {
             
             if (input_x < 0 ||  input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
                 return true;
-            
-            InputAndroid iA = new InputAndroid( input_x, input_y, InputType.values()[motionEvent.getActionMasked()], 
-                    motionEvent.getActionIndex());
-            if (InputType.TOUCH_DOWN == iA.getType() || InputType.TOUCH_UP == iA.getType() ||
-                    InputType.TOUCH_MOVE == iA.getType())
-                myInputManager.addInput(iA);
-            
+
+
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    input_x_original = input_x;
+                    input_y_original = input_y;
+                    idLongTouch = motionEvent.getActionIndex();
+                    handler.postDelayed(mLongPressed, 1000);
+                    //This is where my code for movement is initialized to get original location.
+                    break;
+                case MotionEvent.ACTION_UP:
+                    handler.removeCallbacks(mLongPressed);
+                    if((Math.abs(input_x - input_x_original) <= 2 && Math.abs(input_y - input_y_original) <= 2) && !goneFlag) {
+                        InputAndroid iA = new InputAndroid( input_x, input_y, InputType.TOUCH_UP,
+                                idLongTouch);
+                        myInputManager.addInput(iA);
+                        return true;
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!(Math.abs(input_x - input_x_original) <= 2 && Math.abs(input_y - input_y_original) <= 2))
+                        handler.removeCallbacks(mLongPressed);
+                    break;
+            }
             return true;
         }
     }
