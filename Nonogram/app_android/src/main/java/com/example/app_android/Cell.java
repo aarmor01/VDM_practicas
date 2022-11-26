@@ -52,6 +52,16 @@ public class Cell {
         return retValue;
     }
 
+    public void markCell(){
+        if(s == State.EMPTY) s=State.MARKED;
+        else if(s == State.MARKED) s=State.EMPTY;
+    }
+
+    public void crossCell(){
+        if(s == State.EMPTY) s=State.CROSSED;
+        else if(s == State.CROSSED) s=State.EMPTY;
+    }
+
     private boolean isAnswer;
     private State s;
     private State notCheckedS;

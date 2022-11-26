@@ -55,7 +55,7 @@ public class BoardScene implements IScene {
         if(input.getType() == InputType.TOUCH_UP){
             if(board.isInBoard(input.getX(), input.getY())){
                 engRef.getAudio().playSound(sound);
-                board.markCell(input.getX(),input.getY());
+                board.markCell(input.getX(),input.getY(), false);
             }
             else if(checkButton.isInButton(input.getX(), input.getY())){
                 board.checkear();
@@ -66,6 +66,11 @@ public class BoardScene implements IScene {
             else if(backButton.isInButton(input.getX(), input.getY())){
                 backButton.clicked(engRef.getAudio());
                 engRef.getSceneManager().popScene();
+            }
+        }
+        else if(input.getType() == InputType.TOUCH_LONG){
+            if(board.isInBoard(input.getX(), input.getY())){
+                board.markCell(input.getX(),input.getY(), true);
             }
         }
     }

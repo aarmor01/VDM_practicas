@@ -211,10 +211,13 @@ public class Board {
                 && posY > (separation_margin + this.posY + maxNumbers * fontSize) && posY < (height * board_cell_size + height * separation_margin + this.posY + maxNumbers * fontSize);
     }
 
-    public void markCell(int x, int y) {
+    public void markCell(int x, int y, boolean longT) {
         int boardX = (x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin;
         int boardY = (y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin;
-        cellsLeft -= board[boardX / board_cell_size][boardY / board_cell_size].changeCell();
+        if(longT)
+            board[boardX / board_cell_size][boardY / board_cell_size].crossCell();
+        else
+            board[boardX / board_cell_size][boardY / board_cell_size].markCell();
     }
 
     public int getCellSize() {

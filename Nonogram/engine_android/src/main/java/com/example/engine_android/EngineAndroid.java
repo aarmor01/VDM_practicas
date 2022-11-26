@@ -26,9 +26,6 @@ public class EngineAndroid implements Runnable {
     private Thread renderThread;
     private boolean running;
 
-    // input variables
-    private Handler handler;
-
     public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio, int bgColor) {
         this.assetManager = aM;
 
@@ -36,7 +33,6 @@ public class EngineAndroid implements Runnable {
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
-        handler = new Handler();
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
     }
@@ -117,6 +113,10 @@ public class EngineAndroid implements Runnable {
         private int input_y_original;
         private boolean goneFlag;
         private int idLongTouch;
+
+        // input variables
+        private Handler handler = new Handler();
+
         private Runnable mLongPressed = new Runnable() {
             @Override
             public void run() {
@@ -138,11 +138,11 @@ public class EngineAndroid implements Runnable {
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    goneFlag = false;
                     input_x_original = input_x;
                     input_y_original = input_y;
                     idLongTouch = motionEvent.getActionIndex();
                     handler.postDelayed(mLongPressed, 1000);
-                    //This is where my code for movement is initialized to get original location.
                     break;
                 case MotionEvent.ACTION_UP:
                     handler.removeCallbacks(mLongPressed);
@@ -154,7 +154,7 @@ public class EngineAndroid implements Runnable {
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (!(Math.abs(input_x - input_x_original) <= 2 && Math.abs(input_y - input_y_original) <= 2))
+                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
                         handler.removeCallbacks(mLongPressed);
                     break;
             }
