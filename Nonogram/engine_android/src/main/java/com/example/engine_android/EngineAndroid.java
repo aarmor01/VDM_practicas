@@ -142,7 +142,7 @@ public class EngineAndroid implements Runnable {
                     input_x_original = input_x;
                     input_y_original = input_y;
                     idLongTouch = motionEvent.getActionIndex();
-                    handler.postDelayed(mLongPressed, 1000);
+                    handler.postDelayed(mLongPressed, 500);
                     break;
                 case MotionEvent.ACTION_UP:
                     handler.removeCallbacks(mLongPressed);
@@ -153,10 +153,10 @@ public class EngineAndroid implements Runnable {
                         return true;
                     }
                     break;
-                case MotionEvent.ACTION_MOVE:
-                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-                        handler.removeCallbacks(mLongPressed);
-                    break;
+//                case MotionEvent.ACTION_MOVE:
+//                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
+//                        handler.removeCallbacks(mLongPressed);
+//                    break;
             }
             return true;
         }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
-    static int SEGS_CHECKED = 5;
+    static int SEGS_CHECKED = 2;
 
     private int board_cell_size;
     private int separation_margin;
@@ -57,13 +57,13 @@ public class Board {
         }
     }
 
-    public void renderWin(RenderAndroid renderMng){
-        posX = (renderMng.getWidth() - board_cell_size*width - separation_margin*(width+1))/2;
+    public void renderWin(RenderAndroid renderMng) {
+        posX = (renderMng.getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(board[i][j].isAnswer()){
+                if (board[i][j].isAnswer()) {
                     board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                        j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight()/10, board_cell_size);
+                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class Board {
         int maxDimension = Math.max(w, h);
 
         int winW = (eng.getRender().getWidth()) / (maxDimension + maxDimension / 8);
-        int winH = ((int)(eng.getRender().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension + maxDimension / 8);
+        int winH = ((int) (eng.getRender().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension + maxDimension / 8);
 
         board_cell_size = Math.min(winH, winW);
         separation_margin = Math.max(board_cell_size / 25, 1);
@@ -175,7 +175,7 @@ public class Board {
             for (int j = cols[i].size() - 2; j >= 0; j--) {
                 int w = cols[i].get(j);
                 renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size / 2 + maxNumbers * fontSize,
-                        posY + maxNumbers * fontSize  - 2 * separation_margin - (fontSize * (cols[i].size() - 2 - j)), Integer.toString(w));
+                        posY + maxNumbers * fontSize - 2 * separation_margin - (fontSize * (cols[i].size() - 2 - j)), Integer.toString(w));
             }
         }
 
@@ -192,17 +192,17 @@ public class Board {
         }
     }
 
-    public void checkear() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (!board[i][j].isAnswer() && board[i][j].getState() == Cell.State.MARKED) {
-                    board[i][j].setChecked();
-                    checkedCells.add(board[i][j]);
-                }
-            }
+    public void checkear(int x, int y) {
+        int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        System.out.print(x + " " + y);
+        if (!board[boardX][boardY].isAnswer() && board[boardX][boardY].getState() == Cell.State.MARKED) {
+            board[boardX][boardY].setChecked();
+            checkedCells.add(board[boardX][boardY]);
         }
+
         lastTimeChecked = SEGS_CHECKED;
-        if(checkedCells.size() == 0 && cellsLeft == 0)
+        if (checkedCells.size() == 0 && cellsLeft == 0)
             win = true;
     }
 
@@ -211,13 +211,25 @@ public class Board {
                 && posY > (separation_margin + this.posY + maxNumbers * fontSize) && posY < (height * board_cell_size + height * separation_margin + this.posY + maxNumbers * fontSize);
     }
 
-    public void markCell(int x, int y, boolean longT) {
-        int boardX = (x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin;
-        int boardY = (y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin;
-        if(longT)
-            board[boardX / board_cell_size][boardY / board_cell_size].crossCell();
-        else
-            board[boardX / board_cell_size][boardY / board_cell_size].markCell();
+    public int markCell(int x, int y, boolean longT) {
+        int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        if (longT)
+            board[boardX][boardY].crossCell();
+        else {
+            board[boardX][boardY].markCell();
+            if (board[boardX][boardY].getState() == Cell.State.MARKED) {
+                if (board[boardX][boardY].isAnswer())
+                    cellsLeft -= 1;
+                else
+                    return 1;
+            } else {
+                if (board[boardX][boardY].isAnswer())
+                    cellsLeft += 1;
+            }
+        }
+
+        return 0;
     }
 
     public int getCellSize() {

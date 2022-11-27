@@ -12,17 +12,22 @@ public class WinScene implements IScene {
     private String winText;
     private String font;
     private Button backButton;
+    private boolean victory;
 
     private EngineAndroid engRef;
 
-    public WinScene(Board b){
+    public WinScene(Board b, boolean win){
         board = b;
+        victory = win;
     }
 
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        winText = "¡¡Victoria!!";
+        if(victory)
+            winText = "¡¡Victoria!!";
+        else
+            winText = "Derrota :(";
         font = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 8);
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
@@ -41,7 +46,8 @@ public class WinScene implements IScene {
         renderMng.setFont(font);
         int w = renderMng.getTextWidth(font, winText);
         renderMng.drawText((renderMng.getWidth()-w)/2, renderMng.getHeight()/6, winText);
-        board.renderWin(renderMng);
+        if(victory)
+            board.renderWin(renderMng);
         backButton.render(renderMng);
     }
 
