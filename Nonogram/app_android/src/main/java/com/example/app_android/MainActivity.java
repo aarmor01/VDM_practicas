@@ -2,7 +2,7 @@ package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.AssetManager;
+import android.content.Context;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         // create engine and scene
-        AssetManager aMan = this.getBaseContext().getAssets();
-        EngineAndroid eng = new EngineAndroid(renderView, aMan, 4.0f/6.0f, 0xFFFFFFFF);
+        Context context = this.getBaseContext();
+        EngineAndroid eng = new EngineAndroid(renderView, context, 4.0f/6.0f, 0xFFFFFFFF);
         MainMenu scene = new MainMenu();
 
         // start up

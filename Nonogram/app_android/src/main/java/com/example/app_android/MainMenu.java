@@ -46,7 +46,7 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(InputAndroid input) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
-            engRef.getSceneManager().pushScene(new ModeSelectionMenu());
+            engRef.getSceneManager().pushScene(new PruebaScene());
             playButton.clicked(engRef.getAudio());
         }
     }

@@ -1,5 +1,6 @@
 package com.example.engine_android;
 
+import android.content.Context;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -7,6 +8,12 @@ import android.view.View;
 
 import android.content.res.AssetManager;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class EngineAndroid implements Runnable {
@@ -18,6 +25,7 @@ public class EngineAndroid implements Runnable {
 
     // asset manager
     private AssetManager assetManager;
+    private Context context;
 
     // start scene
     private IScene startScene;
@@ -26,8 +34,9 @@ public class EngineAndroid implements Runnable {
     private Thread renderThread;
     private boolean running;
 
-    public EngineAndroid(SurfaceView surface, AssetManager aM, float ratio, int bgColor) {
-        this.assetManager = aM;
+    public EngineAndroid(SurfaceView surface, Context cont, float ratio, int bgColor) {
+        context = cont;
+        this.assetManager = cont.getAssets();
 
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
@@ -106,6 +115,47 @@ public class EngineAndroid implements Runnable {
     public SceneManager getSceneManager() { return this.mySceneManager; }
 
     public InputManager getInputManager() { return this.myInputManager; }
+
+    public BufferedReader readText(String route, String file) {
+        //Carga de archivo
+        String receiveString = "";
+        try {//Comprobar si existe en el almacenamiento interno
+            FileInputStream fis = context.openFileInput(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            try {
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
+                inputStreamReader.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            return bufferedReader;
+
+        } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+            e.printStackTrace();
+            InputStreamReader inputStreamReader = null;
+            try {
+                inputStreamReader = new InputStreamReader(assetManager.open(route + file));
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
+
+                inputStreamReader.close();
+
+                return bufferedReader;
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+        return  null;
+    }
 
     private class InputListener implements View.OnTouchListener {
 
