@@ -31,11 +31,11 @@ public class BoardScene implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         lives = MAX_LIVES;
-        board = new Board();
-        board.init(dim_w, dim_h, engine);
-
         engRef = engine;
-
+        board = new Board();
+        //board.init(dim_w, dim_h, engRef, "");
+        String bf = engRef.readText("levels/animales/10x10/", "mouse.txt");
+        board.initFile(bf, engRef);
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth() / 3)) / 5, engRef.getRender().getHeight() / 9,
@@ -51,7 +51,6 @@ public class BoardScene implements IScene {
     @Override
     public void update(double deltaTime) {
         board.update(deltaTime);
-
     }
 
     @Override

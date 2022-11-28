@@ -116,7 +116,7 @@ public class EngineAndroid implements Runnable {
 
     public InputManager getInputManager() { return this.myInputManager; }
 
-    public BufferedReader readText(String route, String file) {
+    public String readText(String route, String file) {
         //Carga de archivo
         String receiveString = "";
         try {//Comprobar si existe en el almacenamiento interno
@@ -133,7 +133,7 @@ public class EngineAndroid implements Runnable {
                 ioException.printStackTrace();
             }
 
-            return bufferedReader;
+            return receiveString;
 
         } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
             e.printStackTrace();
@@ -149,7 +149,7 @@ public class EngineAndroid implements Runnable {
 
                 inputStreamReader.close();
 
-                return bufferedReader;
+                return receiveString;
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

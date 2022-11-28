@@ -69,7 +69,7 @@ public class Board {
         }
     }
 
-    public void init(int h, int w, EngineAndroid eng) {
+    public void init(int h, int w, EngineAndroid eng, String content) {
         height = h;
         width = w;
         board = new Cell[width][height];
@@ -97,9 +97,15 @@ public class Board {
             cols[i] = new ArrayList<Integer>();
             cols[i].add(-1);
             for (int j = 0; j < height; j++) {
-                int rand = random.nextInt(10);
-                board[i][j].init(rand < 4);
-                if (rand < 4) {
+                if(content == ""){
+                    int rand = random.nextInt(10);
+                    board[i][j].init(rand < 4);
+                }
+                else{
+                    board[i][j].init(content.charAt(j*height+i) == 'O');
+                }
+
+                if (board[i][j].isAnswer()) {
                     cellsLeft++;
 
                     if (cols[i].get(cols[i].size() - 1) == -1) {      //Rellenado vector columnas
@@ -150,6 +156,11 @@ public class Board {
         font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
         fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, eng.getRender().getWidth() / 20);
         lastTimeChecked = -1;
+    }
+
+    public void initFile(String level, EngineAndroid eng){
+        String[] lines = level.split(" ");
+        this.init(Integer.valueOf(lines[0]), Integer.valueOf(lines[1]), eng, lines[2]);
     }
 
     public void update(double deltaTime) {

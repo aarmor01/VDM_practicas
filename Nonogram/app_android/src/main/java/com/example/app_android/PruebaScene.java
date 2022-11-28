@@ -19,7 +19,8 @@ public class PruebaScene implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        BufferedReader bf = engRef.readText("levels/animales/10x10/", "mouse.txt");
+        String bf = engRef.readText("levels/animales/10x10/", "mouse.txt");
+
     }
 
     @Override
