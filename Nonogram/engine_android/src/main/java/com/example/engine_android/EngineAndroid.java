@@ -35,7 +35,7 @@ public class EngineAndroid implements Runnable {
     private boolean running;
 
     public EngineAndroid(SurfaceView surface, Context cont, float ratio, int bgColor) {
-        context = cont;
+        this.context = cont;
         this.assetManager = cont.getAssets();
 
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
