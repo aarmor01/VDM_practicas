@@ -14,11 +14,14 @@ public class LevelHistorySelectionMenu implements IScene {
     Button backButton;
     String font;
     String route;
+    int lastUnlocked, category;
 
     private EngineAndroid engRef;
 
-    public LevelHistorySelectionMenu(String r){
+    public LevelHistorySelectionMenu(String r, int cat){
         route = r;
+        category = cat;
+        lastUnlocked = GameManager.getInstance().getLevelUnlocked(category) + 1;
     }
 
     @Override
@@ -31,7 +34,10 @@ public class LevelHistorySelectionMenu implements IScene {
         levelSelecBut = new Button[LEVELS_PER_CATEGORY];
 
         for(int i=0; i<LEVELS_PER_CATEGORY; i++){
-            levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), "", font, btAudio);
+            if(i < lastUnlocked)
+                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), "", font, btAudio);
+            else
+                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Abobole", "", font, btAudio);
         }
 
         backButton = new Button(engRef.getRender().getWidth()/4, y/4, engRef.getRender().getWidth()/2, (y - y/4)/2, "Back", "", font, btAudio);
@@ -56,10 +62,11 @@ public class LevelHistorySelectionMenu implements IScene {
         if (input.getType() == InputType.TOUCH_UP) {
             int x = 0;
             int i = 0;
-            while(x == 0 && i<LEVELS_PER_CATEGORY){
+            while(x == 0 && i<lastUnlocked){
                 if(levelSelecBut[i].isInButton(input.getX(), input.getY())){
                     x = i + 1;
                 }
+                i++;
             }
 
             if(backButton.isInButton(input.getX(), input.getY())){
@@ -69,7 +76,7 @@ public class LevelHistorySelectionMenu implements IScene {
 
             if(x != 0){
                 levelSelecBut[0].clicked(engRef.getAudio());
-                engRef.getSceneManager().pushScene(new BoardScene(route , x + ".txt"));
+                engRef.getSceneManager().pushScene(new BoardScene(route , x, category));
             }
         }
     }

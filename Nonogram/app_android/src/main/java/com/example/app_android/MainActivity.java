@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         // test
         GameManager.init(eng);
+
+    }
+
+    @Override
+    protected void onPause() {
+        // save files
+        super.onPause();
         GameManager gM = GameManager.getInstance();
         GameManager.shutdown();
     }
