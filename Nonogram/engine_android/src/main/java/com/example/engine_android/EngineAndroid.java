@@ -162,7 +162,6 @@ public class EngineAndroid implements Runnable {
         private int input_x_original;
         private int input_y_original;
         private boolean goneFlag;
-        private int idLongTouch;
 
         // input variables
         private Handler handler = new Handler();
@@ -170,10 +169,7 @@ public class EngineAndroid implements Runnable {
         private Runnable mLongPressed = new Runnable() {
             @Override
             public void run() {
-                InputAndroid iA = new InputAndroid( input_x_original, input_y_original, InputType.TOUCH_LONG,
-                        idLongTouch);
                 goneFlag = true;
-                myInputManager.addInput(iA);
             }
         };
 
@@ -185,28 +181,38 @@ public class EngineAndroid implements Runnable {
             if (input_x < 0 ||  input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
                 return true;
 
+            InputAndroid iA = null;
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     goneFlag = false;
                     input_x_original = input_x;
                     input_y_original = input_y;
-                    idLongTouch = motionEvent.getActionIndex();
+                    iA = new InputAndroid( input_x, input_y, InputType.TOUCH_DOWN,
+                            motionEvent.getActionIndex());
+                    myInputManager.addInput(iA);
                     handler.postDelayed(mLongPressed, 500);
                     break;
                 case MotionEvent.ACTION_UP:
                     handler.removeCallbacks(mLongPressed);
-                    if((Math.abs(input_x - input_x_original) <= 2 && Math.abs(input_y - input_y_original) <= 2) && !goneFlag) {
-                        InputAndroid iA = new InputAndroid( input_x, input_y, InputType.TOUCH_UP,
-                                idLongTouch);
+                    if(!goneFlag) {
+                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_UP,
+                                motionEvent.getActionIndex());
                         myInputManager.addInput(iA);
                         return true;
                     }
+                    else {
+                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_LONG,
+                                motionEvent.getActionIndex());
+                        myInputManager.addInput(iA);
+                    }
                     break;
-//                case MotionEvent.ACTION_MOVE:
-//                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-//                        handler.removeCallbacks(mLongPressed);
-//                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
+                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
+                                motionEvent.getActionIndex());
+                        myInputManager.addInput(iA);
+                    break;
             }
             return true;
         }
