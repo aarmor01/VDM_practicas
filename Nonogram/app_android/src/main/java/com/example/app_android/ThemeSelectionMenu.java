@@ -28,12 +28,19 @@ public class ThemeSelectionMenu implements IScene {
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         animalThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 4.0),
                 engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "ANIMAL THEME", "", fontButton, btAudio);
+        String tx;
+        if(GameManager.getInstance().getLevelUnlocked(0) > 10) tx = "";
+        else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         emojiThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "EMOJI THEME", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "EMOJI THEME", tx, fontButton, btAudio);
+        if(GameManager.getInstance().getLevelUnlocked(1) > 10) tx = "";
+        else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         theme3ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.1),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio);
+        if(GameManager.getInstance().getLevelUnlocked(2) > 10) tx = "";
+        else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         theme4ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 1.7),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio);
         mainText = "Choose theme:";
         backButton = new Button(engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)*5, engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)/3, "Back", "", backFont, btAudio);
 
@@ -65,18 +72,24 @@ public class ThemeSelectionMenu implements IScene {
                 engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/", 0));
                 animalThemeButton.clicked(engRef.getAudio());
             }
-            else if (emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(0) > 10) {
-                if(gM.getLevelUnlocked(1) == -1) gM.updateCategory(1, 0, null);
+            else if (emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(0) > 0) {
+                if(gM.getLevelUnlocked(1) == -1){
+                    gM.updateCategory(1, 0, null);
+                }
                 engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/emojis/", 1));
                 emojiThemeButton.clicked(engRef.getAudio());
             }
-            else if (theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 21) {
-                if(gM.getLevelUnlocked(2) == -1) gM.updateCategory(2, 0, null);
+            else if (theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 20) {
+                if(gM.getLevelUnlocked(2) == -1){
+                    gM.updateCategory(2, 0, null);
+                }
                 engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme3/", 2));
                 emojiThemeButton.clicked(engRef.getAudio());
             }
-            else if (theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 21) {
-                if(gM.getLevelUnlocked(3) == -1) gM.updateCategory(3, 0, null);
+            else if (theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
+                if(gM.getLevelUnlocked(3) == -1) {
+                    gM.updateCategory(3, 0, null);
+                }
                 engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme4/", 3));
                 emojiThemeButton.clicked(engRef.getAudio());
             }

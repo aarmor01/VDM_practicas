@@ -40,7 +40,7 @@ public class Button {
     public boolean isInButton(int x, int y){
         return x > posX && x < posX + width && y > posY && y < posY + height;
     }
-
+    public void setImage(String tx){image = tx;}
     public void clicked(AudioAndroid soundMng){
         soundMng.playSound(sound);
     }
