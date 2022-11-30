@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.engine_android.EngineAndroid;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -37,12 +38,6 @@ public class GameManager {
         // deserialize story levels
         for (int level = 0; level < instance.numStoryLevels; level++)
             instance.loadCategory("save_story_" + level + ".bin", level);
-
-        // aiuda
-        instance.freeLevel.levelUnlocked++;
-        instance.storyLevels[1].levelUnlocked++;
-        instance.freeLevel.pendingBoard = new Board();
-        instance.freeLevel.pendingBoard.win = true;
     }
 
     public static GameManager getInstance() {
@@ -78,8 +73,8 @@ public class GameManager {
             else storyLevels[category].pendingBoard = new Board();
         }
 
-        if (category == -1 && freeLevel.levelUnlocked - level == 1) freeLevel.levelUnlocked = level;
-        else if(storyLevels[category].levelUnlocked - level == 1) storyLevels[category].levelUnlocked = level;
+        if (category == -1 && level - freeLevel.levelUnlocked == 1) freeLevel.levelUnlocked = level;
+        else if(level - storyLevels[category].levelUnlocked == 1) storyLevels[category].levelUnlocked = level;
     }
 
     public void resetBoard(int category) {
@@ -112,10 +107,14 @@ public class GameManager {
         catch(Exception ex) {
             System.out.println("Category not serialised previously. Loading new Category");
             ct_temp = new CategoryData();
+            if(id == 0)
+                ct_temp.levelUnlocked++;//Iniciamos la primera categoria a 0
         }
 
         if (id == -1) this.freeLevel = ct_temp;
         else this.storyLevels[id] = ct_temp;
+
+        this.engine.removeFile(path);
     }
 
     private void storeCategory(String path, int id) {

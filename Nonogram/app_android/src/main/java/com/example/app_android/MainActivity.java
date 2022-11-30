@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         // save files
+        super.onPause();
         GameManager gM = GameManager.getInstance();
         GameManager.shutdown();
     }

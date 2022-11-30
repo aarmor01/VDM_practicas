@@ -16,7 +16,7 @@ public class BoardScene implements IScene {
     String route, level;
 
     private Board board;
-    private int lives;
+    private int lives, actLevel, actCategory;
 
     private Button checkButton;
     private Button backButton;
@@ -29,9 +29,11 @@ public class BoardScene implements IScene {
         this.dim_h = h;
     }
 
-    public BoardScene(String r, String file){
+    public BoardScene(String r, int file, int category){
         route = r;
-        level = file;
+        level = file + ".txt";
+        actLevel = file;
+        actCategory = category;
     }
 
     @Override
@@ -86,8 +88,10 @@ public class BoardScene implements IScene {
                 engRef.getAudio().playSound(sound);
                 lives -= board.markCell(input.getX(), input.getY(), false);
                 board.checkear(input.getX(), input.getY());
-                if (board.win)
+                if (board.win){
+                    GameManager.getInstance().updateCategory(actCategory, actLevel, null);
                     engRef.getSceneManager().pushScene(new WinScene(board, true));
+                }
                 if(lives == 0)
                     engRef.getSceneManager().pushScene(new WinScene(board, false));
             }

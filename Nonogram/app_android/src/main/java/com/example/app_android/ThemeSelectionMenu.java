@@ -49,7 +49,7 @@ public class ThemeSelectionMenu implements IScene {
     public void handleInput(InputAndroid input) {
         if(input.getType() == InputType.TOUCH_UP){
             if (animalThemeButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/"));
+                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/", 0));
                 animalThemeButton.clicked(engRef.getAudio());
             }
             else if(backButton.isInButton(input.getX(), input.getY())) {
