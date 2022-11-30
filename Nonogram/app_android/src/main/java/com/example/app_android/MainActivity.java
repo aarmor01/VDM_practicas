@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         // create engine and scene
-        Context context = this.getBaseContext();
-        EngineAndroid eng = new EngineAndroid(renderView, context, 4.0f/6.0f, 0xFFFFFFFF);
+        EngineAndroid eng = new EngineAndroid(renderView, this.getBaseContext(), 4.0f/6.0f, 0xFFFFFFFF);
         MainMenu scene = new MainMenu();
 
         // start up
@@ -48,36 +47,8 @@ public class MainActivity extends AppCompatActivity {
         eng.resume();
 
         // test
-        CategoryData ct = null;
-        try
-        {
-            // Reading the object from a file
-            FileInputStream file = context.openFileInput("save.bin");
-            ObjectInputStream in = new ObjectInputStream(file);
-            // Method for deserialization of object
-            ct = (CategoryData)in.readObject();
-            in.close();
-            file.close();
-            System.out.println("Object has been deserialized ");
-        } catch(Exception ex) {
-            ct = new CategoryData();
-            System.out.println("Exception is caught");
-        }
-
-        ct.levelUnlocked++;
-
-        try
-        {
-            // Reading the object from a file
-            FileOutputStream file = context.openFileOutput("save.bin", Context.MODE_PRIVATE);
-            ObjectOutputStream out = new ObjectOutputStream(file) ;
-            // Method for serialization of object
-            out.writeObject(ct) ;
-            out.close() ;
-            file.close() ;
-            System.out.println("Object has been deserialized ");
-        } catch(Exception ex) {
-            System.out.println("Exception is caught");
-        }
+        GameManager.init(eng);
+        GameManager gM = GameManager.getInstance();
+        GameManager.shutdown();
     }
 }
