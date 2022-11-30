@@ -62,6 +62,31 @@ public class GameManager {
         instance = null;
     }
 
+    public int getLevelUnlocked(int category) {
+        if(category == -1) return freeLevel.levelUnlocked;
+        else return storyLevels[category].levelUnlocked;
+    }
+
+    public Board getSavedBoard(int category) {
+        if(category == -1) return freeLevel.pendingBoard;
+        else return storyLevels[category].pendingBoard;
+    }
+
+    public void updateCategory(int category, int level, Board pendBoard) {
+        if(pendBoard != null) {
+            if (category == -1) freeLevel.pendingBoard = new Board();
+            else storyLevels[category].pendingBoard = new Board();
+        }
+
+        if (category == -1 && freeLevel.levelUnlocked - level == 1) freeLevel.levelUnlocked = level;
+        else if(storyLevels[category].levelUnlocked - level == 1) storyLevels[category].levelUnlocked = level;
+    }
+
+    public void resetBoard(int category) {
+        if (category == -1) freeLevel.pendingBoard = null;
+        else storyLevels[category].pendingBoard = null;
+    }
+
     private void setup(EngineAndroid engine) {
         this.engine = engine;
         this.storyLevels = new CategoryData[this.numStoryLevels];
