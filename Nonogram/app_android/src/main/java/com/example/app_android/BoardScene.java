@@ -13,6 +13,7 @@ import com.example.engine_android.RenderAndroid;
 public class BoardScene implements IScene {
     static int MAX_LIVES = 3;
     private int dim_w, dim_h;
+    String route, level;
 
     private Board board;
     private int lives;
@@ -28,14 +29,23 @@ public class BoardScene implements IScene {
         this.dim_h = h;
     }
 
+    public BoardScene(String r, String file){
+        route = r;
+        level = file;
+    }
+
     @Override
     public void init(EngineAndroid engine) {
         lives = MAX_LIVES;
         engRef = engine;
         board = new Board();
-        //board.init(dim_w, dim_h, engRef, "");
-        String bf = engRef.readText("levels/animales/10x10/", "mouse.txt");
-        board.initFile(bf, engRef);
+        if(dim_h != 0)
+            board.init(dim_w, dim_h, engRef, "");
+        else{
+            String bf = engRef.readText(route, level);
+            board.initFile(bf, engRef);
+        }
+
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth() / 3)) / 5, engRef.getRender().getHeight() / 9,
