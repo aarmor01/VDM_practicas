@@ -149,6 +149,9 @@ public class EngineAndroid implements Runnable {
         return file;
     }
 
+    public void removeFile(String path) {
+        this.context.deleteFile(path);
+    }
 
     public String readText(String path, String file) {
         //Carga de archivo
