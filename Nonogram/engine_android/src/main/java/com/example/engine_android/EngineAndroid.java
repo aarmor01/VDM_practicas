@@ -9,8 +9,10 @@ import android.view.View;
 import android.content.res.AssetManager;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -51,12 +53,12 @@ public class EngineAndroid implements Runnable {
         if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while(this.running && myRenderManager.getViewWidth() == 0);
+        while (this.running && myRenderManager.getViewWidth() == 0) ;
 
         this.myRenderManager.adaptScale();
         this.mySceneManager.currentScene().init(this);
         long currentTime = System.currentTimeMillis();
-        while(this.running) {
+        while (this.running) {
             try {
                 // frame time
                 long deltaTime = System.currentTimeMillis() - currentTime;
@@ -68,15 +70,14 @@ public class EngineAndroid implements Runnable {
                     this.mySceneManager.currentScene().handleInput(input.removeFirst());
 
                 // update
-                this.mySceneManager.currentScene().update(deltaTime/1000.0f);
+                this.mySceneManager.currentScene().update(deltaTime / 1000.0f);
 
                 // render
-                while (!this.myRenderManager.surfaceValid());
+                while (!this.myRenderManager.surfaceValid()) ;
                 this.myRenderManager.clear();
                 this.mySceneManager.currentScene().render(this.myRenderManager);
                 this.myRenderManager.present();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.err.println("Frame lost");
                 e.printStackTrace();
             }
@@ -108,18 +109,52 @@ public class EngineAndroid implements Runnable {
         }
     }
 
-    public RenderAndroid getRender() { return this.myRenderManager; }
+    public RenderAndroid getRender() {
+        return this.myRenderManager;
+    }
 
-    public AudioAndroid getAudio() { return this.myAudioManager; }
+    public AudioAndroid getAudio() {
+        return this.myAudioManager;
+    }
 
-    public SceneManager getSceneManager() { return this.mySceneManager; }
+    public SceneManager getSceneManager() {
+        return this.mySceneManager;
+    }
 
-    public InputManager getInputManager() { return this.myInputManager; }
+    public InputManager getInputManager() {
+        return this.myInputManager;
+    }
 
-    public String readText(String route, String file) {
+    public FileInputStream openInputFile(String path) {
+        FileInputStream file = null;
+        try {
+            file = this.context.openFileInput(path);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
+    public FileOutputStream openOutputFile(String path) {
+        FileOutputStream file = null;
+        try {
+            file = this.context.openFileOutput(path, Context.MODE_PRIVATE);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
+
+    public String readText(String path, String file) {
         //Carga de archivo
         String receiveString = "";
-        try {//Comprobar si existe en el almacenamiento interno
+        try {
+            //Comprobar si existe en el almacenamiento interno
             FileInputStream fis = context.openFileInput(file);
             InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -135,11 +170,12 @@ public class EngineAndroid implements Runnable {
 
             return receiveString;
 
-        } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+        } catch (FileNotFoundException e) {
+            //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
             e.printStackTrace();
             InputStreamReader inputStreamReader = null;
             try {
-                inputStreamReader = new InputStreamReader(assetManager.open(route + file));
+                inputStreamReader = new InputStreamReader(assetManager.open(path + file));
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
 
@@ -154,7 +190,7 @@ public class EngineAndroid implements Runnable {
                 ioException.printStackTrace();
             }
         }
-        return  null;
+        return null;
     }
 
     private class InputListener implements View.OnTouchListener {
@@ -175,10 +211,10 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int input_y = (int)motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
-            int input_x = (int)motionEvent.getX() - (myRenderManager.getViewWidth() - myRenderManager.getWidth()) / 2;
-            
-            if (input_x < 0 ||  input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
+            int input_y = (int) motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
+            int input_x = (int) motionEvent.getX() - (myRenderManager.getViewWidth() - myRenderManager.getWidth()) / 2;
+
+            if (input_x < 0 || input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
                 return true;
 
             InputAndroid iA = null;
