@@ -169,6 +169,7 @@ public class Board {
                 lastTimeChecked = -1;
                 for (int i = 0; i < checkedCells.size(); i++) {
                     checkedCells.get(i).unChecked();
+                    checkedCells.get(i).markCell();
                 }
                 checkedCells.clear();
             } else

@@ -21,7 +21,7 @@ public class LevelHistorySelectionMenu implements IScene {
     public LevelHistorySelectionMenu(String r, int cat){
         route = r;
         category = cat;
-        lastUnlocked = GameManager.getInstance().getLevelUnlocked(0) + 1;
+        lastUnlocked = GameManager.getInstance().getLevelUnlocked(category) + 1;
     }
 
     @Override
