@@ -1,4 +1,7 @@
-package com.example.engine_android;
+package com.example.engine_android.Modules;
+
+import com.example.engine_android.EngineAndroid;
+import com.example.engine_android.DataStructures.IScene;
 
 import java.util.Stack;
 
@@ -17,5 +20,4 @@ public class SceneManager {
 
     public IScene popScene() { return this.scenes.pop(); }
 
-    public int getStackSize() { return scenes.size();}
 }

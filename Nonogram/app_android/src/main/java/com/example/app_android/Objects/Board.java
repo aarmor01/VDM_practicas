@@ -1,8 +1,8 @@
-package com.example.app_android;
+package com.example.app_android.Objects;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.FontType;
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Enums.FontType;
+import com.example.engine_android.Modules.RenderAndroid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class Board {
         }
     }
 
-    public void init(int h, int w, EngineAndroid eng, String content) {
+    public void init(int h, int w, EngineAndroid eng, ArrayList<String> content) {
         height = h;
         width = w;
         board = new Cell[width][height];
@@ -97,12 +97,12 @@ public class Board {
             cols[i] = new ArrayList<Integer>();
             cols[i].add(-1);
             for (int j = 0; j < height; j++) {
-                if(content == ""){
+                if(content == null){
                     int rand = random.nextInt(10);
                     board[i][j].init(rand < 4);
                 }
                 else{
-                    board[i][j].init(content.charAt(j*height+i) == 'O');
+                    board[i][j].init(content.get(j+1).charAt(i) == 'O');
                 }
 
                 if (board[i][j].isAnswer()) {
@@ -158,9 +158,9 @@ public class Board {
         lastTimeChecked = -1;
     }
 
-    public void initFile(String level, EngineAndroid eng){
-        String[] lines = level.split(" ");
-        this.init(Integer.valueOf(lines[0]), Integer.valueOf(lines[1]), eng, lines[2]);
+    public void initFile(ArrayList<String> level, EngineAndroid eng){
+        String[] lines = level.get(0).split(" ");
+        this.init(Integer.valueOf(lines[0]), Integer.valueOf(lines[1]), eng, level);
     }
 
     public void update(double deltaTime) {

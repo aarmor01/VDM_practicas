@@ -1,11 +1,11 @@
-package com.example.engine_android;
-
-import java.io.InputStream;
+package com.example.engine_android.DataStructures;
 
 import android.content.res.AssetManager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import java.io.InputStream;
 
 public class ImageAndroid {
     // data of the image

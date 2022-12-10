@@ -1,12 +1,13 @@
-package com.example.app_android;
+package com.example.app_android.Scenes;
 
+import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.FontType;
-import com.example.engine_android.IScene;
-import com.example.engine_android.InputAndroid;
-import com.example.engine_android.InputType;
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Enums.FontType;
+import com.example.engine_android.Enums.InputType;
+import com.example.engine_android.DataStructures.IScene;
+import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.RenderAndroid;
 
 public class ModeSelectionMenu implements IScene {
     private EngineAndroid engRef;
@@ -27,6 +28,9 @@ public class ModeSelectionMenu implements IScene {
                 engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "THEME LEVELS", "", fontButton, btAudio);
         mainText = "Chose play mode:";
     }
+
+    @Override
+    public String getId(){return "ModeSelectionMenu";}
 
     @Override
     public void update(double deltaTime) {

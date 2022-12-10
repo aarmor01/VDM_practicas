@@ -1,6 +1,6 @@
-package com.example.app_android;
+package com.example.app_android.Objects;
 
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Modules.RenderAndroid;
 
 public class Cell {
     public enum State {

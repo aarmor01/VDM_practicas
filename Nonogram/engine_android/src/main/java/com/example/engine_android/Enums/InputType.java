@@ -1,4 +1,4 @@
-package com.example.engine_android;
+package com.example.engine_android.Enums;
 
 public enum InputType {
     TOUCH_DOWN,

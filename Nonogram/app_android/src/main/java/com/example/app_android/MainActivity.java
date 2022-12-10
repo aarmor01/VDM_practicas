@@ -2,8 +2,6 @@ package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,12 +9,8 @@ import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.example.app_android.Scenes.MainMenu;
 import com.example.engine_android.EngineAndroid;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class MainActivity extends AppCompatActivity {
     @Override

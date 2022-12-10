@@ -1,11 +1,14 @@
-package com.example.app_android;
+package com.example.app_android.Scenes;
+
+import com.example.app_android.GameManager;
+import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.FontType;
-import com.example.engine_android.IScene;
-import com.example.engine_android.InputAndroid;
-import com.example.engine_android.InputType;
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Enums.FontType;
+import com.example.engine_android.Enums.InputType;
+import com.example.engine_android.DataStructures.IScene;
+import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.RenderAndroid;
 
 public class LevelHistorySelectionMenu implements IScene {
     static int LEVELS_PER_CATEGORY = 20;
@@ -25,6 +28,9 @@ public class LevelHistorySelectionMenu implements IScene {
     }
 
     @Override
+    public String getId(){return "LevelHistorySelectionMenu";}
+
+    @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
         font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
@@ -37,7 +43,8 @@ public class LevelHistorySelectionMenu implements IScene {
             if(i < lastUnlocked)
                 levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), "", font, btAudio);
             else
-                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Abobole", "", font, btAudio);
+                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1),
+                        engRef.getRender().loadImage("./assets/images/lock.png"), font, btAudio);
         }
 
         backButton = new Button(engRef.getRender().getWidth()/4, y/4, engRef.getRender().getWidth()/2, (y - y/4)/2, "Back", "", font, btAudio);
@@ -45,7 +52,10 @@ public class LevelHistorySelectionMenu implements IScene {
 
     @Override
     public void update(double deltaTime) {
-
+        lastUnlocked = GameManager.getInstance().getLevelUnlocked(category) + 1;
+        for(int i=0; i<lastUnlocked; i++){
+            levelSelecBut[i].setImage("");
+        }
     }
 
     @Override

@@ -1,14 +1,13 @@
-package com.example.app_android;
+package com.example.app_android.Scenes;
 
-
-import androidx.transition.Visibility;
+import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.FontType;
-import com.example.engine_android.IScene;
-import com.example.engine_android.InputAndroid;
-import com.example.engine_android.InputType;
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Enums.InputType;
+import com.example.engine_android.Enums.FontType;
+import com.example.engine_android.DataStructures.IScene;
+import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.RenderAndroid;
 
 public class MainMenu implements IScene {
     Button playButton;
@@ -30,6 +29,10 @@ public class MainMenu implements IScene {
         engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
         engRef.getAudio().playMusic();
     }
+
+    @Override
+    public String getId(){return "MainMenu";}
+
 
     @Override
     public void update(double deltaTime) {

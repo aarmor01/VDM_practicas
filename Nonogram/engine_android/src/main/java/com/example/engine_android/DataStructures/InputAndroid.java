@@ -1,4 +1,6 @@
-package com.example.engine_android;
+package com.example.engine_android.DataStructures;
+
+import com.example.engine_android.Enums.InputType;
 
 public class InputAndroid {
     private int x, y;       // input coords

@@ -1,5 +1,13 @@
 package com.example.engine_android;
 
+import com.example.engine_android.Enums.InputType;
+import com.example.engine_android.DataStructures.IScene;
+import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.AudioAndroid;
+import com.example.engine_android.Modules.InputManager;
+import com.example.engine_android.Modules.RenderAndroid;
+import com.example.engine_android.Modules.SceneManager;
+
 import android.content.Context;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -9,13 +17,13 @@ import android.view.View;
 import android.content.res.AssetManager;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EngineAndroid implements Runnable {
@@ -153,9 +161,9 @@ public class EngineAndroid implements Runnable {
         this.context.deleteFile(path);
     }
 
-    public String readText(String path, String file) {
+    public ArrayList<String> readText(String path, String file) {
         //Carga de archivo
-        String receiveString = "";
+        ArrayList<String> receiveString = new ArrayList<String>();
         try {
             //Comprobar si existe en el almacenamiento interno
             FileInputStream fis = context.openFileInput(file);
@@ -164,7 +172,7 @@ public class EngineAndroid implements Runnable {
 
             try {
                 while (bufferedReader.ready()) {
-                    receiveString += bufferedReader.readLine();
+                    receiveString.add(bufferedReader.readLine());
                 }
                 inputStreamReader.close();
             } catch (IOException ioException) {
@@ -183,7 +191,7 @@ public class EngineAndroid implements Runnable {
 
 
                 while (bufferedReader.ready()) {
-                    receiveString += bufferedReader.readLine();
+                    receiveString.add(bufferedReader.readLine());
                 }
 
                 inputStreamReader.close();
@@ -246,12 +254,12 @@ public class EngineAndroid implements Runnable {
                         myInputManager.addInput(iA);
                     }
                     break;
-                case MotionEvent.ACTION_MOVE:
-                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
-                                motionEvent.getActionIndex());
-                        myInputManager.addInput(iA);
-                    break;
+//                case MotionEvent.ACTION_MOVE:
+//                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
+//                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
+//                                motionEvent.getActionIndex());
+//                        myInputManager.addInput(iA);
+//                    break;
             }
             return true;
         }

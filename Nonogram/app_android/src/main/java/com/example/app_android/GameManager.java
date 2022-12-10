@@ -1,10 +1,10 @@
 package com.example.app_android;
 
-import android.content.Context;
+import com.example.app_android.Objects.Board;
+import com.example.app_android.Objects.CategoryData;
 
 import com.example.engine_android.EngineAndroid;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -58,28 +58,28 @@ public class GameManager {
     }
 
     public int getLevelUnlocked(int category) {
-        if(category == -1) return freeLevel.levelUnlocked;
-        else return storyLevels[category].levelUnlocked;
+        if(category == -1) return this.freeLevel.levelUnlocked;
+        else return this.storyLevels[category].levelUnlocked;
     }
 
     public Board getSavedBoard(int category) {
-        if(category == -1) return freeLevel.pendingBoard;
-        else return storyLevels[category].pendingBoard;
+        if(category == -1) return this.freeLevel.pendingBoard;
+        else return this.storyLevels[category].pendingBoard;
     }
 
     public void updateCategory(int category, int level, Board pendBoard) {
         if(pendBoard != null) {
-            if (category == -1) freeLevel.pendingBoard = new Board();
-            else storyLevels[category].pendingBoard = new Board();
+            if (category == -1) this.freeLevel.pendingBoard = new Board();
+            else this.storyLevels[category].pendingBoard = new Board();
         }
 
-        if (category == -1 && level - freeLevel.levelUnlocked == 1) freeLevel.levelUnlocked = level;
-        else if(level - storyLevels[category].levelUnlocked == 1) storyLevels[category].levelUnlocked = level;
+        if (category == -1 && level - this.freeLevel.levelUnlocked == 1) this.freeLevel.levelUnlocked = level;
+        else if(level - this.storyLevels[category].levelUnlocked == 1) this.storyLevels[category].levelUnlocked = level;
     }
 
     public void resetBoard(int category) {
-        if (category == -1) freeLevel.pendingBoard = null;
-        else storyLevels[category].pendingBoard = null;
+        if (category == -1) this.freeLevel.pendingBoard = null;
+        else this.storyLevels[category].pendingBoard = null;
     }
 
     private void setup(EngineAndroid engine) {

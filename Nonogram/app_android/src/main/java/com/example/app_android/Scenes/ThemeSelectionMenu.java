@@ -1,11 +1,14 @@
-package com.example.app_android;
+package com.example.app_android.Scenes;
+
+import com.example.app_android.GameManager;
+import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.FontType;
-import com.example.engine_android.IScene;
-import com.example.engine_android.InputAndroid;
-import com.example.engine_android.InputType;
-import com.example.engine_android.RenderAndroid;
+import com.example.engine_android.Enums.FontType;
+import com.example.engine_android.Enums.InputType;
+import com.example.engine_android.DataStructures.IScene;
+import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.RenderAndroid;
 
 public class ThemeSelectionMenu implements IScene {
     private Button animalThemeButton;
@@ -18,6 +21,9 @@ public class ThemeSelectionMenu implements IScene {
     Button backButton;
 
     private EngineAndroid engRef;
+
+    @Override
+    public String getId(){return "ThemeSelectionMenu";}
 
     @Override
     public void init(EngineAndroid engine) {

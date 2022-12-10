@@ -1,4 +1,8 @@
-package com.example.engine_android;
+package com.example.engine_android.Modules;
+
+import com.example.engine_android.DataStructures.FontAndroid;
+import com.example.engine_android.DataStructures.ImageAndroid;
+import com.example.engine_android.Enums.FontType;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
