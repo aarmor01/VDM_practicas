@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EngineAndroid implements Runnable {
-    // engine variables
+    // engine modules
     private RenderAndroid myRenderManager;
     private SceneManager mySceneManager;
     private InputManager myInputManager;
@@ -45,13 +45,16 @@ public class EngineAndroid implements Runnable {
     private boolean running;
 
     public EngineAndroid(SurfaceView surface, Context cont, float ratio, int bgColor) {
+        // context
         this.context = cont;
         this.assetManager = cont.getAssets();
 
+        // engine modules initialization
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
+
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
     }
@@ -61,10 +64,11 @@ public class EngineAndroid implements Runnable {
         if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while (this.running && myRenderManager.getViewWidth() == 0) ;
+        while (this.running && myRenderManager.getViewWidth() == 0);
 
         this.myRenderManager.adaptScale();
         this.mySceneManager.currentScene().init(this);
+
         long currentTime = System.currentTimeMillis();
         while (this.running) {
             try {

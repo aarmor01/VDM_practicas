@@ -48,7 +48,5 @@ public class SoundAndroid {
 
     public float getVolume() { return this.volume; }
 
-    public void setVolume(float v) {
-        this.volume = v;
-    }
+    public void setVolume(float v) { this.volume = v; }
 }

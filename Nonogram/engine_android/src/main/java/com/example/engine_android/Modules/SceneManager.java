@@ -19,5 +19,4 @@ public class SceneManager {
     }
 
     public IScene popScene() { return this.scenes.pop(); }
-
 }
