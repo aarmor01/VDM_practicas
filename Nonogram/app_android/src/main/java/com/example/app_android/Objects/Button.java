@@ -22,7 +22,7 @@ public class Button {
         font = f;
         image = im;
         sound = s;
-        color = GameManager.getInstance().getColor(1);
+        color = GameManager.getInstance().getColor(GameManager.ColorTypes.auxColor.ordinal());
     }
 
     public void render(RenderAndroid renderMng){

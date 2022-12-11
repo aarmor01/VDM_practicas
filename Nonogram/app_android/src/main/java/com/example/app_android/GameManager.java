@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class GameManager {
+    public enum ColorTypes{bgColor, mainColor, secondaryColor, auxColor}
+
     // some const parameters
     final String SAVE_FILE_EXTENSION = ".bin";
     final String FREE_LEVEL_SAVE_NAME = "save_free";
@@ -160,23 +162,26 @@ public class GameManager {
 
     private void initPalettes() {
         palettes = new int[NUM_PALETTES][NUM_COLORS_PER_PALETTE];
-        palettes[0][0] = 0xFF000000;//Background
-        palettes[0][1] = 0xFF0000FF;//CellsCorrect
-        palettes[0][2] = 0xFFFF0000;//CellsFailed
-        palettes[0][3] = 0xFF000029;//CellsNotMarked
+        palettes[0][ColorTypes.bgColor.ordinal()] = 0xFFFFFFFF;//Background
+        palettes[0][ColorTypes.mainColor.ordinal()] = 0xFF0000FF;//CellsCorrect
+        palettes[0][ColorTypes.secondaryColor.ordinal()] = 0xFFFF0000;//CellsFailed
+        palettes[0][ColorTypes.auxColor.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
 
-        palettes[1][0] = 0xFF008800;
-        palettes[1][1] = 0xFF00FF00;
-        palettes[1][2] = 0xFFFF00FF;
-        palettes[1][3] = 0xFF0000FF;
+        palettes[1][ColorTypes.bgColor.ordinal()] = 0xFF008800;
+        palettes[1][ColorTypes.mainColor.ordinal()] = 0xFF00FF00;
+        palettes[1][ColorTypes.secondaryColor.ordinal()] = 0xFFFF00FF;
+        palettes[1][ColorTypes.auxColor.ordinal()] = 0xFF0000FF;
 
-        palettes[2][0] = 0xFF660000;
-        palettes[2][1] = 0xFFFF0000;
-        palettes[2][2] = 0xFF00FF00;
-        palettes[2][3] = 0xFF00FF44;
+        palettes[2][ColorTypes.bgColor.ordinal()] = 0xFF660000;
+        palettes[2][ColorTypes.mainColor.ordinal()] = 0xFFFF0000;
+        palettes[2][ColorTypes.secondaryColor.ordinal()] = 0xFF00FF00;
+        palettes[2][ColorTypes.auxColor.ordinal()] = 0xFF00FF44;
 
         unlockedPalettes = new boolean[NUM_PALETTES];
-        idActPalette = 1;
+        unlockedPalettes[0] = true;
+        for(int i=1; i<NUM_PALETTES; i++)
+            unlockedPalettes[i] = false;
+        idActPalette = 0;
     }
 
     public int getColor(int colorType){ return palettes[idActPalette][colorType]; }

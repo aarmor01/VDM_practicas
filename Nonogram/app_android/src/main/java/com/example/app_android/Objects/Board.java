@@ -23,8 +23,6 @@ public class Board {
     private String font;
     private String fontWrongText;
 
-    private int cellsColor = 0xFF0000FF;
-
     private int maxNumbers;
     private List<Cell> checkedCells;
     private double lastTimeChecked;
