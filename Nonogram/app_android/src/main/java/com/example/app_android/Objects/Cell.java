@@ -11,14 +11,11 @@ public class Cell {
         s = notCheckedS = State.EMPTY;
     }
 
-    public void render(RenderAndroid renderMng, int x, int y, int size){
-        int color = 0x1FFFFFF;
+    public void render(RenderAndroid renderMng, int x, int y, int size, int paleteColor){
+        int color = paleteColor;
         switch (s){
             case EMPTY:
                 color = 0xFFCCCCCC;
-                break;
-            case MARKED:
-                color = 0xFF2140D1;
                 break;
             case CROSSED:
                 color = 0xFFFFFFFF;

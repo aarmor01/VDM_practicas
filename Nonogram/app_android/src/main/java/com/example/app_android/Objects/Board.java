@@ -23,6 +23,8 @@ public class Board {
     private String font;
     private String fontWrongText;
 
+    private int cellsColor = 0xFF0000FF;
+
     private int maxNumbers;
     private List<Cell> checkedCells;
     private double lastTimeChecked;
@@ -30,24 +32,22 @@ public class Board {
     public boolean win = false;
 
     public void render(RenderAndroid renderMng) {
-        renderMng.setColor(0xFF000000); //Cuadrados alrededor
-        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + 1,
-                height * (board_cell_size + separation_margin) + 1, false);
-        renderMng.drawRectangle(posX + maxNumbers * fontSize, maxNumbers * fontSize + posY, width * (board_cell_size + separation_margin) + 1,
-                height * (board_cell_size + separation_margin) + 1, false);
+        renderMng.setColor(0xFF000000); //Cuadrado alrededor
+        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin*2),
+                height * (board_cell_size + separation_margin*2) + 1, false);
 
-        printNumbers(renderMng);
+        printNumbers(renderMng);    //Escribimos los números
 
-        for (int i = 0; i < width; i++) {
+        for (int i = 0; i < width; i++) {   //Dibujado casillas
             for (int j = 0; j < height; j++) {
                 board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
-                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
+                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size, cellsColor);
             }
         }
 
         renderMng.setFont(fontWrongText);
 
-        if (lastTimeChecked != -1) {
+        if (lastTimeChecked != -1) {    //Texto de comprobacion
             renderMng.setColor(0xFFFF0000);
             int x = renderMng.getTextWidth(fontWrongText, "Te faltan " + checkedCells.size() + " casillas");
             int x2 = renderMng.getTextWidth(fontWrongText, "Tienes mal " + checkedCells.size() + " casillas");
@@ -57,13 +57,13 @@ public class Board {
         }
     }
 
-    public void renderWin(RenderAndroid renderMng) {
+    public void renderWin(RenderAndroid renderMng) {    //Dibujamos solo las casillas solucion
         posX = (renderMng.getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (board[i][j].isAnswer()) {
                     board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
+                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size, cellsColor);
                 }
             }
         }
@@ -97,7 +97,7 @@ public class Board {
             cols[i] = new ArrayList<Integer>();
             cols[i].add(-1);
             for (int j = 0; j < height; j++) {
-                if(content == null){
+                if(content == null){        //Diferenciamos entre lectura de ficharo y aleatorio
                     int rand = random.nextInt(10);
                     board[i][j].init(rand < 4);
                 }
@@ -105,7 +105,7 @@ public class Board {
                     board[i][j].init(content.get(j+1).charAt(i) == 'O');
                 }
 
-                if (board[i][j].isAnswer()) {
+                if (board[i][j].isAnswer()) {   //Si la casilla es solucion modificamos los arrays de filas-columnas
                     cellsLeft++;
 
                     if (cols[i].get(cols[i].size() - 1) == -1) {      //Rellenado vector columnas
@@ -113,7 +113,8 @@ public class Board {
                         cols[i].add(1);
                         if (maxNumbers < cols[i].size())
                             maxNumbers = cols[i].size();
-                    } else {
+                    }
+                    else {
                         cols[i].set(cols[i].size() - 1, cols[i].get(cols[i].size() - 1) + 1);
                     }
 
@@ -122,10 +123,12 @@ public class Board {
                         rows[j].add(1);
                         if (maxNumbers < rows[j].size())
                             maxNumbers = rows[j].size();
-                    } else {
+                    }
+                    else {
                         rows[j].set(rows[j].size() - 1, rows[j].get(rows[j].size() - 1) + 1);
                     }
-                } else {   //Añadimos -1 al vector de filas y columnas si no es solucion y la casilla anterior si
+                }
+                else {   //Añadimos -1 al vector de filas y columnas si no es solucion y la casilla anterior si
                     if (cols[i].get(cols[i].size() - 1) != -1)
                         cols[i].add(-1);
                     if (rows[j].get(rows[j].size() - 1) != -1)
@@ -142,8 +145,8 @@ public class Board {
         }
         int maxDimension = Math.max(w, h);
 
-        int winW = (eng.getRender().getWidth()) / (maxDimension + maxDimension / 8);
-        int winH = ((int) (eng.getRender().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension + maxDimension / 8);
+        int winW = (eng.getRender().getWidth()) / (maxDimension);
+        int winH = ((int) (eng.getRender().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
 
         board_cell_size = Math.min(winH, winW);
         separation_margin = Math.max(board_cell_size / 25, 1);
