@@ -65,11 +65,9 @@ public class AudioAndroid {
         return soundFile.getName(); //it returns the name of the sound in order to looking for it when you need to play it
     }
 
-
     public void playMusic() {
         this.mediaPlayer.start();
     }
-
 
     public void playSound(String soundName) {
         //looks for the sound in the sound manager, and plays it on the audio player of sound effects

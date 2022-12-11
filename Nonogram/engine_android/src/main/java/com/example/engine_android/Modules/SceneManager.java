@@ -20,4 +20,5 @@ public class SceneManager {
 
     public IScene popScene() { return this.scenes.pop(); }
 
+    public boolean isEmpty(){return this.scenes.isEmpty();}
 }
