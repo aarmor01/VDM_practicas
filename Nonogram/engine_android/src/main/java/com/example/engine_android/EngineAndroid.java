@@ -37,12 +37,11 @@ public class EngineAndroid implements Runnable {
     private AssetManager assetManager;
     private Context context;
 
-    // start scene
-    private IScene startScene;
-
     // thread variables
     private Thread renderThread;
     private boolean running;
+    private Thread configThread;
+    private boolean initialConfigurationDone;
 
     public EngineAndroid(SurfaceView surface, Context cont, float ratio, int bgColor) {
         // context
@@ -57,6 +56,11 @@ public class EngineAndroid implements Runnable {
 
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
+
+        // thread to generate initial configuration
+        initialConfigurationDone = false;
+        this.configThread = new Thread(new SurfaceAvailable(this));
+        this.configThread.start();
     }
 
     @Override
@@ -64,10 +68,20 @@ public class EngineAndroid implements Runnable {
         if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
-        while (this.running && myRenderManager.getViewWidth() == 0);
-
-        this.myRenderManager.adaptScale();
-        this.mySceneManager.currentScene().init(this);
+        // we wait for the initial configuration to end before starting the game cycle
+        while(!initialConfigurationDone);
+        if(this.configThread != null) {
+            while (true) {
+                try {
+                    this.configThread.join();
+                    this.configThread = null;
+                    break;
+                } catch (InterruptedException e) {
+                    System.err.println("Config join error");
+                    e.printStackTrace();
+                }
+            }
+        }
 
         long currentTime = System.currentTimeMillis();
         while (this.running) {
@@ -208,6 +222,23 @@ public class EngineAndroid implements Runnable {
         return null;
     }
 
+    private class SurfaceAvailable implements Runnable {
+
+        EngineAndroid engine;
+
+        SurfaceAvailable(EngineAndroid engine) { this.engine = engine; };
+
+        @Override
+        public void run() {
+            while (running && myRenderManager.getViewWidth() == 0);
+
+            myRenderManager.adaptScale();
+            mySceneManager.currentScene().init(this.engine);
+
+            initialConfigurationDone = true;
+        }
+    }
+
     private class InputListener implements View.OnTouchListener {
 
         private int input_x_original;
@@ -258,12 +289,12 @@ public class EngineAndroid implements Runnable {
                         myInputManager.addInput(iA);
                     }
                     break;
-//                case MotionEvent.ACTION_MOVE:
-//                    if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-//                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
-//                                motionEvent.getActionIndex());
-//                        myInputManager.addInput(iA);
-//                    break;
+                case MotionEvent.ACTION_MOVE:
+//              if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
+                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
+                                motionEvent.getActionIndex());
+                        myInputManager.addInput(iA);
+                    break;
             }
             return true;
         }
