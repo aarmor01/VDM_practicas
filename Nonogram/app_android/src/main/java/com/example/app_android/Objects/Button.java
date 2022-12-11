@@ -1,5 +1,6 @@
 package com.example.app_android.Objects;
 
+import com.example.app_android.GameManager;
 import com.example.engine_android.Modules.AudioAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
@@ -9,6 +10,7 @@ public class Button {
     private String image;
     private int posX, posY;
     private int width, height;
+    private int color;
     private String sound;
 
     public Button(int x, int y, int w, int h, String tx, String im, String f, String s){
@@ -20,10 +22,11 @@ public class Button {
         font = f;
         image = im;
         sound = s;
+        color = GameManager.getInstance().getColor(1);
     }
 
     public void render(RenderAndroid renderMng){
-        renderMng.setColor(0xFFCCCCCC);
+        renderMng.setColor(color);
         renderMng.setFont(font);
         renderMng.drawRectangle(posX, posY, width, height, true);
         int x = posX;

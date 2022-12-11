@@ -33,15 +33,15 @@ public class Board {
 
     public void render(RenderAndroid renderMng) {
         renderMng.setColor(0xFF000000); //Cuadrado alrededor
-        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin*2),
-                height * (board_cell_size + separation_margin*2) + 1, false);
+        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + separation_margin,
+                height * (board_cell_size + separation_margin) + separation_margin, false);
 
         printNumbers(renderMng);    //Escribimos los números
 
         for (int i = 0; i < width; i++) {   //Dibujado casillas
             for (int j = 0; j < height; j++) {
                 board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
-                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size, cellsColor);
+                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
             }
         }
 
@@ -63,7 +63,7 @@ public class Board {
             for (int j = 0; j < height; j++) {
                 if (board[i][j].isAnswer()) {
                     board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size, cellsColor);
+                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
                 }
             }
         }

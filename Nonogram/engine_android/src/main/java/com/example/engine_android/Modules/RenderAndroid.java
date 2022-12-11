@@ -117,6 +117,8 @@ public class RenderAndroid {
         this.paint.setTextSize(font.getSize());
     }
 
+    public void setBackGorundColor(int hexColor){ bgColor = hexColor; }
+
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
     }

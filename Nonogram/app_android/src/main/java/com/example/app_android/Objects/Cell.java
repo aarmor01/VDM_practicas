@@ -1,5 +1,6 @@
 package com.example.app_android.Objects;
 
+import com.example.app_android.GameManager;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class Cell {
@@ -11,17 +12,20 @@ public class Cell {
         s = notCheckedS = State.EMPTY;
     }
 
-    public void render(RenderAndroid renderMng, int x, int y, int size, int paleteColor){
-        int color = paleteColor;
+    public void render(RenderAndroid renderMng, int x, int y, int size){
+        int color = 0xFF000000;
         switch (s){
             case EMPTY:
-                color = 0xFFCCCCCC;
+                color = GameManager.getInstance().getColor(3);
+                break;
+            case MARKED:
+                color = GameManager.getInstance().getColor(1);
                 break;
             case CROSSED:
                 color = 0xFFFFFFFF;
                 break;
             case CHECKED:
-                color = 0xFFFF2F2B;
+                color = GameManager.getInstance().getColor(2);
                 break;
         }
         renderMng.setColor(color);
