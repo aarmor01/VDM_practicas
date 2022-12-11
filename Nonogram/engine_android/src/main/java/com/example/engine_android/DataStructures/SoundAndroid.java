@@ -19,7 +19,7 @@ public class SoundAndroid {
         try {
             AssetFileDescriptor assetDescriptor = null;
             assetDescriptor = aMan.openFd(filePath);
-            this.soundId = soundPool.load(assetDescriptor, 0);
+            this.soundId = soundPool.load(assetDescriptor, 1);
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
             e.printStackTrace();
@@ -28,7 +28,7 @@ public class SoundAndroid {
         //sets all sound parameters
         this.volume = volume_;
         this.loop = 0;
-        this.priority = 0;
+        this.priority = 1;
         this.rate = 1.0f;
     }
 

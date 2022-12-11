@@ -2,6 +2,7 @@ package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -69,24 +70,23 @@ public class MainActivity extends AppCompatActivity {
             GameManager.init(engine, savedInstanceState);
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//
-//        // Checks the orientation of the screen
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-//            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            System.out.println("Landscape");
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+            System.out.println("Portrait");
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
 
         // pause engine process cycle
-        // engine.pause();
+        engine.pause();
     }
 
     @Override

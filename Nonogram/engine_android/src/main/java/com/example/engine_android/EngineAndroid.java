@@ -222,6 +222,9 @@ public class EngineAndroid implements Runnable {
         return null;
     }
 
+    // thread that's used only once, at engine creation, so
+    // we can do the start configuration when engine is created,
+    // and the run method waits till this is done
     private class SurfaceAvailable implements Runnable {
 
         EngineAndroid engine;

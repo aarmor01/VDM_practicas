@@ -61,7 +61,7 @@ public class AudioAndroid {
         String convFilepath = filePath.replaceAll("./assets/", "");
         //if the sound has not been already been loaded, it is stored in the sounds manager
         if(!this.sounds.containsKey(soundFile.getName()))
-            this.sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, this.assetManager, this.soundPool,volume));
+            this.sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, this.assetManager, this.soundPool, volume));
         return soundFile.getName(); //it returns the name of the sound in order to looking for it when you need to play it
     }
 
@@ -71,8 +71,8 @@ public class AudioAndroid {
 
     public void playSound(String soundName) {
         //looks for the sound in the sound manager, and plays it on the audio player of sound effects
-        SoundAndroid s = this.sounds.get(soundName);
-        this.soundPool.play(s.getSoundId(), s.getVolume(),  s.getVolume(), s.getPriority(), s.getLoop(), s.getRate());
+        SoundAndroid sound = this.sounds.get(soundName);
+        this.soundPool.play(sound.getSoundId(), sound.getVolume(),  sound.getVolume(), sound.getPriority(), sound.getLoop(), sound.getRate());
     }
 
     public void setMusicVolume(float volume) {
