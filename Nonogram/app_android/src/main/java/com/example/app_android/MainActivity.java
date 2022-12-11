@@ -64,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        // load files
-//        GameManager.init(engine, savedInstanceState);
+        // if the onCreate method doesn't work, we load data here
+        if (GameManager.getInstance() == null)
+            GameManager.init(engine, savedInstanceState);
     }
 
 //    @Override
@@ -85,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         // pause engine process cycle
-//      engine.pause();
+        // engine.pause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // save files
+        // save data
         GameManager.shutdown(engine, outState);
     }
 
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
 
+        // in case we haven't gone to onSaveInstanceState(), we
+        // save data in this part of the lifecycle
         if(GameManager.getInstance() != null)
             GameManager.shutdown(engine, null);
     }
