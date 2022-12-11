@@ -90,9 +90,11 @@ public class GameManager {
                 category_file = category_name + SAVE_FILE_EXTENSION;
 
         // first, we try to load it from bundle
-        this.levels[category] = (CategoryData)savedState.getSerializable(category_name);
-        if(this.levels[category] != null)
-            return;
+        if(savedState != null){
+            this.levels[category] = (CategoryData)savedState.getSerializable(category_name);
+            if(this.levels[category] != null)
+                return;
+        }
 
         // if it doesn't work, we load from file
         try
@@ -127,7 +129,8 @@ public class GameManager {
                 category_file = category_name + SAVE_FILE_EXTENSION;
 
         // first, we save it from bundle
-        savedState.putSerializable(category_name, this.levels[category]);
+        if(savedState != null)
+            savedState.putSerializable(category_name, this.levels[category]);
 
         // then, we save it on a file just in case
         try

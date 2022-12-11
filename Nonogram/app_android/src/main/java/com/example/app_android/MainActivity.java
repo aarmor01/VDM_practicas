@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         // create engine
         engine = new EngineAndroid(renderView, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+
+        // load files
+        GameManager.init(engine, savedInstanceState);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         // create start scene if no scene has been initialised
         // (defensive code just in case, we should be fine with
         // just the onConfigurationChanged)
-        if (engine.getSceneManager().currentScene() != null) {
+        if (engine.getSceneManager().isEmpty()) {
             MainMenu scene = new MainMenu();
             engine.getSceneManager().pushScene(scene);
         }
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // load files
-        GameManager.init(engine, savedInstanceState);
+//        // load files
+//        GameManager.init(engine, savedInstanceState);
     }
 
 //    @Override
@@ -91,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
         // save files
         GameManager.shutdown(engine, outState);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        if(GameManager.getInstance() != null)
+            GameManager.shutdown(engine, null);
     }
 
     private void viewConfig() {
