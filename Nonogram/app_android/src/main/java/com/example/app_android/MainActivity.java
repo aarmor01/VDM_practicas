@@ -12,6 +12,7 @@ import android.view.WindowManager;
 
 import com.example.app_android.Scenes.MainMenu;
 import com.example.engine_android.EngineAndroid;
+import com.google.android.gms.ads.AdView;
 
 // onPause() ➟ onStop() ➟ onSaveInstanceState() ➟ onDestroy() ➟ Same Activity Opened Again ➟
 // onCreate() ➟ onStart() ➟ onRestoreInstanceState() ➟ onResume()
@@ -29,14 +30,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // set surface view
-        SurfaceView renderView = new SurfaceView(this);
-        setContentView(renderView);
+        setContentView(R.layout.activity_main);
+        SurfaceView renderView = findViewById(R.id.surfaceView);
 
         // fullscreen and remove support action bar
-        viewConfig();
+        activityConfigurations();
 
         // create engine
         engine = new EngineAndroid(renderView, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+
+        // start ad process
+        engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
 
         // load files
         GameManager.init(engine, savedInstanceState);
@@ -107,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             GameManager.shutdown(engine, null);
     }
 
-    private void viewConfig() {
+    private void activityConfigurations() {
         // fullscreen
         if (Build.VERSION.SDK_INT < 16)
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

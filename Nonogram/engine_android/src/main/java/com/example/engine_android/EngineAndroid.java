@@ -1,8 +1,8 @@
 package com.example.engine_android;
 
 import com.example.engine_android.Enums.InputType;
-import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.AdSystemAndroid;
 import com.example.engine_android.Modules.AudioAndroid;
 import com.example.engine_android.Modules.InputManager;
 import com.example.engine_android.Modules.RenderAndroid;
@@ -32,6 +32,7 @@ public class EngineAndroid implements Runnable {
     private SceneManager mySceneManager;
     private InputManager myInputManager;
     private AudioAndroid myAudioManager;
+    private AdSystemAndroid myAdSystem;
 
     // asset manager
     private AssetManager assetManager;
@@ -43,16 +44,17 @@ public class EngineAndroid implements Runnable {
     private Thread configThread;
     private boolean initialConfigurationDone;
 
-    public EngineAndroid(SurfaceView surface, Context cont, float ratio, int bgColor) {
+    public EngineAndroid(SurfaceView surface, Context context, float ratio, int bgColor) {
         // context
-        this.context = cont;
-        this.assetManager = cont.getAssets();
+        this.context = context;
+        this.assetManager = context.getAssets();
 
         // engine modules initialization
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();
+        this.myAdSystem = new AdSystemAndroid(this.context);
 
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
@@ -69,19 +71,7 @@ public class EngineAndroid implements Runnable {
             throw new RuntimeException("run() should not be called directly");
 
         // we wait for the initial configuration to end before starting the game cycle
-        while(!initialConfigurationDone);
-        if(this.configThread != null) {
-            while (true) {
-                try {
-                    this.configThread.join();
-                    this.configThread = null;
-                    break;
-                } catch (InterruptedException e) {
-                    System.err.println("Config join error");
-                    e.printStackTrace();
-                }
-            }
-        }
+        waitSurfaceConfiguration();
 
         long currentTime = System.currentTimeMillis();
         while (this.running) {
@@ -149,6 +139,10 @@ public class EngineAndroid implements Runnable {
 
     public InputManager getInputManager() {
         return this.myInputManager;
+    }
+
+    public AdSystemAndroid getAdSystem() {
+        return this.myAdSystem;
     }
 
     public FileInputStream openInputFile(String path) {
@@ -222,6 +216,22 @@ public class EngineAndroid implements Runnable {
         return null;
     }
 
+    private void waitSurfaceConfiguration() {
+        while(!this.initialConfigurationDone);
+        if(this.configThread != null) {
+            while (true) {
+                try {
+                    this.configThread.join();
+                    this.configThread = null;
+                    break;
+                } catch (InterruptedException e) {
+                    System.err.println("Config join error");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     // thread that's used only once, at engine creation, so
     // we can do the start configuration when engine is created,
     // and the run method waits till this is done
@@ -233,9 +243,7 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public void run() {
-            while (running && myRenderManager.getViewWidth() == 0);
-
-            myRenderManager.adaptScale();
+            myRenderManager.holderWait();
             mySceneManager.currentScene().init(this.engine);
 
             initialConfigurationDone = true;

@@ -57,21 +57,13 @@ public class RenderAndroid {
         this.bgColor = bgColor;
     }
 
-    public void adaptScale() {
+    public void holderWait() {
         while(this.holder.getSurfaceFrame().width() == 0);
 
-        float w = this.holder.getSurfaceFrame().width();
-        float y = this.holder.getSurfaceFrame().height();
-        float scaleX = w;
-        float scaleY = y;
-
-        if (scaleX * this.scale < scaleY) scaleY = scaleX / scale;
-        else scaleX = scaleY * this.scale;
-
-        this.posCanvasX = (int) (w - scaleX) / 2;
-        this.posCanvasY = (int) (y - scaleY) / 2;
-        this.baseWidth = (int)scaleX;
-        this.baseHeight = (int)scaleY;
+        this.posCanvasX = 0;
+        this.posCanvasY = 0;
+        this.baseWidth = this.holder.getSurfaceFrame().width();
+        this.baseHeight = this.holder.getSurfaceFrame().height();
     }
 
     public boolean surfaceValid() {
