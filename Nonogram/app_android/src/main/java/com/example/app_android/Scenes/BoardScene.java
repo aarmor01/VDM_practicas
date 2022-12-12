@@ -47,12 +47,19 @@ public class BoardScene implements IScene {
     public void init(EngineAndroid engine) {
         lives = MAX_LIVES;
         engRef = engine;
-        board = new Board();
-        if(dim_h != 0)
-            board.init(dim_w, dim_h, engRef, null);
+        if(GameManager.getInstance().getSavedBoard(actCategory) != null){
+            board = GameManager.getInstance().getSavedBoard(actCategory);
+            GameManager.getInstance().resetBoard(actCategory);
+        }
         else{
-            ArrayList<String> bf = engRef.readText(route, level);
-            board.initFile(bf, engRef);
+            board = new Board();
+
+            if(dim_h != 0)
+                board.init(dim_w, dim_h, engRef, null);
+            else{
+                ArrayList<String> bf = engRef.readText(route, level);
+                board.initFile(bf, engRef);
+            }
         }
 
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
@@ -105,6 +112,8 @@ public class BoardScene implements IScene {
             else if (backButton.isInButton(input.getX(), input.getY())) {
                 backButton.clicked(engRef.getAudio());
                 engRef.getSceneManager().popScene();
+
+                GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
             }
         }
         else if (input.getType() == InputType.TOUCH_LONG) {
