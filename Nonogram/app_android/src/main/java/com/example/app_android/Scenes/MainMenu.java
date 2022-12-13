@@ -31,12 +31,13 @@ public class MainMenu implements IScene {
     }
 
     @Override
-    public String getId(){return "MainMenu";}
+    public String getId() { return "MainMenu"; }
 
 
     @Override
     public void update(double deltaTime) {
-
+        if(engRef.getAdSystem().hasRewardBeenGranted())
+            System.out.println("Reward Granted on " + getId());
     }
 
     @Override
@@ -51,8 +52,9 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(InputAndroid input) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
-            engRef.getSceneManager().pushScene(new ModeSelectionMenu());
-            playButton.clicked(engRef.getAudio());
+//            engRef.getSceneManager().pushScene(new ModeSelectionMenu());
+//            playButton.clicked(engRef.getAudio());
+            engRef.getAdSystem().showRewardedAd();
         }
     }
 }

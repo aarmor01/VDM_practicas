@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
         activityConfigurations();
 
         // create engine
-        engine = new EngineAndroid(renderView, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+        engine = new EngineAndroid(renderView, this, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
 
         // start ad process
-        engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
+        engine.getAdSystem().preloadBannerAd((AdView)findViewById(R.id.adView));
+        engine.getAdSystem().preloadRewardedAd();
 
         // load files
         GameManager.init(engine, savedInstanceState);
