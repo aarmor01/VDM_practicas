@@ -107,17 +107,14 @@ public class AdSystemAndroid {
             RewardedAd.load(this.activity, REWARD_AD_TOKEN, adRequest,
                     new MyRewardedAdLoadCallback());
 
-            while (true) {
-                if (rewardAd == null) {
-                    System.out.println("Reward ad not set up yet.");
-                    return;
-                }
-
-                rewardAd.setFullScreenContentCallback(new MyFullScreenContentCallback());
-                rewardAd.show(this.activity, new MyUserEarnedRewardListener());
-                rewardAd = null;
-                break;
+            if (rewardAd == null) {
+                System.out.println("Reward ad not set up yet.");
+                return;
             }
+
+            rewardAd.setFullScreenContentCallback(new MyFullScreenContentCallback());
+            rewardAd.show(this.activity, new MyUserEarnedRewardListener());
+            rewardAd = null;
         }
     }
 
