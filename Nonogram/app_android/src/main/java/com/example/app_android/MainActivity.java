@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         // load files
         GameManager.init(engine, savedInstanceState);
+        engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
     }
 
     @Override
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         // pause engine process cycle
         engine.pause();
+        engine.getAudio().stopMusic();
     }
 
     @Override

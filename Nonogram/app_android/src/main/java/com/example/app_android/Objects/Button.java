@@ -1,5 +1,6 @@
 package com.example.app_android.Objects;
 
+import com.example.app_android.GameManager;
 import com.example.engine_android.Modules.AudioAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
@@ -9,9 +10,11 @@ public class Button {
     private String image;
     private int posX, posY;
     private int width, height;
+    private int color;
     private String sound;
+    private boolean mode;
 
-    public Button(int x, int y, int w, int h, String tx, String im, String f, String s){
+    public Button(int x, int y, int w, int h, String tx, String im, String f, String s, boolean m){
         posX = x;
         posY = y;
         width = w;
@@ -20,10 +23,12 @@ public class Button {
         font = f;
         image = im;
         sound = s;
+        color = GameManager.getInstance().getColor(GameManager.ColorTypes.auxColor.ordinal());
+        mode = m;
     }
 
     public void render(RenderAndroid renderMng){
-        renderMng.setColor(0xFFCCCCCC);
+        renderMng.setColor(color);
         renderMng.setFont(font);
         renderMng.drawRectangle(posX, posY, width, height, true);
         int x = posX;
@@ -34,13 +39,15 @@ public class Button {
 
         int lg = renderMng.getTextWidth(font, text);
 
+        String[] splTx = text.split("\n");
         renderMng.setColor(0xFF000000);
-        renderMng.drawText(x + (width - (x-posX))/2 - lg/2, posY + height/2 + renderMng.getTextHeight(font)/2, text);
+        renderMng.drawText(x + (width - (x-posX))/2 - lg/2, posY + height / 2 + (renderMng.getTextHeight(font) / splTx.length) / 2, text);
     }
     public boolean isInButton(int x, int y){
         return x > posX && x < posX + width && y > posY && y < posY + height;
     }
-    public void setImage(String tx){image = tx;}
+    public void setImage(String tx){ image = tx; }
+    public void setText(String tx){ text = tx; }
     public void clicked(AudioAndroid soundMng){
         soundMng.playSound(sound);
     }

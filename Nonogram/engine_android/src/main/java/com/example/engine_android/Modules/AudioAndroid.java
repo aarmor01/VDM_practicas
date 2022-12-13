@@ -68,6 +68,7 @@ public class AudioAndroid {
     public void playMusic() {
         this.mediaPlayer.start();
     }
+    public void stopMusic() { this.mediaPlayer.stop(); }
 
     public void playSound(String soundName) {
         //looks for the sound in the sound manager, and plays it on the audio player of sound effects

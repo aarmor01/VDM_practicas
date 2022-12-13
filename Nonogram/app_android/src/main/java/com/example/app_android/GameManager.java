@@ -13,11 +13,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class GameManager {
+    public enum ColorTypes{bgColor, mainColor, secondaryColor, auxColor}
+
     // some const parameters
     final String SAVE_FILE_EXTENSION = ".bin";
     final String FREE_LEVEL_SAVE_NAME = "save_free";
     final String STORY_LEVEL_SAVE_NAME = "save_story_";  // add the level id after this when using it
     final int NUM_LEVELS = 4;
+    final int NUM_PALETTES = 3;
+    final int NUM_COLORS_PER_PALETTE = 4;
 
     // singleton
     private static GameManager instance = null;
@@ -25,7 +29,16 @@ public class GameManager {
     // categories (0 FREE LEVEL, 1-4 STORY LEVELS)
     CategoryData[] levels = null;
 
-    public GameManager() {}
+    //Palettes data
+    private int[][] palettes;
+    private boolean[] unlockedPalettes;
+    private int idActPalette;
+
+    //Coins
+    private int coins;
+
+    public GameManager() {
+    }
 
     // loads the corresponding CategoryData saved files
     public static void init(EngineAndroid engine, Bundle savedState) {
@@ -70,12 +83,16 @@ public class GameManager {
     }
 
     private void setup(EngineAndroid engine, Bundle savedState) {
+        initPalettes();
+
         // +1 indicates always a free level
         this.levels = new CategoryData[this.NUM_LEVELS + 1];
 
         // deserialize free & story levels
         for (int level = 0; level < this.NUM_LEVELS + 1; level++)
             loadCategory(engine, savedState, level);
+
+        coins = 0;
     }
 
     private void close(EngineAndroid engine, Bundle savedState) {
@@ -90,31 +107,29 @@ public class GameManager {
                 category_file = category_name + SAVE_FILE_EXTENSION;
 
         // first, we try to load it from bundle
-        if(savedState != null){
-            this.levels[category] = (CategoryData)savedState.getSerializable(category_name);
-            if(this.levels[category] != null)
+        if (savedState != null) {
+            this.levels[category] = (CategoryData) savedState.getSerializable(category_name);
+            if (this.levels[category] != null)
                 return;
         }
 
         // if it doesn't work, we load from file
-        try
-        {
+        try {
             // Reading the object from a file
             FileInputStream file = engine.openInputFile(category_file);
             ObjectInputStream in = new ObjectInputStream(file);
 
             // Method for deserialization of object
-            this.levels[category] = (CategoryData)in.readObject();
+            this.levels[category] = (CategoryData) in.readObject();
             System.out.println("Category " + category + " has been deserialized.");
 
             // close
             in.close();
             file.close();
-        }
-        catch(Exception ex) { // if file also fails, we end up creating new data
+        } catch (Exception ex) { // if file also fails, we end up creating new data
             System.out.println("Category not serialised previously. Loading new Category");
             this.levels[category] = new CategoryData();
-            if(category == 1) // we set the first story level with the first level unlocked
+            if (category == 1) // we set the first story level with the first level unlocked
                 this.levels[category].levelUnlocked++;
         }
 
@@ -129,12 +144,11 @@ public class GameManager {
                 category_file = category_name + SAVE_FILE_EXTENSION;
 
         // first, we save it from bundle
-        if(savedState != null)
+        if (savedState != null)
             savedState.putSerializable(category_name, this.levels[category]);
 
         // then, we save it on a file just in case
-        try
-        {
+        try {
             // Reading the object to a file
             FileOutputStream file = engine.openOutputFile(category_file);
             ObjectOutputStream out = new ObjectOutputStream(file);
@@ -146,8 +160,38 @@ public class GameManager {
             // close
             out.close();
             file.close();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Category not serialised correctly. Serializing new empty Category");
         }
     }
+
+    private void initPalettes() {
+        palettes = new int[NUM_PALETTES][NUM_COLORS_PER_PALETTE];
+        palettes[0][ColorTypes.bgColor.ordinal()] = 0xFFFFFFFF;//Background
+        palettes[0][ColorTypes.mainColor.ordinal()] = 0xFF0000FF;//CellsCorrect
+        palettes[0][ColorTypes.secondaryColor.ordinal()] = 0xFFFF0000;//CellsFailed
+        palettes[0][ColorTypes.auxColor.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
+
+        palettes[1][ColorTypes.bgColor.ordinal()] = 0xFF008800;
+        palettes[1][ColorTypes.mainColor.ordinal()] = 0xFF00FF00;
+        palettes[1][ColorTypes.secondaryColor.ordinal()] = 0xFFFF00FF;
+        palettes[1][ColorTypes.auxColor.ordinal()] = 0xFF0000FF;
+
+        palettes[2][ColorTypes.bgColor.ordinal()] = 0xFF660000;
+        palettes[2][ColorTypes.mainColor.ordinal()] = 0xFFFF0000;
+        palettes[2][ColorTypes.secondaryColor.ordinal()] = 0xFF00FF00;
+        palettes[2][ColorTypes.auxColor.ordinal()] = 0xFF00FF44;
+
+        unlockedPalettes = new boolean[NUM_PALETTES];
+        unlockedPalettes[0] = true;
+        for(int i=1; i<NUM_PALETTES; i++)
+            unlockedPalettes[i] = false;
+        idActPalette = 0;
+    }
+
+    public int getColor(int colorType){ return palettes[idActPalette][colorType]; }
+
+    public int getCoins(){ return coins; }
+
+    public void addCoins(int c){ coins += c; }
 }

@@ -29,13 +29,13 @@ public class SelectionMenu implements IScene {
         int x = engRef.getRender().getWidth()/3;
         int y = engRef.getRender().getHeight()/6;
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font, btAudio);
-        t5x5 = new Button(x * 5 / 4, y*2, x/2, x/2, "5x5", "", font, btAudio);
-        t5x10 = new Button(x * 9 / 4, y*2, x/2, x/2, "10x5", "", font, btAudio);
-        t8x8 = new Button(x / 4, y*3, x/2, x/2, "8x8", "", font, btAudio);
-        t10x10 = new Button(x * 5 / 4, y*3, x/2, x/2, "10x10", "", font, btAudio);
-        t10x15 = new Button(x * 9 / 4, y*3, x/2, x/2, "15x10", "", font, btAudio);
-        backButton = new Button(x, y*5, x, y/3, "Back", "", font, btAudio);
+        t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font, btAudio, false);
+        t5x5 = new Button(x * 5 / 4, y*2, x/2, x/2, "5x5", "", font, btAudio, false);
+        t5x10 = new Button(x * 9 / 4, y*2, x/2, x/2, "10x5", "", font, btAudio, false);
+        t8x8 = new Button(x / 4, y*3, x/2, x/2, "8x8", "", font, btAudio, false);
+        t10x10 = new Button(x * 5 / 4, y*3, x/2, x/2, "10x10", "", font, btAudio, false);
+        t10x15 = new Button(x * 9 / 4, y*3, x/2, x/2, "15x10", "", font, btAudio, false);
+        backButton = new Button(x, y*5, x, y/3, "Back", "", font, btAudio, false);
     }
 
     @Override

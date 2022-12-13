@@ -134,6 +134,8 @@ public class EngineAndroid implements Runnable {
         return this.myRenderManager;
     }
 
+    public IntentSystemAndroid getIntentSystemAndroid() { return this.myIntentSystemAndroid; }
+
     public AudioAndroid getAudio() {
         return this.myAudioManager;
     }

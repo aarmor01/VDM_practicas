@@ -109,6 +109,8 @@ public class RenderAndroid {
         this.paint.setTextSize(font.getSize());
     }
 
+    public void setBackGorundColor(int hexColor){ bgColor = hexColor; }
+
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
     }
@@ -132,15 +134,24 @@ public class RenderAndroid {
 
     public void drawText(int x, int y, String text) {
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        this.canvas.drawText(text, x, y, this.paint);
+        String[] txSpl = text.split("\n");
+        for(String l : txSpl){
+            this.canvas.drawText(l, x, y, this.paint);
+            y += this.paint.getTextSize();
+        }
     }
 
     public int getTextWidth(String fontID, String text) {
         Typeface prev_font = this.paint.getTypeface();
         FontAndroid font = this.fonts.get(fontID);
 
+        String[] txSpl = text.split("\n");
         this.paint.setTypeface(font.getFont());
-        float width = this.paint.measureText(text);
+
+        float width = 0;
+        for(String l:txSpl)
+            width = Math.max(paint.measureText(l), width);
+
         this.paint.setTypeface(prev_font);
 
         return (int)width;
