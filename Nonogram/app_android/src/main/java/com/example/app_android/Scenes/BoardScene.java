@@ -22,8 +22,9 @@ public class BoardScene implements IScene {
     private Board board;
     private int lives, actLevel, actCategory;
 
-    private Button checkButton;
     private Button backButton;
+    private Button coinIndicator;
+    private Button recoverLive;
 
     private EngineAndroid engRef;
     private String sound, liveImage, noLiveImage;
@@ -64,10 +65,15 @@ public class BoardScene implements IScene {
 
         String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        checkButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth() / 3)) / 5, engRef.getRender().getHeight() / 9,
-                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 12, "Check", engRef.getRender().loadImage("./assets/images/checkbutton.png"), fontButtons, btAudio);
-        backButton = new Button((engRef.getRender().getWidth() - (engRef.getRender().getWidth() / 3)) * 4 / 5, engRef.getRender().getHeight() / 9,
-                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 12, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons, btAudio);
+
+        int w = engRef.getRender().getWidth() / 3;
+        int h = engRef.getRender().getHeight() / 12;
+        backButton = new Button(8 * w / 5, h / 2, w, h, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"),
+                fontButtons, btAudio, false);
+        recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", engRef.getRender().loadImage("./assets/images/backbutton.png"),
+                fontButtons, btAudio, false);
+        coinIndicator = new Button(2 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
+                engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, "", false);
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
         liveImage = engine.getRender().loadImage("./assets/images/heart.png");
@@ -75,34 +81,34 @@ public class BoardScene implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) {
-        board.update(deltaTime);
-    }
+    public void update(double deltaTime) { board.update(deltaTime); }
 
     @Override
     public void render(RenderAndroid renderMng) {
         board.render(renderMng);
-        //checkButton.render(renderMng);
         backButton.render(renderMng);
+        recoverLive.render(renderMng);
+        coinIndicator.render(renderMng);
+        int getW = engRef.getRender().getWidth();
+        int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
             if(i>lives)
                 imName = noLiveImage;
             else
                 imName = liveImage;
-            renderMng.drawImage((engRef.getRender().getWidth() - (engRef.getRender().getWidth() / 3)) / 5 + (engRef.getRender().getWidth() / 15 * (MAX_LIVES - i)),
-                    engRef.getRender().getHeight() / 9, engRef.getRender().getWidth() / 15, engRef.getRender().getWidth() / 15, imName);
+            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), engRef.getRender().getHeight() / 6, w, w, imName);
         }
     }
 
     @Override
     public void handleInput(InputAndroid input) {
         if (input.getType() == InputType.TOUCH_UP) {
-            if (board.isInBoard(input.getX(), input.getY())) {
+            if (board.isInBoard(input.getX(), input.getY())) {          //Input en la zona del tablero
                 engRef.getAudio().playSound(sound);
                 lives -= board.markCell(input.getX(), input.getY(), false);
-                board.checkear(input.getX(), input.getY());
-                if (board.win){     //Checkeo de la victoria
+
+                if (board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
                     GameManager.getInstance().updateCategory(actCategory, actLevel, null);
                     engRef.getSceneManager().pushScene(new WinScene(board, true));
                 }

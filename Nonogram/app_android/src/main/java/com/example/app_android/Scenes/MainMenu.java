@@ -23,7 +23,7 @@ public class MainMenu implements IScene {
 
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth()/3 )/2, (int)(engRef.getRender().getHeight() /1.5),
-                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", fontButton, btAudio);
+                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", fontButton, btAudio, false);
         title = "NONOGRAMAS";
 
         engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);

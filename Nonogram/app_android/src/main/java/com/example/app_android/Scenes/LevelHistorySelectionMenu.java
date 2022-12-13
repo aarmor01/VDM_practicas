@@ -15,6 +15,7 @@ public class LevelHistorySelectionMenu implements IScene {
 
     Button[] levelSelecBut;
     Button backButton;
+    Button coinIndicator;
     String font;
     String route;
     int lastUnlocked, category;
@@ -40,14 +41,18 @@ public class LevelHistorySelectionMenu implements IScene {
         levelSelecBut = new Button[LEVELS_PER_CATEGORY];
 
         for(int i=0; i<LEVELS_PER_CATEGORY; i++){
-            if(i < lastUnlocked)
-                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), "", font, btAudio);
-            else
-                levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1),
-                        engRef.getRender().loadImage("./assets/images/lock.png"), font, btAudio);
+            String im = "";
+            if(i >= lastUnlocked)
+                im = engRef.getRender().loadImage("./assets/images/lock.png");
+
+            levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), im, font, btAudio, false);
         }
 
-        backButton = new Button(engRef.getRender().getWidth()/4, y/4, engRef.getRender().getWidth()/2, (y - y/4)/2, "Back", "", font, btAudio);
+        int getW = engRef.getRender().getWidth();
+        backButton = new Button(getW/8, y/4, getW/4, (y - y/4)/2, "Back",
+                engRef.getRender().loadImage("./assets/images/backbutton.png"), font, btAudio, false);
+        coinIndicator = new Button(5* getW/8, y/4, getW/4, (y - y/4)/2, Integer.toString(GameManager.getInstance().getCoins()),
+                engRef.getRender().loadImage("./assets/images/coin.png"), font, "", false);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class LevelHistorySelectionMenu implements IScene {
         for(int i=0; i<lastUnlocked; i++){
             levelSelecBut[i].setImage("");
         }
+        coinIndicator.setText(Integer.toString(GameManager.getInstance().getCoins()));
     }
 
     @Override
@@ -65,6 +71,7 @@ public class LevelHistorySelectionMenu implements IScene {
             levelSelecBut[i].render(renderMng);
         }
         backButton.render(renderMng);
+        coinIndicator.render(renderMng);
     }
 
     @Override
