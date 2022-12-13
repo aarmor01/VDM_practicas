@@ -68,11 +68,11 @@ public class BoardScene implements IScene {
 
         int w = engRef.getRender().getWidth() / 3;
         int h = engRef.getRender().getHeight() / 12;
-        backButton = new Button(8 * w / 5, h / 2, w, h, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"),
+        backButton = new Button(2 * w / 5, h / 2, w, h, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"),
                 fontButtons, btAudio, false);
         recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", engRef.getRender().loadImage("./assets/images/backbutton.png"),
                 fontButtons, btAudio, false);
-        coinIndicator = new Button(2 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
+        coinIndicator = new Button(8 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
                 engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, "", false);
 
         sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);

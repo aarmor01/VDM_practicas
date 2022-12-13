@@ -1,5 +1,6 @@
 package com.example.app_android.Scenes;
 
+import com.example.app_android.GameManager;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
@@ -15,6 +16,7 @@ public class ModeSelectionMenu implements IScene {
     private String font;
     private Button playRandomLevelButton;
     private Button playThemeButton;
+    private Button coinIndicator;
 
     @Override
     public void init(EngineAndroid engine) {
@@ -22,10 +24,15 @@ public class ModeSelectionMenu implements IScene {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        playRandomLevelButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() )/2, (int)(engRef.getRender().getHeight() /1.25),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "RANDOM LEVELS", "", fontButton, btAudio, false);
-        playThemeButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() )/2, (int)(engRef.getRender().getHeight() /1.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "THEME LEVELS", "", fontButton, btAudio, false);
+        int getW = engRef.getRender().getWidth();
+        int getH = engRef.getRender().getHeight();
+
+        playRandomLevelButton = new Button(0, (int)(getH /1.25),
+                getW, getH/8, "RANDOM LEVELS", "", fontButton, btAudio, false);
+        playThemeButton = new Button(0, (int)(getH /1.75),
+                getW, getH/8, "THEME LEVELS", "", fontButton, btAudio, false);
+        coinIndicator = new Button(5* getW/8, 0, getW/4, getW/8, Integer.toString(GameManager.getInstance().getCoins()),
+                engRef.getRender().loadImage("./assets/images/coin.png"), fontButton, "", false);
         mainText = "Chose play mode:";
     }
 
@@ -34,7 +41,7 @@ public class ModeSelectionMenu implements IScene {
 
     @Override
     public void update(double deltaTime) {
-
+        coinIndicator.setText(Integer.toString(GameManager.getInstance().getCoins()));
     }
 
     @Override
@@ -45,6 +52,7 @@ public class ModeSelectionMenu implements IScene {
         renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, mainText);
         playRandomLevelButton.render(renderMng);
         playThemeButton.render(renderMng);
+        coinIndicator.render(renderMng);
     }
 
     @Override

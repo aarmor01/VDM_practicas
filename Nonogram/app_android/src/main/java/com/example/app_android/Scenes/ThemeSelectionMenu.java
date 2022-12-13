@@ -15,6 +15,7 @@ public class ThemeSelectionMenu implements IScene {
     private Button emojiThemeButton;
     private Button theme3ThemeButton;
     private Button theme4ThemeButton;
+    private Button coinIndicator;
     private String mainText;
     private String font;
     private String backFont;
@@ -57,11 +58,13 @@ public class ThemeSelectionMenu implements IScene {
         backButton = new Button(engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)*5, engRef.getRender().getWidth()/3,
                 (engRef.getRender().getHeight()/6)/3, "Back", "", backFont, btAudio, false);
 
+        coinIndicator = new Button(5* engRef.getRender().getWidth()/8, 0, engRef.getRender().getWidth()/4, engRef.getRender().getWidth()/8,
+                Integer.toString(GameManager.getInstance().getCoins()), engRef.getRender().loadImage("./assets/images/coin.png"), fontButton, "", false);
     }
 
     @Override
     public void update(double deltaTime) {
-
+        coinIndicator.setText(Integer.toString(GameManager.getInstance().getCoins()));
     }
 
     @Override
@@ -74,6 +77,7 @@ public class ThemeSelectionMenu implements IScene {
         emojiThemeButton.render(renderMng);
         theme3ThemeButton.render(renderMng);
         theme4ThemeButton.render(renderMng);
+        coinIndicator.render(renderMng);
         backButton.render(renderMng);
     }
 
