@@ -81,7 +81,11 @@ public class BoardScene implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) { board.update(deltaTime); }
+    public void update(double deltaTime) {
+        if(this.engRef.getAdSystem().hasRewardBeenGranted())
+            GameManager.getInstance().addCoins(69);
+
+        board.update(deltaTime); }
 
     @Override
     public void render(RenderAndroid renderMng) {
@@ -89,6 +93,7 @@ public class BoardScene implements IScene {
         backButton.render(renderMng);
         recoverLive.render(renderMng);
         coinIndicator.render(renderMng);
+
         int getW = engRef.getRender().getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
@@ -120,6 +125,9 @@ public class BoardScene implements IScene {
                 engRef.getSceneManager().popScene();
 
                 GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
+            }
+            else if (coinIndicator.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
+                this.engRef.getAdSystem().showRewardedAd();
             }
         }
         else if (input.getType() == InputType.TOUCH_LONG) {     //Long touch en tablero
