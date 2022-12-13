@@ -34,6 +34,9 @@ public class GameManager {
     private boolean[] unlockedPalettes;
     private int idActPalette;
 
+    //Coins
+    private int coins;
+
     public GameManager() {
     }
 
@@ -88,6 +91,8 @@ public class GameManager {
         // deserialize free & story levels
         for (int level = 0; level < this.NUM_LEVELS + 1; level++)
             loadCategory(engine, savedState, level);
+
+        coins = 0;
     }
 
     private void close(EngineAndroid engine, Bundle savedState) {
@@ -185,4 +190,8 @@ public class GameManager {
     }
 
     public int getColor(int colorType){ return palettes[idActPalette][colorType]; }
+
+    public int getCoins(){ return coins; }
+
+    public void addCoins(int c){ coins += c; }
 }

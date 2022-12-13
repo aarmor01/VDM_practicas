@@ -23,9 +23,9 @@ public class ModeSelectionMenu implements IScene {
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         playRandomLevelButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() )/2, (int)(engRef.getRender().getHeight() /1.25),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "RANDOM LEVELS", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "RANDOM LEVELS", "", fontButton, btAudio, false);
         playThemeButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() )/2, (int)(engRef.getRender().getHeight() /1.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "THEME LEVELS", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/8, "THEME LEVELS", "", fontButton, btAudio, false);
         mainText = "Chose play mode:";
     }
 

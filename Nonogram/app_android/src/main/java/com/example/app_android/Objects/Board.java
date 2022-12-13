@@ -205,7 +205,7 @@ public class Board {
         }
     }
 
-    public void checkear(int x, int y) {
+    public boolean checkear(int x, int y) {
         int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
         int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
         System.out.print(x + " " + y);
@@ -215,8 +215,10 @@ public class Board {
         }
 
         lastTimeChecked = SEGS_CHECKED;
-        if (checkedCells.size() == 0 && cellsLeft == 0)
+        if (cellsLeft == 0)
             win = true;
+
+        return win;
     }
 
     public boolean isInBoard(int posX, int posY) {

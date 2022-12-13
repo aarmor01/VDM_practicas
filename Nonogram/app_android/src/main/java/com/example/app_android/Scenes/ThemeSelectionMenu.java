@@ -33,26 +33,29 @@ public class ThemeSelectionMenu implements IScene {
         backFont = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         animalThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 4.0),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "ANIMAL THEME", "", fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "ANIMAL THEME", "", fontButton, btAudio, false);
 
         String tx;
         if(GameManager.getInstance().getLevelUnlocked(1) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         emojiThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "EMOJI THEME", tx, fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "EMOJI THEME", tx, fontButton, btAudio, false);
 
         if(GameManager.getInstance().getLevelUnlocked(2) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         theme3ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.1),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON",
+                engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio, false);
 
         if(GameManager.getInstance().getLevelUnlocked(3) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
         theme4ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 1.7),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON", engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio);
+                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON",
+                engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio, false);
 
         mainText = "Choose theme:";
-        backButton = new Button(engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)*5, engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)/3, "Back", "", backFont, btAudio);
+        backButton = new Button(engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)*5, engRef.getRender().getWidth()/3,
+                (engRef.getRender().getHeight()/6)/3, "Back", "", backFont, btAudio, false);
 
     }
 
