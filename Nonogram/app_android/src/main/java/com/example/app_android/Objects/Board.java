@@ -208,7 +208,7 @@ public class Board {
     public boolean checkear(int x, int y) {
         int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
         int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
-        System.out.print(x + " " + y);
+
         if (!board[boardX][boardY].isAnswer() && board[boardX][boardY].getState() == Cell.State.MARKED) {
             board[boardX][boardY].setChecked();
             checkedCells.add(board[boardX][boardY]);

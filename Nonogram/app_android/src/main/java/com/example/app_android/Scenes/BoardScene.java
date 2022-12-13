@@ -115,14 +115,14 @@ public class BoardScene implements IScene {
                 if(lives == 0)
                     engRef.getSceneManager().pushScene(new WinScene(board, false));
             }
-            else if (backButton.isInButton(input.getX(), input.getY())) {
+            else if (backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
                 backButton.clicked(engRef.getAudio());
                 engRef.getSceneManager().popScene();
 
                 GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
             }
         }
-        else if (input.getType() == InputType.TOUCH_LONG) {
+        else if (input.getType() == InputType.TOUCH_LONG) {     //Long touch en tablero
             if (board.isInBoard(input.getX(), input.getY())) {
                 board.markCell(input.getX(), input.getY(), true);
             }

@@ -54,7 +54,7 @@ public class Cell {
     }
 
     public void markCell(){
-        if(s == State.EMPTY) s=State.MARKED;
+        if(s == State.EMPTY || s == State.CROSSED) s=State.MARKED;
         else if(s == State.MARKED) s=State.EMPTY;
     }
 

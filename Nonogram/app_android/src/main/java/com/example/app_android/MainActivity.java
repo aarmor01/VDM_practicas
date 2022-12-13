@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         // pause engine process cycle
         // engine.pause();
+        engine.getAudio().stopMusic();
     }
 
     @Override
