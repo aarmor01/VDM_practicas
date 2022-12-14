@@ -19,7 +19,8 @@ import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity {
     // engine's window ratio and background colour
-    final float RATIO = 4.0f/6.0f;
+    final int WIDTH = 400, HEIGHT = 600;
+//    final float RATIO = WIDTH / HEIGHT;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
 
     // engine
@@ -37,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
         activityConfigurations();
 
         // create engine
-        engine = new EngineAndroid(renderView, this, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+        engine = new EngineAndroid(renderView, this, this.getBaseContext(), WIDTH, HEIGHT, BACKGROUND_COLOR);
 
         // start ad process
-        engine.getAdSystem().preloadBannerAd((AdView)findViewById(R.id.adView));
+        engine.getAdSystem().preloadBannerAd((AdView) findViewById(R.id.adView));
         engine.getAdSystem().preloadRewardedAd();
 
         // load files
-        GameManager.init(engine, savedInstanceState);
-        engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
+        GameManager.init(WIDTH, HEIGHT, engine, savedInstanceState);
+        engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
     }
 
     @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // if the onCreate method doesn't work, we load data here
         if (GameManager.getInstance() == null)
-            GameManager.init(engine, savedInstanceState);
+            GameManager.init(WIDTH, HEIGHT, engine, savedInstanceState);
     }
 
     @Override
@@ -105,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
 
         // in case we haven't gone to onSaveInstanceState(), we
         // save data in this part of the lifecycle
-        if(GameManager.getInstance() != null)
+        if (GameManager.getInstance() != null)
             GameManager.shutdown(engine, null);
     }
 

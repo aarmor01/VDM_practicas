@@ -26,6 +26,9 @@ public class GameManager {
     // singleton
     private static GameManager instance = null;
 
+    //Dimensions
+    int width, height;
+
     // categories (0 FREE LEVEL, 1-4 STORY LEVELS)
     CategoryData[] levels = null;
 
@@ -41,12 +44,12 @@ public class GameManager {
     }
 
     // loads the corresponding CategoryData saved files
-    public static void init(EngineAndroid engine, Bundle savedState) {
+    public static void init(int w, int h, EngineAndroid engine, Bundle savedState) {
         // singleton initialization
         instance = new GameManager();
 
         // instance setting
-        instance.setup(engine, savedState);
+        instance.setup(w, h, engine, savedState);
     }
 
     public static GameManager getInstance() {
@@ -82,7 +85,10 @@ public class GameManager {
         this.levels[category].pendingBoard = null;
     }
 
-    private void setup(EngineAndroid engine, Bundle savedState) {
+    private void setup(int w, int h, EngineAndroid engine, Bundle savedState) {
+        width = w;
+        height = h;
+
         initPalettes();
 
         // +1 indicates always a free level
@@ -192,6 +198,10 @@ public class GameManager {
     public int getColor(int colorType){ return palettes[idActPalette][colorType]; }
 
     public int getCoins(){ return coins; }
+
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
 
     public void addCoins(int c){ coins += c; }
 }

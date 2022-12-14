@@ -34,9 +34,9 @@ public class LevelHistorySelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
-        int x = engRef.getRender().getWidth()/5;
-        int y = engRef.getRender().getHeight()/4;
+        font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 22);
+        int x = GameManager.getInstance().getWidth()/5;
+        int y = GameManager.getInstance().getHeight()/4;
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         levelSelecBut = new Button[LEVELS_PER_CATEGORY];
 
@@ -48,7 +48,7 @@ public class LevelHistorySelectionMenu implements IScene {
             levelSelecBut[i] = new Button(x/2 + x*(i%4), y + (y/2 * (i/4)), x-x/10, x-x/10, "Lvl " + (i + 1), im, font, btAudio, false);
         }
 
-        int getW = engRef.getRender().getWidth();
+        int getW = GameManager.getInstance().getWidth();
         backButton = new Button(getW/8, y/4, getW/4, (y - y/4)/2, "Back",
                 engRef.getRender().loadImage("./assets/images/backbutton.png"), font, btAudio, false);
         coinIndicator = new Button(5* getW/8, y/4, getW/4, (y - y/4)/2, Integer.toString(GameManager.getInstance().getCoins()),

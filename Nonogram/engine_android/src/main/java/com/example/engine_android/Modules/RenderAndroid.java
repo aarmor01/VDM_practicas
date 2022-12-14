@@ -39,7 +39,7 @@ public class RenderAndroid {
     //background color
     private int bgColor;
 
-    public RenderAndroid(SurfaceView myView, AssetManager aM, float ratio, int bgColor) {
+    public RenderAndroid(SurfaceView myView, AssetManager aM, int w, int h, int bgColor) {
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
@@ -51,19 +51,22 @@ public class RenderAndroid {
         this.images = new HashMap<>();
 
         // initializes canvas values
-        this.scale = ratio;
+        //this.scale = ratio;
+        this.baseWidth = w;
+        this.baseHeight = h;
 
         // sets the background color
         this.bgColor = bgColor;
     }
 
     public void holderWait() {
-        while(this.holder.getSurfaceFrame().width() == 0);
+        while (this.holder.getSurfaceFrame().width() == 0) ;
 
         this.posCanvasX = 0;
         this.posCanvasY = 0;
-        this.baseWidth = this.holder.getSurfaceFrame().width();
-        this.baseHeight = this.holder.getSurfaceFrame().height();
+        this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
+//        this.baseWidth = this.holder.getSurfaceFrame().width();
+//        this.baseHeight = this.holder.getSurfaceFrame().height();
     }
 
     public boolean surfaceValid() {
@@ -73,7 +76,9 @@ public class RenderAndroid {
     public void clear() {
         this.canvas = this.holder.lockCanvas();
         this.canvas.drawColor(this.bgColor);
-        this.canvas.translate(this.posCanvasX, this.posCanvasY);
+        //this.canvas.translate(this.posCanvasX, this.posCanvasY);
+        this.canvas.scale(this.scale, this.scale);
+        System.out.println(scale);
         setColor(this.bgColor);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
     }
@@ -85,7 +90,7 @@ public class RenderAndroid {
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
         String convFilepath = filePath.replaceAll("./assets/", "");
-        if(!this.images.containsKey(imageFile.getName()))
+        if (!this.images.containsKey(imageFile.getName()))
             this.images.put(imageFile.getName(), new ImageAndroid(convFilepath, this.assetManager));
         return imageFile.getName();
     }
@@ -109,7 +114,7 @@ public class RenderAndroid {
         this.paint.setTextSize(font.getSize());
     }
 
-    public void setBackGorundColor(int hexColor){ bgColor = hexColor; }
+    public void setBackGroundColor(int hexColor){ bgColor = hexColor; }
 
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
@@ -149,21 +154,31 @@ public class RenderAndroid {
         this.paint.setTypeface(font.getFont());
 
         float width = 0;
-        for(String l:txSpl)
+        for (String l : txSpl)
             width = Math.max(paint.measureText(l), width);
 
         this.paint.setTypeface(prev_font);
 
-        return (int)width;
+        return (int) width;
     }
 
-    public int getTextHeight(String fontID) { return this.fonts.get(fontID).getSize(); }
+    public int getTextHeight(String fontID) {
+        return this.fonts.get(fontID).getSize();
+    }
 
-    public int getWidth() { return this.baseWidth; }
+    public int getWidth() {
+        return this.baseWidth;
+    }
 
-    public int getHeight() { return this.baseHeight; }
+    public int getHeight() {
+        return this.baseHeight;
+    }
 
-    public int getViewWidth() { return this.myView.getWidth(); }
+    public int getViewWidth() {
+        return this.myView.getWidth();
+    }
 
-    public int getViewHeight() { return this.myView.getHeight(); }
+    public int getViewHeight() {
+        return this.myView.getHeight();
+    }
 }

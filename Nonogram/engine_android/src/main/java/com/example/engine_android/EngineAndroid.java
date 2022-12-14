@@ -48,13 +48,13 @@ public class EngineAndroid implements Runnable {
     private Thread configThread;
     private boolean initialConfigurationDone;
 
-    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, Context context, float ratio, int bgColor) {
+    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, Context context, int w, int h, int bgColor) {
         // context
         this.context = context;
         this.assetManager = context.getAssets();
 
         // engine modules initialization
-        this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
+        this.myRenderManager = new RenderAndroid(surface, this.assetManager, w, h, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager(this);
         this.myInputManager = new InputManager();

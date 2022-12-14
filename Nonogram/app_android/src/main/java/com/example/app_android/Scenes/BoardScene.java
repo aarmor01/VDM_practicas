@@ -63,11 +63,12 @@ public class BoardScene implements IScene {
             }
         }
 
-        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
+        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT,
+                GameManager.getInstance().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
 
-        int w = engRef.getRender().getWidth() / 3;
-        int h = engRef.getRender().getHeight() / 12;
+        int w = GameManager.getInstance().getWidth() / 3;
+        int h = GameManager.getInstance().getHeight() / 12;
         backButton = new Button(2 * w / 5, h / 2, w, h, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"),
                 fontButtons, btAudio, false);
         recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", engRef.getRender().loadImage("./assets/images/backbutton.png"),
@@ -94,7 +95,7 @@ public class BoardScene implements IScene {
         recoverLive.render(renderMng);
         coinIndicator.render(renderMng);
 
-        int getW = engRef.getRender().getWidth();
+        int getW = GameManager.getInstance().getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
@@ -102,7 +103,7 @@ public class BoardScene implements IScene {
                 imName = noLiveImage;
             else
                 imName = liveImage;
-            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), engRef.getRender().getHeight() / 6, w, w, imName);
+            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), GameManager.getInstance().getHeight() / 6, w, w, imName);
         }
     }
 

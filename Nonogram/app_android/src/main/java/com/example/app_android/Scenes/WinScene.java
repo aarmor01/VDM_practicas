@@ -23,34 +23,36 @@ public class WinScene implements IScene {
 
     private EngineAndroid engRef;
 
-    public WinScene(Board b, boolean win){
+    public WinScene(Board b, boolean win) {
         board = b;
         victory = win;
     }
 
     @Override
-    public String getId(){return "WinScene";}
+    public String getId() {
+        return "WinScene";
+    }
 
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        if(victory){
+        if (victory) {
             coins = (board.getWidth() * board.getHeight()) / 2;
             GameManager.getInstance().addCoins(coins);
             winText = "¡¡Victoria!!";
-        }
-        else
+        } else
             winText = "Derrota :(";
 
-        font = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 8);
-        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
+        int w = GameManager.getInstance().getWidth() / 4;
+        int h = GameManager.getInstance().getHeight();
+
+        font = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, w / 2);
+        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, h / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
 
-        int w = engRef.getRender().getWidth() / 4;
-        int h = engRef.getRender().getHeight();
         backButton = new Button(w / 2, h * 7 / 8, w, h / 12, "Back",
                 engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons, btAudio, false);
-        coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+"+coins,
+        coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+" + coins,
                 engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, btAudio, false);
     }
 
@@ -64,8 +66,8 @@ public class WinScene implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
         int w = renderMng.getTextWidth(font, winText);
-        renderMng.drawText((renderMng.getWidth()-w)/2, renderMng.getHeight()/6, winText);
-        if(victory)
+        renderMng.drawText((GameManager.getInstance().getWidth() - w) / 2, GameManager.getInstance().getHeight() / 6, winText);
+        if (victory)
             board.renderWin(renderMng);
 
         backButton.render(renderMng);
@@ -74,8 +76,8 @@ public class WinScene implements IScene {
 
     @Override
     public void handleInput(InputAndroid input) {
-        if(input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())){
-            while(engRef.getSceneManager().currentScene().getId() != MENU)
+        if (input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())) {
+            while (engRef.getSceneManager().currentScene().getId() != MENU)
                 engRef.getSceneManager().popScene();
             backButton.clicked(engRef.getAudio());
         }

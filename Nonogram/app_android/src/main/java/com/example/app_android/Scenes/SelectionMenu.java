@@ -1,5 +1,6 @@
 package com.example.app_android.Scenes;
 
+import com.example.app_android.GameManager;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
@@ -25,9 +26,9 @@ public class SelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
-        int x = engRef.getRender().getWidth()/3;
-        int y = engRef.getRender().getHeight()/6;
+        font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 22);
+        int x = GameManager.getInstance().getWidth()/3;
+        int y = GameManager.getInstance().getHeight()/6;
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         t4x4 = new Button(x / 4, y*2, x/2, x/2, "4x4", "", font, btAudio, false);
         t5x5 = new Button(x * 5 / 4, y*2, x/2, x/2, "5x5", "", font, btAudio, false);

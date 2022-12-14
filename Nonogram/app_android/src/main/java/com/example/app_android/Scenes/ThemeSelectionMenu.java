@@ -29,36 +29,36 @@ public class ThemeSelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        backFont = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
+        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 10);
+        backFont = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        animalThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 4.0),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "ANIMAL THEME", "", fontButton, btAudio, false);
+        animalThemeButton = new Button(0, (int)(GameManager.getInstance().getHeight() / 4.0),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight()/10, "ANIMAL THEME", "", fontButton, btAudio, false);
 
         String tx;
         if(GameManager.getInstance().getLevelUnlocked(1) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
-        emojiThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "EMOJI THEME", tx, fontButton, btAudio, false);
+        emojiThemeButton = new Button(0, (int)(GameManager.getInstance().getHeight() / 2.75),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight()/10, "EMOJI THEME", tx, fontButton, btAudio, false);
 
         if(GameManager.getInstance().getLevelUnlocked(2) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
-        theme3ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 2.1),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON",
+        theme3ThemeButton = new Button(0, (int)(GameManager.getInstance().getHeight() / 2.1),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight()/10, "SOON",
                 engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio, false);
 
         if(GameManager.getInstance().getLevelUnlocked(3) > 10) tx = "";
         else tx = engRef.getRender().loadImage("./assets/images/lock.png");
-        theme4ThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 1.7),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight()/10, "SOON",
+        theme4ThemeButton = new Button(0, (int)(GameManager.getInstance().getHeight() / 1.7),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight()/10, "SOON",
                 engRef.getRender().loadImage("./assets/images/lock.png"), fontButton, btAudio, false);
 
         mainText = "Choose theme:";
-        backButton = new Button(engRef.getRender().getWidth()/3, (engRef.getRender().getHeight()/6)*5, engRef.getRender().getWidth()/3,
-                (engRef.getRender().getHeight()/6)/3, "Back", "", backFont, btAudio, false);
+        backButton = new Button(GameManager.getInstance().getWidth()/3, (GameManager.getInstance().getHeight()/6)*5, GameManager.getInstance().getWidth()/3,
+                (GameManager.getInstance().getHeight()/6)/3, "Back", "", backFont, btAudio, false);
 
-        coinIndicator = new Button(5* engRef.getRender().getWidth()/8, 0, engRef.getRender().getWidth()/4, engRef.getRender().getWidth()/8,
+        coinIndicator = new Button(5* GameManager.getInstance().getWidth()/8, 0, GameManager.getInstance().getWidth()/4, GameManager.getInstance().getWidth()/8,
                 Integer.toString(GameManager.getInstance().getCoins()), engRef.getRender().loadImage("./assets/images/coin.png"), fontButton, "", false);
     }
 
@@ -72,7 +72,7 @@ public class ThemeSelectionMenu implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
         int wi = engRef.getRender().getTextWidth(font, mainText);
-        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, mainText);
+        renderMng.drawText((GameManager.getInstance().getWidth() - wi)/2, GameManager.getInstance().getHeight()/6, mainText);
         animalThemeButton.render(renderMng);
         emojiThemeButton.render(renderMng);
         theme3ThemeButton.render(renderMng);

@@ -21,11 +21,11 @@ public class ModeSelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engine) {
         engRef = engine;
-        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 10);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        int getW = engRef.getRender().getWidth();
-        int getH = engRef.getRender().getHeight();
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 10);
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
 
         playRandomLevelButton = new Button(0, (int)(getH /1.25),
                 getW, getH/8, "RANDOM LEVELS", "", fontButton, btAudio, false);
@@ -49,7 +49,7 @@ public class ModeSelectionMenu implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
         int wi = engRef.getRender().getTextWidth(font, mainText);
-        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, mainText);
+        renderMng.drawText((GameManager.getInstance().getWidth() - wi)/2, GameManager.getInstance().getHeight()/6, mainText);
         playRandomLevelButton.render(renderMng);
         playThemeButton.render(renderMng);
         coinIndicator.render(renderMng);
