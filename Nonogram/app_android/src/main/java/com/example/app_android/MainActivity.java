@@ -1,6 +1,12 @@
 package com.example.app_android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.OutOfQuotaPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.content.res.Configuration;
 import android.os.Build;
@@ -12,7 +18,11 @@ import android.view.WindowManager;
 
 import com.example.app_android.Scenes.MainMenu;
 import com.example.engine_android.EngineAndroid;
+import com.example.engine_android.Modules.IntentWork;
 import com.google.android.gms.ads.AdView;
+
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 // onPause() ➟ onStop() ➟ onSaveInstanceState() ➟ onDestroy() ➟ Same Activity Opened Again ➟
 // onCreate() ➟ onStart() ➟ onRestoreInstanceState() ➟ onResume()
@@ -21,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     // engine's window ratio and background colour
     final float RATIO = 4.0f/6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
+    final long NOTIFICATION_PUSH = 30;
 
     // engine
     EngineAndroid engine;
@@ -46,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         // load files
         GameManager.init(engine, savedInstanceState);
         engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
+
+        createWorkRequest();
     }
 
     @Override
@@ -127,5 +140,31 @@ public class MainActivity extends AppCompatActivity {
 
         // hide support bar
         getSupportActionBar().hide();
+    }
+
+    private void createWorkRequest(){
+        HashMap<String, Object> dataValues = new HashMap<>();
+        dataValues.put("chanel", "nonogram_prueba");
+        dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
+        Data inputData = new Data.Builder().putAll(dataValues).build();
+        WorkRequest uploadWorkRequest =
+                new OneTimeWorkRequest.Builder(IntentWork.class)
+                        // Additional configuration
+                        .addTag("String")
+                        .setInitialDelay(NOTIFICATION_PUSH, TimeUnit.SECONDS)
+                        .setInputData(inputData)
+                        .build();
+
+//        PeriodicWorkRequest uploadWorkRequest =
+//                new PeriodicWorkRequest.Builder(IntentWork.class,
+//                        15, TimeUnit.MINUTES,
+//                        5, TimeUnit.MINUTES)
+//                        // Constraints
+//                        .addTag("String")
+//                        .setInputData(inputData)
+//                        .build();
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest);
+        //WorkManager.getInstance(this).getWorkInfosByTag("String");
     }
 }

@@ -44,13 +44,16 @@ public class IntentSystemAndroid {
 
     public void createNotification(int icon) {
         //Intent intent = new Intent(context , MiClase.class);
+        //PendingIntent contentIntent = PendingIntent. getActivity(context, 0, intent, PendingIntent. FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, this.channel_id)
                 .setSmallIcon(icon)
                 .setContentTitle( "My notification" )
                 .setContentText( "Much longer text that cannot fit one line..." )
                 .setStyle( new NotificationCompat.BigTextStyle()
                         .bigText( "Much longer text that cannot fit one line..." ))
-                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat. PRIORITY_DEFAULT)
+                //.setContentIntent(contentIntent)
+                .setAutoCancel(true);
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(1, builder.build());

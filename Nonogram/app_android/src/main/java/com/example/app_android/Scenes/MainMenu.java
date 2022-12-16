@@ -53,7 +53,6 @@ public class MainMenu implements IScene {
     public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
             engine.getSceneManager().pushScene(new ModeSelectionMenu(), engine);
-            engine.getIntentSystemAndroid().createNotification(androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
             playButton.clicked(engine.getAudio());
         }
     }
