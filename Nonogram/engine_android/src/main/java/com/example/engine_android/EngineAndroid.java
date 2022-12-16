@@ -56,7 +56,7 @@ public class EngineAndroid implements Runnable {
         // engine modules initialization
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
-        this.mySceneManager = new SceneManager(this);
+        this.mySceneManager = new SceneManager();
         this.myInputManager = new InputManager();
         this.myAdSystem = new AdSystemAndroid(activity, this.context);
         this.myIntentSystem = new IntentSystemAndroid(this.context);
@@ -88,7 +88,7 @@ public class EngineAndroid implements Runnable {
                 // handle input
                 LinkedList<InputAndroid> input = this.myInputManager.getInput();
                 while (!input.isEmpty())
-                    this.mySceneManager.currentScene().handleInput(input.removeFirst());
+                    this.mySceneManager.currentScene().handleInput(input.removeFirst(), this);
 
                 // update
                 this.mySceneManager.currentScene().update(deltaTime / 1000.0f);

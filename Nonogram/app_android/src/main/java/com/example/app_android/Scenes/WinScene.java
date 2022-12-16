@@ -21,7 +21,7 @@ public class WinScene implements IScene {
     private boolean victory;
     private int coins;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
 
     public WinScene(Board b, boolean win){
         board = b;
@@ -32,8 +32,7 @@ public class WinScene implements IScene {
     public String getId(){return "WinScene";}
 
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         if(victory){
             coins = (board.getWidth() * board.getHeight()) / 2;
             GameManager.getInstance().addCoins(coins);
@@ -73,11 +72,11 @@ public class WinScene implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())){
-            while(engRef.getSceneManager().currentScene().getId() != MENU)
-                engRef.getSceneManager().popScene();
-            backButton.clicked(engRef.getAudio());
+            while(engine.getSceneManager().currentScene().getId() != MENU)
+                engine.getSceneManager().popScene();
+            backButton.clicked(engine.getAudio());
         }
     }
 }

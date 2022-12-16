@@ -7,14 +7,13 @@ import java.util.Stack;
 
 public class SceneManager {
     Stack<IScene> scenes;
-    EngineAndroid engine;
 
-    public SceneManager(EngineAndroid engine) { this.scenes = new Stack<>(); this.engine = engine; }
+    public SceneManager() { this.scenes = new Stack<>(); }
 
     public IScene currentScene() { return this.scenes.peek(); }
 
-    public void pushScene(IScene newScene) {
-        newScene.init(engine);
+    public void pushScene(IScene newScene, EngineAndroid eng) {
+        newScene.init(eng);
         this.scenes.push(newScene);
     }
 

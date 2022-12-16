@@ -21,14 +21,13 @@ public class ThemeSelectionMenu implements IScene {
     private String backFont;
     Button backButton;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
 
     @Override
     public String getId(){return "ThemeSelectionMenu";}
 
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         backFont = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
@@ -71,8 +70,8 @@ public class ThemeSelectionMenu implements IScene {
     public void render(RenderAndroid renderMng) {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
-        int wi = engRef.getRender().getTextWidth(font, mainText);
-        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, mainText);
+        int wi = renderMng.getTextWidth(font, mainText);
+        renderMng.drawText((renderMng.getWidth() - wi)/2, renderMng.getHeight()/6, mainText);
         animalThemeButton.render(renderMng);
         emojiThemeButton.render(renderMng);
         theme3ThemeButton.render(renderMng);
@@ -82,37 +81,37 @@ public class ThemeSelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         GameManager gM = GameManager.getInstance();
         if(input.getType() == InputType.TOUCH_UP){
             if (animalThemeButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/", 1));
-                animalThemeButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/", 1), engine);
+                animalThemeButton.clicked(engine.getAudio());
             }
             else if (emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 0) {
                 if(gM.getLevelUnlocked(2) == -1){
                     gM.updateCategory(2, 0, null);
                 }
-                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/emojis/", 2));
-                emojiThemeButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/emojis/", 2), engine);
+                emojiThemeButton.clicked(engine.getAudio());
             }
             else if (theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
                 if(gM.getLevelUnlocked(3) == -1){
                     gM.updateCategory(3, 0, null);
                 }
-                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme3/", 3));
-                emojiThemeButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme3/", 3), engine);
+                emojiThemeButton.clicked(engine.getAudio());
             }
             else if (theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > 20) {
                 if(gM.getLevelUnlocked(4) == -1) {
                     gM.updateCategory(4, 0, null);
                 }
-                engRef.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme4/", 4));
-                emojiThemeButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme4/", 4), engine);
+                emojiThemeButton.clicked(engine.getAudio());
             }
             else if(backButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().popScene();
-                backButton.clicked(engRef.getAudio());
+                engine.getSceneManager().popScene();
+                backButton.clicked(engine.getAudio());
             }
         }
     }

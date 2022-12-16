@@ -11,7 +11,7 @@ import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class ModeSelectionMenu implements IScene {
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
     private String mainText;
     private String font;
     private Button playRandomLevelButton;
@@ -19,8 +19,7 @@ public class ModeSelectionMenu implements IScene {
     private Button coinIndicator;
 
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
@@ -48,23 +47,23 @@ public class ModeSelectionMenu implements IScene {
     public void render(RenderAndroid renderMng) {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
-        int wi = engRef.getRender().getTextWidth(font, mainText);
-        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, mainText);
+        int wi = renderMng.getTextWidth(font, mainText);
+        renderMng.drawText((renderMng.getWidth() - wi)/2, renderMng.getHeight()/6, mainText);
         playRandomLevelButton.render(renderMng);
         playThemeButton.render(renderMng);
         coinIndicator.render(renderMng);
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP || input.getType() == InputType.TOUCH_LONG) {
             if (playRandomLevelButton.isInButton(input.getX(), input.getY())){
-                engRef.getSceneManager().pushScene(new SelectionMenu());
-                playRandomLevelButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new SelectionMenu(), engine);
+                playRandomLevelButton.clicked(engine.getAudio());
             }
             else if (playThemeButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().pushScene(new ThemeSelectionMenu());
-                playThemeButton.clicked(engRef.getAudio());
+                engine.getSceneManager().pushScene(new ThemeSelectionMenu(), engine);
+                playThemeButton.clicked(engine.getAudio());
             }
         }
     }

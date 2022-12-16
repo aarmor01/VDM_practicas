@@ -20,11 +20,10 @@ public class SelectionMenu implements IScene {
     Button backButton;
     String font;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
 
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         int x = engRef.getRender().getWidth()/3;
         int y = engRef.getRender().getHeight()/6;
@@ -59,7 +58,7 @@ public class SelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if (input.getType() == InputType.TOUCH_UP) {
             int x = 0, y = 0;
             if (t4x4.isInButton(input.getX(), input.getY())){
@@ -87,13 +86,13 @@ public class SelectionMenu implements IScene {
                 y=10;
             }
             else if(backButton.isInButton(input.getX(), input.getY())){
-                engRef.getSceneManager().popScene();
-                backButton.clicked(engRef.getAudio());
+                engine.getSceneManager().popScene();
+                backButton.clicked(engine.getAudio());
             }
 
             if(x != 0){
-                t4x4.clicked(engRef.getAudio());
-                engRef.getSceneManager().pushScene(new BoardScene(x, y));
+                t4x4.clicked(engine.getAudio());
+                engine.getSceneManager().pushScene(new BoardScene(x, y), engine);
             }
         }
     }

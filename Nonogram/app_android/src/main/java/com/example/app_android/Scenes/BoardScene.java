@@ -26,7 +26,7 @@ public class BoardScene implements IScene {
     private Button coinIndicator;
     private Button recoverLive;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
     private String sound, liveImage, noLiveImage;
 
     public BoardScene(int w, int h) {
@@ -45,9 +45,8 @@ public class BoardScene implements IScene {
     public String getId(){return "BoardScene";}
 
     @Override
-    public void init(EngineAndroid engine) {
+    public void init(EngineAndroid engRef) {
         lives = MAX_LIVES;
-        engRef = engine;
         if(GameManager.getInstance().getSavedBoard(actCategory) != null){
             board = GameManager.getInstance().getSavedBoard(actCategory);
             GameManager.getInstance().resetBoard(actCategory);
@@ -75,17 +74,18 @@ public class BoardScene implements IScene {
         coinIndicator = new Button(8 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
                 engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, "", false);
 
-        sound = engine.getAudio().loadSound("./assets/sounds/click.wav", 1);
-        liveImage = engine.getRender().loadImage("./assets/images/heart.png");
-        noLiveImage = engine.getRender().loadImage("./assets/images/no_heart.png");
+        sound = engRef.getAudio().loadSound("./assets/sounds/click.wav", 1);
+        liveImage = engRef.getRender().loadImage("./assets/images/heart.png");
+        noLiveImage = engRef.getRender().loadImage("./assets/images/no_heart.png");
     }
 
     @Override
     public void update(double deltaTime) {
-        if(this.engRef.getAdSystem().hasRewardBeenGranted())
-            GameManager.getInstance().addCoins(69);
+//        if(engine.getAdSystem().hasRewardBeenGranted())
+//            GameManager.getInstance().addCoins(69);
 
-        board.update(deltaTime); }
+        board.update(deltaTime);
+    }
 
     @Override
     public void render(RenderAndroid renderMng) {
@@ -94,7 +94,7 @@ public class BoardScene implements IScene {
         recoverLive.render(renderMng);
         coinIndicator.render(renderMng);
 
-        int getW = engRef.getRender().getWidth();
+        int getW = renderMng.getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
@@ -102,32 +102,32 @@ public class BoardScene implements IScene {
                 imName = noLiveImage;
             else
                 imName = liveImage;
-            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), engRef.getRender().getHeight() / 6, w, w, imName);
+            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), renderMng.getHeight() / 6, w, w, imName);
         }
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if (input.getType() == InputType.TOUCH_UP) {
             if (board.isInBoard(input.getX(), input.getY())) {          //Input en la zona del tablero
-                engRef.getAudio().playSound(sound);
+                engine.getAudio().playSound(sound);
                 lives -= board.markCell(input.getX(), input.getY(), false);
 
                 if (board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
                     GameManager.getInstance().updateCategory(actCategory, actLevel, null);
-                    engRef.getSceneManager().pushScene(new WinScene(board, true));
+                    engine.getSceneManager().pushScene(new WinScene(board, true), engine);
                 }
                 if(lives == 0)
-                    engRef.getSceneManager().pushScene(new WinScene(board, false));
+                    engine.getSceneManager().pushScene(new WinScene(board, false), engine);
             }
             else if (backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
-                backButton.clicked(engRef.getAudio());
-                engRef.getSceneManager().popScene();
+                backButton.clicked(engine.getAudio());
+                engine.getSceneManager().popScene();
 
                 GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
             }
             else if (coinIndicator.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
-                this.engRef.getAdSystem().showRewardedAd();
+                engine.getAdSystem().showRewardedAd();
             }
         }
         else if (input.getType() == InputType.TOUCH_LONG) {     //Long touch en tablero

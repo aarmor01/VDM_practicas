@@ -20,7 +20,7 @@ public class LevelHistorySelectionMenu implements IScene {
     String route;
     int lastUnlocked, category;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
 
     public LevelHistorySelectionMenu(String r, int cat){
         route = r;
@@ -32,8 +32,7 @@ public class LevelHistorySelectionMenu implements IScene {
     public String getId(){return "LevelHistorySelectionMenu";}
 
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         font = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         int x = engRef.getRender().getWidth()/5;
         int y = engRef.getRender().getHeight()/4;
@@ -75,7 +74,7 @@ public class LevelHistorySelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if (input.getType() == InputType.TOUCH_UP) {
             int x = 0;
             int i = 0;
@@ -87,13 +86,13 @@ public class LevelHistorySelectionMenu implements IScene {
             }
 
             if(backButton.isInButton(input.getX(), input.getY())){
-                engRef.getSceneManager().popScene();
-                backButton.clicked(engRef.getAudio());
+                engine.getSceneManager().popScene();
+                backButton.clicked(engine.getAudio());
             }
 
             if(x != 0){
-                levelSelecBut[0].clicked(engRef.getAudio());
-                engRef.getSceneManager().pushScene(new BoardScene(route , x, category));
+                levelSelecBut[0].clicked(engine.getAudio());
+                engine.getSceneManager().pushScene(new BoardScene(route , x, category), engine);
             }
         }
     }

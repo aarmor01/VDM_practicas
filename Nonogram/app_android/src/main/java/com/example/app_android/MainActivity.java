@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         engine = new EngineAndroid(renderView, this, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
 
         // start ad process
-        engine.getAdSystem().preloadBannerAd((AdView)findViewById(R.id.adView));
-        engine.getAdSystem().preloadRewardedAd();
+//        engine.getAdSystem().preloadBannerAd((AdView)findViewById(R.id.adView));
+//        engine.getAdSystem().preloadRewardedAd();
 
         // load files
         GameManager.init(engine, savedInstanceState);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // just the onConfigurationChanged)
         if (engine.getSceneManager().isEmpty()) {
             MainMenu scene = new MainMenu();
-            engine.getSceneManager().pushScene(scene);
+            engine.getSceneManager().pushScene(scene, engine);
         }
     }
 

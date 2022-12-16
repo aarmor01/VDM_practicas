@@ -15,10 +15,9 @@ public class MainMenu implements IScene {
     String title;
     String font;
 
-    private EngineAndroid engRef;
+    //private EngineAndroid engRef;
     @Override
-    public void init(EngineAndroid engine) {
-        engRef = engine;
+    public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
 
@@ -37,25 +36,25 @@ public class MainMenu implements IScene {
 
     @Override
     public void update(double deltaTime) {
-        if(engRef.getAdSystem().hasRewardBeenGranted())
-            System.out.println("Reward Granted on " + getId());
+//        if(engRef.getAdSystem().hasRewardBeenGranted())
+//            System.out.println("Reward Granted on " + getId());
     }
 
     @Override
     public void render(RenderAndroid renderMng) {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
-        int wi = engRef.getRender().getTextWidth(font, title);
-        renderMng.drawText((engRef.getRender().getWidth() - wi)/2, engRef.getRender().getHeight()/6, title);
+        int wi = renderMng.getTextWidth(font, title);
+        renderMng.drawText((renderMng.getWidth() - wi)/2, renderMng.getHeight()/6, title);
         playButton.render(renderMng);
     }
 
     @Override
-    public void handleInput(InputAndroid input) {
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
-            engRef.getSceneManager().pushScene(new ModeSelectionMenu());
-            engRef.getIntentSystemAndroid().createNotification(androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
-            playButton.clicked(engRef.getAudio());
+            engine.getSceneManager().pushScene(new ModeSelectionMenu(), engine);
+            engine.getIntentSystemAndroid().createNotification(androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
+            playButton.clicked(engine.getAudio());
         }
     }
 }

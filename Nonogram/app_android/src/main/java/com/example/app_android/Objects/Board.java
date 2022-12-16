@@ -29,44 +29,6 @@ public class Board {
 
     public boolean win = false;
 
-    public void render(RenderAndroid renderMng) {
-        renderMng.setColor(0xFF000000); //Cuadrado alrededor
-        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + separation_margin,
-                height * (board_cell_size + separation_margin) + separation_margin, false);
-
-        printNumbers(renderMng);    //Escribimos los números
-
-        for (int i = 0; i < width; i++) {   //Dibujado casillas
-            for (int j = 0; j < height; j++) {
-                board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
-                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
-            }
-        }
-
-        renderMng.setFont(fontWrongText);
-
-        if (lastTimeChecked != -1) {    //Texto de comprobacion
-            renderMng.setColor(0xFFFF0000);
-            int x = renderMng.getTextWidth(fontWrongText, "Te faltan " + checkedCells.size() + " casillas");
-            int x2 = renderMng.getTextWidth(fontWrongText, "Tienes mal " + checkedCells.size() + " casillas");
-            int y = renderMng.getTextHeight(fontWrongText);
-            renderMng.drawText((renderMng.getWidth() - x) / 2, posY - renderMng.getHeight() / 10, "Te faltan " + cellsLeft + " casillas");
-            renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + y * 2, "Tienes mal " + checkedCells.size() + " casillas");
-        }
-    }
-
-    public void renderWin(RenderAndroid renderMng) {    //Dibujamos solo las casillas solucion
-        posX = (renderMng.getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (board[i][j].isAnswer()) {
-                    board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
-                }
-            }
-        }
-    }
-
     public void init(int h, int w, EngineAndroid eng, ArrayList<String> content) {
         height = h;
         width = w;
@@ -157,6 +119,44 @@ public class Board {
         font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
         fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, eng.getRender().getWidth() / 20);
         lastTimeChecked = -1;
+    }
+
+    public void render(RenderAndroid renderMng) {
+        renderMng.setColor(0xFF000000); //Cuadrado alrededor
+        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + separation_margin,
+                height * (board_cell_size + separation_margin) + separation_margin, false);
+
+        printNumbers(renderMng);    //Escribimos los números
+
+        for (int i = 0; i < width; i++) {   //Dibujado casillas
+            for (int j = 0; j < height; j++) {
+                board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
+                        j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
+            }
+        }
+
+        renderMng.setFont(fontWrongText);
+
+        if (lastTimeChecked != -1) {    //Texto de comprobacion
+            renderMng.setColor(0xFFFF0000);
+            int x = renderMng.getTextWidth(fontWrongText, "Te faltan " + checkedCells.size() + " casillas");
+            int x2 = renderMng.getTextWidth(fontWrongText, "Tienes mal " + checkedCells.size() + " casillas");
+            int y = renderMng.getTextHeight(fontWrongText);
+            renderMng.drawText((renderMng.getWidth() - x) / 2, posY - renderMng.getHeight() / 10, "Te faltan " + cellsLeft + " casillas");
+            renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + y * 2, "Tienes mal " + checkedCells.size() + " casillas");
+        }
+    }
+
+    public void renderWin(RenderAndroid renderMng) {    //Dibujamos solo las casillas solucion
+        posX = (renderMng.getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (board[i][j].isAnswer()) {
+                    board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
+                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
+                }
+            }
+        }
     }
 
     public void initFile(ArrayList<String> level, EngineAndroid eng){
