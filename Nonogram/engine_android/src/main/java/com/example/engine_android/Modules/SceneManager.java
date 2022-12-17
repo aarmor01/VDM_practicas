@@ -6,18 +6,23 @@ import com.example.engine_android.DataStructures.IScene;
 import java.util.Stack;
 
 public class SceneManager {
-    Stack<IScene> scenes;
+    IScene scene;
 
-    public SceneManager() { this.scenes = new Stack<>(); }
+    public SceneManager() { this.scene = null; }
 
-    public IScene currentScene() { return this.scenes.peek(); }
+    public IScene currentScene() { return this.scene; }
 
-    public void pushScene(IScene newScene, EngineAndroid eng) {
+//    public void pushScene(IScene newScene, EngineAndroid eng) {
+//        newScene.init(eng);
+//        this.scenes.push(newScene);
+//    }
+//
+//    public IScene popScene() { return this.scenes.pop(); }
+
+    public boolean isEmpty(){return this.scene == null; }
+
+    public void changeScene(IScene newScene, EngineAndroid eng){
         newScene.init(eng);
-        this.scenes.push(newScene);
+        this.scene = newScene;
     }
-
-    public IScene popScene() { return this.scenes.pop(); }
-
-    public boolean isEmpty(){return this.scenes.isEmpty();}
 }

@@ -74,8 +74,7 @@ public class WinScene implements IScene {
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())){
-            while(engine.getSceneManager().currentScene().getId() != MENU)
-                engine.getSceneManager().popScene();
+            engine.getSceneManager().changeScene(new MainMenu(), engine);
             backButton.clicked(engine.getAudio());
         }
     }

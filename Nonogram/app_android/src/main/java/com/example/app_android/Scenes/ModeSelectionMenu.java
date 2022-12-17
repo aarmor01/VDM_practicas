@@ -58,11 +58,11 @@ public class ModeSelectionMenu implements IScene {
     public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP || input.getType() == InputType.TOUCH_LONG) {
             if (playRandomLevelButton.isInButton(input.getX(), input.getY())){
-                engine.getSceneManager().pushScene(new SelectionMenu(), engine);
+                engine.getSceneManager().changeScene(new SelectionMenu(), engine);
                 playRandomLevelButton.clicked(engine.getAudio());
             }
             else if (playThemeButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().pushScene(new ThemeSelectionMenu(), engine);
+                engine.getSceneManager().changeScene(new ThemeSelectionMenu(), engine);
                 playThemeButton.clicked(engine.getAudio());
             }
         }

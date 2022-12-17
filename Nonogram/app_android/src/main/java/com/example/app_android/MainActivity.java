@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         // just the onConfigurationChanged)
         if (engine.getSceneManager().isEmpty()) {
             MainMenu scene = new MainMenu();
-            engine.getSceneManager().pushScene(scene, engine);
+            engine.getSceneManager().changeScene(scene, engine);
         }
     }
 

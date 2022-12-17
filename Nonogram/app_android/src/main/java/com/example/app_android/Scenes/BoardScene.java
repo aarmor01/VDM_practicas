@@ -115,18 +115,18 @@ public class BoardScene implements IScene {
 
                 if (board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
                     GameManager.getInstance().updateCategory(actCategory, actLevel, null);
-                    engine.getSceneManager().pushScene(new WinScene(board, true), engine);
+                    engine.getSceneManager().changeScene(new WinScene(board, true), engine);
                 }
                 if(lives == 0)
-                    engine.getSceneManager().pushScene(new WinScene(board, false), engine);
+                    engine.getSceneManager().changeScene(new WinScene(board, false), engine);
             }
             else if (backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
                 backButton.clicked(engine.getAudio());
-                engine.getSceneManager().popScene();
+                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
 
                 GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
             }
-            else if (coinIndicator.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
+            else if (recoverLive.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
                 engine.getAdSystem().showRewardedAd();
             }
         }
