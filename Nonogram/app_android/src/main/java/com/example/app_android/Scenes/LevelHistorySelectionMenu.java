@@ -55,6 +55,11 @@ public class LevelHistorySelectionMenu implements IScene {
     }
 
     @Override
+    public void rearrange(EngineAndroid engRef) {
+
+    }
+
+    @Override
     public void update(double deltaTime) {
         lastUnlocked = GameManager.getInstance().getLevelUnlocked(category) + 1;
         for(int i=0; i<lastUnlocked; i++){

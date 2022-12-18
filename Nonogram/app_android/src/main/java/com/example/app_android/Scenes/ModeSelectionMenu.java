@@ -36,6 +36,11 @@ public class ModeSelectionMenu implements IScene {
     }
 
     @Override
+    public void rearrange(EngineAndroid engRef) {
+
+    }
+
+    @Override
     public String getId(){return "ModeSelectionMenu";}
 
     @Override

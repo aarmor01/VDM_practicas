@@ -1,5 +1,6 @@
 package com.example.app_android;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     final float RATIO = 4.0f / 6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
     final long NOTIFICATION_PUSH = 30;
+    final String SCENE_ID = "SAVED_SCENE";
 
     // engine
     private EngineAndroid engine;
@@ -56,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         activityConfigurations();
 
         // create engine
-        this.engine = new EngineAndroid(renderView, this, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+        this.engine = new EngineAndroid(renderView, this, RATIO, BACKGROUND_COLOR);
 
         // start ad process
-//        this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
+        // this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
         this.engine.getAdSystem().loadRewardedAd();
 
         // load files
@@ -106,14 +108,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            System.out.println("Landscape");
-        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-            System.out.println("Portrait");
+        // updates the orientation of the screen
+        this.engine.updateConfiguration(newConfig);
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+//            System.out.println("Landscape");
+//        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+//            System.out.println("Portrait");
     }
 
     @Override
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // save data

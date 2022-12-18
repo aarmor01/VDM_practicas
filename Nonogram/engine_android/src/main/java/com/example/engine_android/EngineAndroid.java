@@ -10,6 +10,7 @@ import com.example.engine_android.Modules.RenderAndroid;
 import com.example.engine_android.Modules.SceneManager;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -30,17 +31,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EngineAndroid implements Runnable {
+    public enum Orientation { PORTRAIT, LANDSCAPE };
+
     // engine modules
-    private RenderAndroid myRenderManager;
-    private SceneManager mySceneManager;
-    private InputManager myInputManager;
-    private AudioAndroid myAudioManager;
-    private AdSystemAndroid myAdSystem;
-    private IntentSystemAndroid myIntentSystem;
+    private final RenderAndroid myRenderManager;
+    private final SceneManager mySceneManager;
+    private final InputManager myInputManager;
+    private final AudioAndroid myAudioManager;
+    private final AdSystemAndroid myAdSystem;
+    private final IntentSystemAndroid myIntentSystem;
 
     // asset manager
-    private AssetManager assetManager;
-    private Context context;
+    private final AssetManager assetManager;
+    private final Context context;
+
+    // current orientation
+    private Orientation orientation;
 
     // thread variables
     private Thread renderThread;
@@ -48,10 +54,13 @@ public class EngineAndroid implements Runnable {
     private Thread configThread;
     private boolean initialConfigurationDone;
 
-    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, Context context, float ratio, int bgColor) {
+    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, float ratio, int bgColor) {
         // context
-        this.context = context;
-        this.assetManager = context.getAssets();
+        this.context = activity.getBaseContext();
+        this.assetManager = this.context.getAssets();
+
+        // orientation (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
+        this.orientation = Orientation.values()[activity.getResources().getConfiguration().orientation - 1];
 
         // engine modules initialization
         this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
@@ -134,8 +143,6 @@ public class EngineAndroid implements Runnable {
         return this.myRenderManager;
     }
 
-    public IntentSystemAndroid getIntentSystemAndroid() { return this.myIntentSystem; }
-
     public AudioAndroid getAudio() {
         return this.myAudioManager;
     }
@@ -156,12 +163,20 @@ public class EngineAndroid implements Runnable {
         return this.myIntentSystem;
     }
 
+    // TODO: change scene init structure so we don't need this and we just return the enum in the method
+    public Orientation getOrientation() { return orientation; }
+
+    public void updateConfiguration(Configuration config) {
+        // (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
+        this.orientation = Orientation.values()[config.orientation - 1];
+        this.mySceneManager.currentScene().rearrange(this);
+    }
+
     public FileInputStream openInputFile(String path) {
         FileInputStream file = null;
         try {
             file = this.context.openFileInput(path);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -172,8 +187,7 @@ public class EngineAndroid implements Runnable {
         FileOutputStream file = null;
         try {
             file = this.context.openFileOutput(path, Context.MODE_PRIVATE);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -186,7 +200,7 @@ public class EngineAndroid implements Runnable {
 
     public ArrayList<String> readText(String path, String file) {
         //Carga de archivo
-        ArrayList<String> receiveString = new ArrayList<String>();
+        ArrayList<String> receiveString = new ArrayList<>();
         try {
             //Comprobar si existe en el almacenamiento interno
             FileInputStream fis = context.openFileInput(file);
@@ -228,8 +242,8 @@ public class EngineAndroid implements Runnable {
     }
 
     private void waitSurfaceConfiguration() {
-        while(!this.initialConfigurationDone);
-        if(this.configThread != null) {
+        while (!this.initialConfigurationDone) ;
+        if (this.configThread != null) {
             while (true) {
                 try {
                     this.configThread.join();
@@ -250,7 +264,9 @@ public class EngineAndroid implements Runnable {
 
         EngineAndroid engine;
 
-        SurfaceAvailable(EngineAndroid engine) { this.engine = engine; };
+        SurfaceAvailable(EngineAndroid engine) {
+            this.engine = engine;
+        }
 
         @Override
         public void run() {
@@ -292,30 +308,29 @@ public class EngineAndroid implements Runnable {
                     goneFlag = false;
                     input_x_original = input_x;
                     input_y_original = input_y;
-                    iA = new InputAndroid( input_x, input_y, InputType.TOUCH_DOWN,
+                    iA = new InputAndroid(input_x, input_y, InputType.TOUCH_DOWN,
                             motionEvent.getActionIndex());
                     myInputManager.addInput(iA);
                     handler.postDelayed(mLongPressed, 500);
                     break;
                 case MotionEvent.ACTION_UP:
                     handler.removeCallbacks(mLongPressed);
-                    if(!goneFlag) {
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_UP,
+                    if (!goneFlag) {
+                        iA = new InputAndroid(input_x, input_y, InputType.TOUCH_UP,
                                 motionEvent.getActionIndex());
                         myInputManager.addInput(iA);
                         return true;
-                    }
-                    else {
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_LONG,
+                    } else {
+                        iA = new InputAndroid(input_x, input_y, InputType.TOUCH_LONG,
                                 motionEvent.getActionIndex());
                         myInputManager.addInput(iA);
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
 //              if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
-                                motionEvent.getActionIndex());
-                        myInputManager.addInput(iA);
+                    iA = new InputAndroid(input_x, input_y, InputType.TOUCH_MOVE,
+                            motionEvent.getActionIndex());
+                    myInputManager.addInput(iA);
                     break;
             }
             return true;

@@ -2,7 +2,6 @@ package com.example.app_android.Scenes;
 
 import com.example.app_android.Objects.Button;
 
-import com.example.app_android.R;
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.InputType;
 import com.example.engine_android.Enums.FontType;
@@ -15,24 +14,27 @@ public class MainMenu implements IScene {
     String title;
     String font;
 
+    @Override
+    public String getId() {
+        return "MainMenu";
+    }
+
     //private EngineAndroid engRef;
     @Override
     public void init(EngineAndroid engRef) {
-        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-
-        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth()/3 )/2, (int)(engRef.getRender().getHeight() /1.5),
-                engRef.getRender().getWidth()/3, engRef.getRender().getHeight()/8, "PLAY", "", fontButton, btAudio, false);
-        title = "NONOGRAMAS";
-
-        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
-        engRef.getAudio().playMusic();
+        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
+            arrangePortrait(engRef);
+        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
+            arrangeLandscape(engRef);
     }
 
     @Override
-    public String getId() { return "MainMenu"; }
-
+    public void rearrange(EngineAndroid engRef) {
+        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
+            arrangePortrait(engRef);
+        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
+            arrangeLandscape(engRef);
+    }
 
     @Override
     public void update(double deltaTime) {
@@ -45,15 +47,41 @@ public class MainMenu implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(font);
         int wi = renderMng.getTextWidth(font, title);
-        renderMng.drawText((renderMng.getWidth() - wi)/2, renderMng.getHeight()/6, title);
+        renderMng.drawText((renderMng.getWidth() - wi) / 2, renderMng.getHeight() / 6, title);
         playButton.render(renderMng);
     }
 
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engine) {
-        if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
+        if (input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())) {
             engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
             playButton.clicked(engine.getAudio());
         }
+    }
+
+    private void arrangePortrait(EngineAndroid engRef) {
+        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+
+        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
+        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2, (int) (engRef.getRender().getHeight() / 1.5),
+                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 8, "PLAY", "", fontButton, btAudio, false);
+        title = "NONOGRAMAS";
+
+        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
+        engRef.getAudio().playMusic();
+    }
+
+    private void arrangeLandscape(EngineAndroid engRef) {
+        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+
+        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
+        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2, (int) (engRef.getRender().getHeight() / 1.5),
+                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 8, "PLAY", "", fontButton, btAudio, false);
+        title = "NANOGRAMO";
+
+        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
+        engRef.getAudio().playMusic();
     }
 }

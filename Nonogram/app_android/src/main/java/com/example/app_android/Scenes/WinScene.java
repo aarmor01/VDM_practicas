@@ -54,6 +54,11 @@ public class WinScene implements IScene {
     }
 
     @Override
+    public void rearrange(EngineAndroid engRef) {
+
+    }
+
+    @Override
     public void update(double deltaTime) {
 
     }
