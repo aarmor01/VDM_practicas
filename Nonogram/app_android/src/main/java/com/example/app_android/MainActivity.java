@@ -7,7 +7,12 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 // onPause() ➟ onStop() ➟ onSaveInstanceState() ➟ onDestroy() ➟ Same Activity Opened Again ➟
 // onCreate() ➟ onStart() ➟ onRestoreInstanceState() ➟ onResume()
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     // engine's window ratio and background colour
     final float RATIO = 4.0f/6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
@@ -32,10 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
     // engine
     EngineAndroid engine;
+    private SensorManager sensorManager;
+    private Sensor sensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // set sensor and sensor manager
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
 
         // set surface view
         setContentView(R.layout.activity_main);
@@ -77,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         // resume engine process cycle
         engine.resume();
+        sensorManager .registerListener( this, sensor, SensorManager. SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
@@ -104,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         // pause engine process cycle
         engine.pause();
         engine.getAudio().stopMusic();
+        sensorManager .unregisterListener( this);
     }
 
     @Override
@@ -163,5 +177,21 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
         WorkManager.getInstance(this).enqueue(uploadWorkRequestPeriodic);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
+            float sensorValue = sensorEvent.values[0];
+            // TODO
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        if (sensor.getType() == Sensor.TYPE_LIGHT) {
+
+            // TODO
+        }
     }
 }
