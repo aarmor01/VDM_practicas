@@ -3,7 +3,6 @@ package com.example.app_android;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.OutOfQuotaPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
@@ -18,8 +17,6 @@ import android.view.WindowManager;
 
 import com.example.app_android.Scenes.MainMenu;
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.Modules.IntentWork;
-import com.google.android.gms.ads.AdView;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -146,25 +143,25 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, Object> dataValues = new HashMap<>();
         dataValues.put("chanel", "nonogram_prueba");
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
+        //dataValues.put("mainClass", MainActivity.class);
         Data inputData = new Data.Builder().putAll(dataValues).build();
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(IntentWork.class)
                         // Additional configuration
-                        .addTag("String")
                         .setInitialDelay(NOTIFICATION_PUSH, TimeUnit.SECONDS)
                         .setInputData(inputData)
                         .build();
 
-//        PeriodicWorkRequest uploadWorkRequest =
-//                new PeriodicWorkRequest.Builder(IntentWork.class,
-//                        15, TimeUnit.MINUTES,
-//                        5, TimeUnit.MINUTES)
-//                        // Constraints
-//                        .addTag("String")
-//                        .setInputData(inputData)
-//                        .build();
-
         WorkManager.getInstance(this).enqueue(uploadWorkRequest);
-        //WorkManager.getInstance(this).getWorkInfosByTag("String");
+
+        PeriodicWorkRequest uploadWorkRequestPeriodic =
+                new PeriodicWorkRequest.Builder(IntentWork.class,
+                        15, TimeUnit.MINUTES,
+                        5, TimeUnit.MINUTES)
+                        // Constraints
+                        .setInputData(inputData)
+                        .build();
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequestPeriodic);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.engine_android.Modules;
+package com.example.app_android;
 
 
 import android.app.PendingIntent;
@@ -24,10 +24,9 @@ public class IntentWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-
-        //Intent intent = new Intent(context , MainActivity.);
-        //PendingIntent contentIntent = PendingIntent. getActivity(context, 0, intent, PendingIntent. FLAG_UPDATE_CURRENT);
         Data data = getInputData();
+        Intent intent = new Intent(context , MainActivity.class);
+        PendingIntent contentIntent = PendingIntent. getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent. FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, data.getString("chanel"))
                 .setSmallIcon(data.getInt("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg))
                 .setContentTitle( "My notification" )
@@ -35,7 +34,7 @@ public class IntentWork extends Worker {
                 .setStyle( new NotificationCompat.BigTextStyle()
                         .bigText( "Much longer text that cannot fit one line..." ))
                 .setPriority(NotificationCompat. PRIORITY_DEFAULT)
-                //.setContentIntent(contentIntent)
+                .setContentIntent(contentIntent)
                 .setAutoCancel(true);
 
 
