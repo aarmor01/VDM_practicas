@@ -86,13 +86,13 @@ public class LevelHistorySelectionMenu implements IScene {
             }
 
             if(backButton.isInButton(input.getX(), input.getY())){
-                engine.getSceneManager().popScene();
+                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
                 backButton.clicked(engine.getAudio());
             }
 
             if(x != 0){
                 levelSelecBut[0].clicked(engine.getAudio());
-                engine.getSceneManager().pushScene(new BoardScene(route , x, category), engine);
+                engine.getSceneManager().changeScene(new BoardScene(route , x, category), engine);
             }
         }
     }

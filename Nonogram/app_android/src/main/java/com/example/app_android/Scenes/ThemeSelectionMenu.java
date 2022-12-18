@@ -85,32 +85,32 @@ public class ThemeSelectionMenu implements IScene {
         GameManager gM = GameManager.getInstance();
         if(input.getType() == InputType.TOUCH_UP){
             if (animalThemeButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/animales/", 1), engine);
+                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/animales/", 1), engine);
                 animalThemeButton.clicked(engine.getAudio());
             }
             else if (emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 0) {
                 if(gM.getLevelUnlocked(2) == -1){
                     gM.updateCategory(2, 0, null);
                 }
-                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/emojis/", 2), engine);
+                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/emojis/", 2), engine);
                 emojiThemeButton.clicked(engine.getAudio());
             }
             else if (theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
                 if(gM.getLevelUnlocked(3) == -1){
                     gM.updateCategory(3, 0, null);
                 }
-                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme3/", 3), engine);
+                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/theme3/", 3), engine);
                 emojiThemeButton.clicked(engine.getAudio());
             }
             else if (theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > 20) {
                 if(gM.getLevelUnlocked(4) == -1) {
                     gM.updateCategory(4, 0, null);
                 }
-                engine.getSceneManager().pushScene(new LevelHistorySelectionMenu("levels/theme4/", 4), engine);
+                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/theme4/", 4), engine);
                 emojiThemeButton.clicked(engine.getAudio());
             }
             else if(backButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().popScene();
+                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
                 backButton.clicked(engine.getAudio());
             }
         }

@@ -86,13 +86,13 @@ public class SelectionMenu implements IScene {
                 y=10;
             }
             else if(backButton.isInButton(input.getX(), input.getY())){
-                engine.getSceneManager().popScene();
+                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
                 backButton.clicked(engine.getAudio());
             }
 
             if(x != 0){
                 t4x4.clicked(engine.getAudio());
-                engine.getSceneManager().pushScene(new BoardScene(x, y), engine);
+                engine.getSceneManager().changeScene(new BoardScene(x, y), engine);
             }
         }
     }
