@@ -20,7 +20,6 @@ import com.google.android.gms.ads.AdView;
 public class MainActivity extends AppCompatActivity {
     // engine's window ratio and background colour
     final int WIDTH = 400, HEIGHT = 600;
-//    final float RATIO = WIDTH / HEIGHT;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
 
     // engine

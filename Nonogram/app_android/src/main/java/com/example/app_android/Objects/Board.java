@@ -1,5 +1,6 @@
 package com.example.app_android.Objects;
 
+import com.example.app_android.GameManager;
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.FontType;
 import com.example.engine_android.Modules.RenderAndroid;
@@ -50,18 +51,20 @@ public class Board {
             int x = renderMng.getTextWidth(fontWrongText, "Te faltan " + checkedCells.size() + " casillas");
             int x2 = renderMng.getTextWidth(fontWrongText, "Tienes mal " + checkedCells.size() + " casillas");
             int y = renderMng.getTextHeight(fontWrongText);
-            renderMng.drawText((renderMng.getWidth() - x) / 2, posY - renderMng.getHeight() / 10, "Te faltan " + cellsLeft + " casillas");
-            renderMng.drawText((renderMng.getWidth() - x2) / 2, posY - renderMng.getHeight() / 10 + y * 2, "Tienes mal " + checkedCells.size() + " casillas");
+            int getW = GameManager.getInstance().getWidth();
+            int getH = GameManager.getInstance().getHeight();
+            renderMng.drawText((getW - x) / 2, posY - getH / 10, "Te faltan " + cellsLeft + " casillas");
+            renderMng.drawText((getW - x2) / 2, posY - getH / 10 + y * 2, "Tienes mal " + checkedCells.size() + " casillas");
         }
     }
 
     public void renderWin(RenderAndroid renderMng) {    //Dibujamos solo las casillas solucion
-        posX = (renderMng.getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
+        posX = (GameManager.getInstance().getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (board[i][j].isAnswer()) {
                     board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
-                            j * board_cell_size + (j + 1) * separation_margin + posY - renderMng.getHeight() / 10, board_cell_size);
+                            j * board_cell_size + (j + 1) * separation_margin + posY - GameManager.getInstance().getHeight() / 10, board_cell_size);
                 }
             }
         }
@@ -143,19 +146,19 @@ public class Board {
         }
         int maxDimension = Math.max(w, h);
 
-        int winW = (eng.getRender().getWidth()) / (maxDimension);
-        int winH = ((int) (eng.getRender().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
+        int winW = (GameManager.getInstance().getWidth()) / (maxDimension);
+        int winH = ((int) (GameManager.getInstance().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
 
         board_cell_size = Math.min(winH, winW);
         separation_margin = Math.max(board_cell_size / 25, 1);
         board_cell_size -= separation_margin;
         fontSize = board_cell_size / 3;
 
-        posX = (eng.getRender().getWidth() - (board_cell_size + separation_margin) * width - maxNumbers * fontSize) / 2;
-        posY = ((int) (eng.getRender().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
+        posX = (GameManager.getInstance().getWidth() - (board_cell_size + separation_margin) * width - maxNumbers * fontSize) / 2;
+        posY = ((int) (GameManager.getInstance().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
 
         font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
-        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, eng.getRender().getWidth() / 20);
+        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, GameManager.getInstance().getWidth() / 20);
         lastTimeChecked = -1;
     }
 

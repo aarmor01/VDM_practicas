@@ -78,7 +78,6 @@ public class RenderAndroid {
         this.canvas.drawColor(this.bgColor);
         //this.canvas.translate(this.posCanvasX, this.posCanvasY);
         this.canvas.scale(this.scale, this.scale);
-        System.out.println(scale);
         setColor(this.bgColor);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
     }
@@ -166,19 +165,19 @@ public class RenderAndroid {
         return this.fonts.get(fontID).getSize();
     }
 
-    public int getWidth() {
-        return this.baseWidth;
-    }
+    public int getWidth() {return this.myView.getWidth(); }
 
     public int getHeight() {
-        return this.baseHeight;
-    }
-
-    public int getViewWidth() {
-        return this.myView.getWidth();
-    }
-
-    public int getViewHeight() {
         return this.myView.getHeight();
     }
+
+//    public int getViewWidth() {
+//        return this.myView.getWidth();
+//    }
+//
+//    public int getViewHeight() {
+//        return this.myView.getHeight();
+//    }
+
+    public float getScale() { return scale; }
 }

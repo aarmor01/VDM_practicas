@@ -9,6 +9,7 @@ import com.example.engine_android.Modules.IntentSystemAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 import com.example.engine_android.Modules.SceneManager;
 
+import android.app.GameManager;
 import android.content.Context;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -134,7 +135,9 @@ public class EngineAndroid implements Runnable {
         return this.myRenderManager;
     }
 
-    public IntentSystemAndroid getIntentSystemAndroid() { return this.myIntentSystem; }
+    public IntentSystemAndroid getIntentSystemAndroid() {
+        return this.myIntentSystem;
+    }
 
     public AudioAndroid getAudio() {
         return this.myAudioManager;
@@ -160,8 +163,7 @@ public class EngineAndroid implements Runnable {
         FileInputStream file = null;
         try {
             file = this.context.openFileInput(path);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -172,8 +174,7 @@ public class EngineAndroid implements Runnable {
         FileOutputStream file = null;
         try {
             file = this.context.openFileOutput(path, Context.MODE_PRIVATE);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -228,8 +229,8 @@ public class EngineAndroid implements Runnable {
     }
 
     private void waitSurfaceConfiguration() {
-        while(!this.initialConfigurationDone);
-        if(this.configThread != null) {
+        while (!this.initialConfigurationDone) ;
+        if (this.configThread != null) {
             while (true) {
                 try {
                     this.configThread.join();
@@ -250,7 +251,11 @@ public class EngineAndroid implements Runnable {
 
         EngineAndroid engine;
 
-        SurfaceAvailable(EngineAndroid engine) { this.engine = engine; };
+        SurfaceAvailable(EngineAndroid engine) {
+            this.engine = engine;
+        }
+
+        ;
 
         @Override
         public void run() {
@@ -279,43 +284,39 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int input_y = (int) motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
-            int input_x = (int) motionEvent.getX() - (myRenderManager.getViewWidth() - myRenderManager.getWidth()) / 2;
+            int input_y = (int) (motionEvent.getY() / myRenderManager.getScale());
+            int input_x = (int) (motionEvent.getX() / myRenderManager.getScale());
 
-            if (input_x < 0 || input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
-                return true;
-
-            InputAndroid iA = null;
+            InputAndroid iA;
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     goneFlag = false;
                     input_x_original = input_x;
                     input_y_original = input_y;
-                    iA = new InputAndroid( input_x, input_y, InputType.TOUCH_DOWN,
+                    iA = new InputAndroid(input_x, input_y, InputType.TOUCH_DOWN,
                             motionEvent.getActionIndex());
                     myInputManager.addInput(iA);
                     handler.postDelayed(mLongPressed, 500);
                     break;
                 case MotionEvent.ACTION_UP:
                     handler.removeCallbacks(mLongPressed);
-                    if(!goneFlag) {
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_UP,
+                    if (!goneFlag) {
+                        iA = new InputAndroid(input_x, input_y, InputType.TOUCH_UP,
                                 motionEvent.getActionIndex());
                         myInputManager.addInput(iA);
                         return true;
-                    }
-                    else {
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_LONG,
+                    } else {
+                        iA = new InputAndroid(input_x, input_y, InputType.TOUCH_LONG,
                                 motionEvent.getActionIndex());
                         myInputManager.addInput(iA);
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
 //              if (!(Math.abs(input_x - input_x_original) <= 5 && Math.abs(input_y - input_y_original) <= 5))
-                        iA = new InputAndroid( input_x, input_y, InputType.TOUCH_MOVE,
-                                motionEvent.getActionIndex());
-                        myInputManager.addInput(iA);
+                    iA = new InputAndroid(input_x, input_y, InputType.TOUCH_MOVE,
+                            motionEvent.getActionIndex());
+                    myInputManager.addInput(iA);
                     break;
             }
             return true;
