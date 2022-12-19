@@ -63,7 +63,7 @@ public class SelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engine) {
+    public void handleInput(InputAndroid input, EngineAndroid engRef) {
         if (input.getType() == InputType.TOUCH_UP) {
             int x = 0, y = 0;
             if (t4x4.isInButton(input.getX(), input.getY())){
@@ -91,13 +91,13 @@ public class SelectionMenu implements IScene {
                 y=10;
             }
             else if(backButton.isInButton(input.getX(), input.getY())){
-                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
-                backButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);
+                backButton.clicked(engRef.getAudio());
             }
 
             if(x != 0){
-                t4x4.clicked(engine.getAudio());
-                engine.getSceneManager().changeScene(new BoardScene(x, y), engine);
+                t4x4.clicked(engRef.getAudio());
+                engRef.getSceneManager().changeScene(new BoardScene(x, y), engRef);
             }
         }
     }

@@ -120,14 +120,17 @@ public class BoardScene implements IScene {
 
                 if (board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
                     GameManager.getInstance().updateCategory(actCategory, actLevel, null);
-                    engine.getSceneManager().changeScene(new WinScene(board, true), engine);
+                    engine.getSceneManager().changeScene(new WinScene(board, true, actCategory), engine);
                 }
                 if(lives == 0)
-                    engine.getSceneManager().changeScene(new WinScene(board, false), engine);
+                    engine.getSceneManager().changeScene(new WinScene(board, false, actCategory), engine);
             }
             else if (backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
                 backButton.clicked(engine.getAudio());
-                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
+                if(actCategory == 0)
+                    engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
+                else
+                    engine.getSceneManager().changeScene(new LevelHistorySelectionMenu(actCategory), engine);
 
                 GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
             }

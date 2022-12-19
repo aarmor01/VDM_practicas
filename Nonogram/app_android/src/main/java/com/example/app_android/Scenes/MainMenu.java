@@ -52,10 +52,10 @@ public class MainMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engine) {
+    public void handleInput(InputAndroid input, EngineAndroid engRef) {
         if (input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())) {
-            engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
-            playButton.clicked(engine.getAudio());
+            engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);
+            playButton.clicked(engRef.getAudio());
         }
     }
 
