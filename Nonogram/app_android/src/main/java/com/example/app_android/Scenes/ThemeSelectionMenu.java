@@ -29,7 +29,7 @@ public class ThemeSelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         backFont = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
         animalThemeButton = new Button(0, (int)(engRef.getRender().getHeight() / 4.0),
@@ -62,6 +62,11 @@ public class ThemeSelectionMenu implements IScene {
     }
 
     @Override
+    public void rearrange(EngineAndroid engRef) {
+
+    }
+
+    @Override
     public void update(double deltaTime) {
         coinIndicator.setText(Integer.toString(GameManager.getInstance().getCoins()));
     }
@@ -81,37 +86,37 @@ public class ThemeSelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engine) {
+    public void handleInput(InputAndroid input, EngineAndroid engRef) {
         GameManager gM = GameManager.getInstance();
         if(input.getType() == InputType.TOUCH_UP){
             if (animalThemeButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/animales/", 1), engine);
-                animalThemeButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(1), engRef);
+                animalThemeButton.clicked(engRef.getAudio());
             }
             else if (emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 0) {
                 if(gM.getLevelUnlocked(2) == -1){
                     gM.updateCategory(2, 0, null);
                 }
-                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/emojis/", 2), engine);
-                emojiThemeButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(2), engRef);
+                emojiThemeButton.clicked(engRef.getAudio());
             }
             else if (theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
                 if(gM.getLevelUnlocked(3) == -1){
                     gM.updateCategory(3, 0, null);
                 }
-                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/theme3/", 3), engine);
-                emojiThemeButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(3), engRef);
+                emojiThemeButton.clicked(engRef.getAudio());
             }
             else if (theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > 20) {
                 if(gM.getLevelUnlocked(4) == -1) {
                     gM.updateCategory(4, 0, null);
                 }
-                engine.getSceneManager().changeScene(new LevelHistorySelectionMenu("levels/theme4/", 4), engine);
-                emojiThemeButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(4), engRef);
+                emojiThemeButton.clicked(engRef.getAudio());
             }
             else if(backButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
-                backButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);
+                backButton.clicked(engRef.getAudio());
             }
         }
     }

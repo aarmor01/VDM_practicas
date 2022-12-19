@@ -22,7 +22,7 @@ public class ModeSelectionMenu implements IScene {
     public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         int getW = engRef.getRender().getWidth();
         int getH = engRef.getRender().getHeight();
 
@@ -33,6 +33,11 @@ public class ModeSelectionMenu implements IScene {
         coinIndicator = new Button(5* getW/8, 0, getW/4, getW/8, Integer.toString(GameManager.getInstance().getCoins()),
                 engRef.getRender().loadImage("./assets/images/coin.png"), fontButton, "", false);
         mainText = "Chose play mode:";
+    }
+
+    @Override
+    public void rearrange(EngineAndroid engRef) {
+
     }
 
     @Override
@@ -55,15 +60,15 @@ public class ModeSelectionMenu implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engine) {
+    public void handleInput(InputAndroid input, EngineAndroid engRef) {
         if(input.getType() == InputType.TOUCH_UP || input.getType() == InputType.TOUCH_LONG) {
             if (playRandomLevelButton.isInButton(input.getX(), input.getY())){
-                engine.getSceneManager().changeScene(new SelectionMenu(), engine);
-                playRandomLevelButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new SelectionMenu(), engRef);
+                playRandomLevelButton.clicked(engRef.getAudio());
             }
             else if (playThemeButton.isInButton(input.getX(), input.getY())) {
-                engine.getSceneManager().changeScene(new ThemeSelectionMenu(), engine);
-                playThemeButton.clicked(engine.getAudio());
+                engRef.getSceneManager().changeScene(new ThemeSelectionMenu(), engRef);
+                playThemeButton.clicked(engRef.getAudio());
             }
         }
     }

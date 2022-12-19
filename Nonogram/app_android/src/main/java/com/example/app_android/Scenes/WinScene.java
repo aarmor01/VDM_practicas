@@ -19,13 +19,14 @@ public class WinScene implements IScene {
     private Button backButton;
     private Button coinsButton;
     private boolean victory;
-    private int coins;
+    private int coins, category;
 
     //private EngineAndroid engRef;
 
-    public WinScene(Board b, boolean win){
+    public WinScene(Board b, boolean win, int categ){
         board = b;
         victory = win;
+        category = categ;
     }
 
     @Override
@@ -54,6 +55,11 @@ public class WinScene implements IScene {
     }
 
     @Override
+    public void rearrange(EngineAndroid engRef) {
+
+    }
+
+    @Override
     public void update(double deltaTime) {
 
     }
@@ -72,10 +78,13 @@ public class WinScene implements IScene {
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engine) {
+    public void handleInput(InputAndroid input, EngineAndroid engRef) {
         if(input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())){
-            engine.getSceneManager().changeScene(new MainMenu(), engine);
-            backButton.clicked(engine.getAudio());
+            if(category == 0)
+                engRef.getSceneManager().changeScene(new SelectionMenu(), engRef);
+            else
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(category), engRef);
+            backButton.clicked(engRef.getAudio());
         }
     }
 }

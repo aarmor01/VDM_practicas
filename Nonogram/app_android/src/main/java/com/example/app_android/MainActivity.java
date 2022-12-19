@@ -1,5 +1,6 @@
 package com.example.app_android;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -24,6 +25,8 @@ import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.google.android.gms.ads.AdView;
+
 import com.example.app_android.Scenes.MainMenu;
 import com.example.engine_android.EngineAndroid;
 
@@ -35,25 +38,22 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     // engine's window ratio and background colour
-    final float RATIO = 4.0f/6.0f;
+    final float RATIO = 4.0f / 6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
     final long NOTIFICATION_PUSH = 30;
+    final String SCENE_ID = "SAVED_SCENE";
 
     // engine
-    EngineAndroid engine;
+    private EngineAndroid engine;
+
+    // sensor
     private SensorManager sensorManager;
     private Sensor sensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         WorkManager.getInstance(this).cancelAllWork();
-
-        // set sensor and sensor manager
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
 
         // set surface view
         setContentView(R.layout.activity_main);
@@ -63,15 +63,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         activityConfigurations();
 
         // create engine
-        engine = new EngineAndroid(renderView, this, this.getBaseContext(), RATIO, BACKGROUND_COLOR);
+        this.engine = new EngineAndroid(renderView, this, RATIO, BACKGROUND_COLOR);
 
         // start ad process
-//        engine.getAdSystem().preloadBannerAd((AdView)findViewById(R.id.adView));
-//        engine.getAdSystem().preloadRewardedAd();
+        // this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
+        this.engine.getAdSystem().loadRewardedAd();
 
         // load files
-        GameManager.init(engine, savedInstanceState);
-        engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
+        GameManager.init(this.engine, savedInstanceState);
+        this.engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
+
+        // set sensor and sensor manager
+        this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         //creates notification channel
         engine.getIntentSystemAndroid().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
     }
@@ -83,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // create start scene if no scene has been initialised
         // (defensive code just in case, we should be fine with
         // just the onConfigurationChanged)
-        if (engine.getSceneManager().isEmpty()) {
+        if (this.engine.getSceneManager().isEmpty()) {
             MainMenu scene = new MainMenu();
-            engine.getSceneManager().changeScene(scene, engine);
+            this.engine.getSceneManager().changeScene(scene, engine);
         }
     }
 
@@ -95,26 +101,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // resume engine process cycle
         engine.resume();
-        sensorManager .registerListener( this, sensor, SensorManager. SENSOR_DELAY_NORMAL);
 
+        // register listener
+        this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // if the onCreate method doesn't work, we load data here
         if (GameManager.getInstance() == null)
-            GameManager.init(engine, savedInstanceState);
+            GameManager.init(this.engine, savedInstanceState);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            System.out.println("Landscape");
-        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-            System.out.println("Portrait");
+        // updates the orientation of the screen
+        this.engine.updateConfiguration(newConfig);
     }
 
     @Override
@@ -122,17 +126,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
 
         // pause engine process cycle
-        engine.pause();
-        engine.getAudio().stopMusic();
-        sensorManager .unregisterListener( this);
+        this.engine.pause();
+        this.engine.getAudio().stopMusic();
+
+        // sensor things i guess
+        this.sensorManager.unregisterListener(this);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // save data
-        GameManager.shutdown(engine, outState);
+        GameManager.shutdown(this.engine, outState);
     }
 
     @Override
@@ -149,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // in case we haven't gone to onSaveInstanceState(), we
         // save data in this part of the lifecycle
-        if(GameManager.getInstance() != null)
-            GameManager.shutdown(engine, null);
+        if (GameManager.getInstance() != null)
+            GameManager.shutdown(this.engine, null);
     }
 
     private void activityConfigurations() {
@@ -168,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getSupportActionBar().hide();
     }
 
+    // notification tryout?
     private void createWorkRequest(String channel_id, String title, String text){
         HashMap<String, Object> dataValues = new HashMap<>();
         dataValues.put("chanel", channel_id);

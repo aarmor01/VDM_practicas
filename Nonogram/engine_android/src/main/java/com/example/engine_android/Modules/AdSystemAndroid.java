@@ -59,7 +59,7 @@ public class AdSystemAndroid {
     }
 
     // Banner
-    public void preloadBannerAd(AdView adView) {
+    public void loadBannerAd(AdView adView) {
         this.bannerAd = adView;
         adView.loadAd(this.adRequest);
     }
@@ -75,7 +75,7 @@ public class AdSystemAndroid {
     }
 
     // Rewarded
-    public void preloadRewardedAd() {
+    public void loadRewardedAd() {
         RewardedAd.load(this.activity, REWARD_AD_TOKEN, adRequest,
                 new MyRewardedAdLoadCallback());
     }
@@ -104,17 +104,18 @@ public class AdSystemAndroid {
 
         @Override
         public void run() {
-            RewardedAd.load(this.activity, REWARD_AD_TOKEN, adRequest,
-                    new MyRewardedAdLoadCallback());
-
-            if (rewardAd == null) {
+            // if ad hasn't load
+            if (rewardAd == null)
                 System.out.println("Reward ad not set up yet.");
-                return;
+            else {
+                // show ad (we assume one has been preloaded before)
+                rewardAd.setFullScreenContentCallback(new MyFullScreenContentCallback());
+                rewardAd.show(this.activity, new MyUserEarnedRewardListener());
+                rewardAd = null;
             }
 
-            rewardAd.setFullScreenContentCallback(new MyFullScreenContentCallback());
-            rewardAd.show(this.activity, new MyUserEarnedRewardListener());
-            rewardAd = null;
+            // load ad for next showing
+            loadRewardedAd();
         }
     }
 
