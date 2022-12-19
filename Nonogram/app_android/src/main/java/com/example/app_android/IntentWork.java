@@ -29,10 +29,10 @@ public class IntentWork extends Worker {
         PendingIntent contentIntent = PendingIntent. getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent. FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, data.getString("chanel"))
                 .setSmallIcon(data.getInt("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg))
-                .setContentTitle( "My notification" )
-                .setContentText( "Much longer text that cannot fit one line..." )
+                .setContentTitle( data.getString("contentTitle") )
+                .setContentText( data.getString("contentText") )
                 .setStyle( new NotificationCompat.BigTextStyle()
-                        .bigText( "Much longer text that cannot fit one line..." ))
+                        .bigText( data.getString("contentText") ))
                 .setPriority(NotificationCompat. PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);

@@ -1,5 +1,11 @@
 package com.example.app_android.Scenes;
 
+import static com.example.engine_android.Modules.IntentSystemAndroid.SocialNetwork.TWITTER;
+
+import android.content.Intent;
+import android.net.Uri;
+
+import com.example.app_android.MainActivity;
 import com.example.app_android.Objects.Button;
 
 import com.example.app_android.R;
@@ -52,7 +58,8 @@ public class MainMenu implements IScene {
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engine) {
         if(input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())){
-            engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
+            //engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
+            engine.getIntentSystemAndroid().share(TWITTER, "hehe twitter que guapo");
             playButton.clicked(engine.getAudio());
         }
     }

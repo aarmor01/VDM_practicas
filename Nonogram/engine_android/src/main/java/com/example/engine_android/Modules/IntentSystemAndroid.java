@@ -1,61 +1,88 @@
 package com.example.engine_android.Modules;
 
-import static android.provider.Settings.System.getString;
-
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.ArrayList;
+
 public class IntentSystemAndroid {
+
+    public enum SocialNetwork {
+        TWITTER
+    }
+
     // activity context
     private Context context;
     private Activity activity;
-    private String channel_name;
-    private String channel_description;
-    private String channel_id;
+    private ArrayList<String> channel_names;
+    private ArrayList<String> channel_descriptions;
+    private ArrayList<String> channel_ids;
+    int numChannels;
 
     public IntentSystemAndroid(Context cont) {
         this.context = cont;
-        this.channel_name = "Pruebas";
-        this.channel_description = "Esto es un canal de Prueba";
-        this.channel_id = "nonogram_prueba";
+        this.numChannels = 0;
 
-        createChannel();
+        //nos guardamos la informacion por posible utilidad en el futuro
+        this.channel_names = new ArrayList<>();
+        this.channel_descriptions = new ArrayList<>();
+        this.channel_ids = new ArrayList<>();
     }
 
-    private void createChannel() {
+    public void createChannel(String channel_name, String channel_descriptions, String channel_id) {
+        this.channel_names.add(channel_name);
+        this.channel_descriptions.add(channel_descriptions);
+        this.channel_ids.add(channel_id);
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
             int importance = NotificationManager. IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(this.channel_id , this.channel_name, importance) ;
-            channel.setDescription(this.channel_description) ;
+            NotificationChannel channel = new NotificationChannel(channel_id , channel_name, importance) ;
+            channel.setDescription(channel_descriptions) ;
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = this.context.getSystemService(NotificationManager. class);
             notificationManager.createNotificationChannel(channel) ;
         }
+        this.numChannels++;
     }
 
-    public void createNotification(int icon) {
-        //Intent intent = new Intent(context , MiClase.class);
-        //PendingIntent contentIntent = PendingIntent. getActivity(context, 0, intent, PendingIntent. FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, this.channel_id)
-                .setSmallIcon(icon)
-                .setContentTitle( "My notification" )
-                .setContentText( "Much longer text that cannot fit one line..." )
-                .setStyle( new NotificationCompat.BigTextStyle()
-                        .bigText( "Much longer text that cannot fit one line..." ))
-                .setPriority(NotificationCompat. PRIORITY_DEFAULT)
-                //.setContentIntent(contentIntent)
-                .setAutoCancel(true);
+    public void share(SocialNetwork socialNetwork, String msg) {
+        Intent intent;
+        PackageManager packageManager = context.getPackageManager();
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
-        managerCompat.notify(1, builder.build());
+        switch (socialNetwork) {
+            case TWITTER:
+                try {
+                    PackageInfo packageInfo = packageManager.getPackageInfo("com.twitter.android", packageManager.GET_META_DATA);
+                    intent = new Intent(Intent.ACTION_SEND);
+                    intent.setClassName("com.twitter.android", "com.twitter.android.PostActivity");
+                    intent.setType("text/*");
+                    intent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
+                } catch (PackageManager.NameNotFoundException e) {
+                    String tweetUrl = "https://twitter.com/intent/tweet?text=" + msg;
+                    Uri uri = Uri.parse(tweetUrl);
+                    intent = new Intent(Intent.ACTION_VIEW, uri);
+
+//                    String tweetUrl = "https://twitter.com/intent/tweet?text=";
+//                    Uri uri = Uri.parse(tweetUrl).buildUpon().appendQueryParameter("text", tweetUrl + msg).build();
+//                    intent = new Intent(Intent.ACTION_VIEW, uri);
+                }
+                break;
+            default:
+                return;
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

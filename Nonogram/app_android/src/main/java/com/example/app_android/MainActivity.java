@@ -8,11 +8,15 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WorkManager.getInstance(this).cancelAllWork();
+
         // set sensor and sensor manager
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -65,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // load files
         GameManager.init(engine, savedInstanceState);
         engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
-
-        createWorkRequest();
+        //creates notification channel
+        engine.getIntentSystemAndroid().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
     }
 
     @Override
@@ -129,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        createWorkRequest("not_nonogram", "Nonograms need you!", "Time to play some Nonograms and save the world");
+        startPeriodicWorkRequest("not_nonogram", "We miss you!", "If you don't play all of us will starve to death");
+    }
+
+    @Override
     protected void onDestroy(){
         super.onDestroy();
 
@@ -153,12 +168,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getSupportActionBar().hide();
     }
 
-    private void createWorkRequest(){
+    private void createWorkRequest(String channel_id, String title, String text){
         HashMap<String, Object> dataValues = new HashMap<>();
-        dataValues.put("chanel", "nonogram_prueba");
+        dataValues.put("chanel", channel_id);
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
-        //dataValues.put("mainClass", MainActivity.class);
+        dataValues.put("contentTitle", title);
+        dataValues.put("contentText", text);
         Data inputData = new Data.Builder().putAll(dataValues).build();
+
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(IntentWork.class)
                         // Additional configuration
@@ -167,6 +184,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         .build();
 
         WorkManager.getInstance(this).enqueue(uploadWorkRequest);
+    }
+
+    private void startPeriodicWorkRequest(String channel_id, String title, String text) {
+        HashMap<String, Object> dataValues = new HashMap<>();
+        dataValues.put("chanel", "not_nonogram");
+        dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
+        dataValues.put("contentTitle", title);
+        dataValues.put("contentText", text);
+        Data inputData = new Data.Builder().putAll(dataValues).build();
 
         PeriodicWorkRequest uploadWorkRequestPeriodic =
                 new PeriodicWorkRequest.Builder(IntentWork.class,
