@@ -1,5 +1,6 @@
 package com.example.app_android.Objects;
 
+import com.example.app_android.Resources;
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.FontType;
 import com.example.engine_android.Modules.RenderAndroid;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
-    static int SEGS_CHECKED = 2;
+    static double SECONDS_CHECKED = 0.5;
 
     private int board_cell_size;
     private int separation_margin;
@@ -116,8 +117,8 @@ public class Board {
         posX = (eng.getRender().getWidth() - (board_cell_size + separation_margin) * width - maxNumbers * fontSize) / 2;
         posY = ((int) (eng.getRender().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
 
-        font = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
-        fontWrongText = eng.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, eng.getRender().getWidth() / 20);
+        font = eng.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
+        fontWrongText = Resources.FONT_SIMPLY_SQUARE_BIG;
         lastTimeChecked = -1;
     }
 
@@ -214,7 +215,7 @@ public class Board {
             checkedCells.add(board[boardX][boardY]);
         }
 
-        lastTimeChecked = SEGS_CHECKED;
+        lastTimeChecked = SECONDS_CHECKED;
         if (cellsLeft == 0)
             win = true;
 

@@ -84,18 +84,16 @@ public class RenderAndroid {
 
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        String convFilepath = filePath.replaceAll("./assets/", "");
         if(!this.images.containsKey(imageFile.getName()))
-            this.images.put(imageFile.getName(), new ImageAndroid(convFilepath, this.assetManager));
+            this.images.put(imageFile.getName(), new ImageAndroid(filePath, this.assetManager));
         return imageFile.getName();
     }
 
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
         String fontID = fontFile.getName() + type.toString() + size;
-        String convFilepath = filePath.replaceAll("./assets/", "");
         if(!this.fonts.containsKey(fontID))
-            this.fonts.put(fontID, new FontAndroid(convFilepath, this.assetManager, size, type));
+            this.fonts.put(fontID, new FontAndroid(filePath, this.assetManager, size, type));
         return fontID;
     }
 
@@ -109,7 +107,7 @@ public class RenderAndroid {
         this.paint.setTextSize(font.getSize());
     }
 
-    public void setBackGorundColor(int hexColor){ bgColor = hexColor; }
+    public void setBackGroundColor(int hexColor){ bgColor = hexColor; }
 
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);

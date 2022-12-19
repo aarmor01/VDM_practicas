@@ -2,6 +2,7 @@ package com.example.app_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
@@ -9,26 +10,21 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
-import com.example.app_android.Scenes.BootScene;
 import com.google.android.gms.ads.AdView;
 
-import com.example.app_android.Scenes.MainMenu;
+import com.example.app_android.Scenes.BootScene;
+
 import com.example.engine_android.EngineAndroid;
 
 import java.util.HashMap;
@@ -40,8 +36,8 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     // engine's window ratio and background colour
     final float RATIO = 4.0f / 6.0f;
-    final int BACKGROUND_COLOR = 0xFFFFFFFF;
     final long NOTIFICATION_PUSH = 30;
+    final int BACKGROUND_COLOR = 0xFFFFFFFF;
 
     // engine
     private EngineAndroid engine;
@@ -66,44 +62,40 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.engine = new EngineAndroid(renderView, this, RATIO, BACKGROUND_COLOR);
 
         // start ad process
-        // this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
+         this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
         this.engine.getAdSystem().loadRewardedAd();
-
-        // load files
-        GameManager.init(this.engine, savedInstanceState);
-        this.engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
 
         // set sensor and sensor manager
         this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         //creates notification channel
-        this.engine.getIntentSystem().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
+        this.engine.getIntentSystem().createChannel("Nonogram",
+                "Notifications for Nonogram App", "not_nonogram");
+
+        // load files
+        GameManager.init(this.engine, savedInstanceState);
+        this.engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // create start scene if no scene has been initialised
-        // (defensive code just in case, we should be fine with
-        // just the onConfigurationChanged)
-        if (this.engine.getSceneManager().isEmpty()) {
-            BootScene scene = new BootScene();
-            this.engine.getSceneManager().changeScene(scene, engine);
-        }
+        // create boot scene
+        BootScene scene = new BootScene();
+        this.engine.getSceneManager().changeScene(scene, engine);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        // resume engine process cycle
-        engine.resume();
-
         // register listener
         this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // resume engine process cycle
+        this.engine.resume();
     }
 
     @Override
@@ -127,9 +119,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // pause engine process cycle
         this.engine.pause();
-        this.engine.getAudio().stopMusic();
 
-        // sensor things i guess
+        // sensor things
         this.sensorManager.unregisterListener(this);
     }
 
@@ -145,12 +136,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onStop() {
         super.onStop();
 
+        // not
         createWorkRequest("not_nonogram", "Nonograms need you!", "Time to play some Nonograms and save the world");
         startPeriodicWorkRequest("not_nonogram", "We miss you!", "If you don't play all of us will starve to death");
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
 
         // in case we haven't gone to onSaveInstanceState(), we
@@ -175,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     // notification tryout?
-    private void createWorkRequest(String channel_id, String title, String text){
+    private void createWorkRequest(String channel_id, String title, String text) {
         HashMap<String, Object> dataValues = new HashMap<>();
         dataValues.put("chanel", channel_id);
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
@@ -195,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void startPeriodicWorkRequest(String channel_id, String title, String text) {
         HashMap<String, Object> dataValues = new HashMap<>();
-        dataValues.put("chanel", "not_nonogram");
+        dataValues.put("chanel", channel_id);
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
         dataValues.put("contentTitle", title);
         dataValues.put("contentText", text);
@@ -217,14 +209,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
             float sensorValue = sensorEvent.values[0];
             // TODO
+
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
         if (sensor.getType() == Sensor.TYPE_LIGHT) {
-
             // TODO
+
         }
     }
 }

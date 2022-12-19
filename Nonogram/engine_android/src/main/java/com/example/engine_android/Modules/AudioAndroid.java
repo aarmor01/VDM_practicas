@@ -39,8 +39,7 @@ public class AudioAndroid {
         AssetFileDescriptor assetFD = null;
         try {
             // load the music resource from assets folder
-            String convFilepath = filePath.replaceAll("./assets/", "");
-            assetFD = this.assetManager.openFd(convFilepath);
+            assetFD = this.assetManager.openFd(filePath);
             this.mediaPlayer.setDataSource(assetFD.getFileDescriptor(),
                     assetFD.getStartOffset(), assetFD.getLength());
 
@@ -58,29 +57,36 @@ public class AudioAndroid {
     public String loadSound(String filePath, float volume) {
         //obtains the path of the sound in the assets folder
         File soundFile = new File(filePath);
-        String convFilepath = filePath.replaceAll("./assets/", "");
         //if the sound has not been already been loaded, it is stored in the sounds manager
-        if(!this.sounds.containsKey(soundFile.getName()))
-            this.sounds.put(soundFile.getName(), new SoundAndroid(convFilepath, this.assetManager, this.soundPool, volume));
+        if (!this.sounds.containsKey(soundFile.getName()))
+            this.sounds.put(soundFile.getName(), new SoundAndroid(filePath, this.assetManager, this.soundPool, volume));
         return soundFile.getName(); //it returns the name of the sound in order to looking for it when you need to play it
     }
 
     public void playMusic() {
         this.mediaPlayer.start();
     }
-    public void stopMusic() { this.mediaPlayer.stop(); }
 
     public void playSound(String soundName) {
         //looks for the sound in the sound manager, and plays it on the audio player of sound effects
         SoundAndroid sound = this.sounds.get(soundName);
-        this.soundPool.play(sound.getSoundId(), sound.getVolume(),  sound.getVolume(), sound.getPriority(), sound.getLoop(), sound.getRate());
+        this.soundPool.play(sound.getSoundId(), sound.getVolume(), sound.getVolume(), sound.getPriority(), sound.getLoop(), sound.getRate());
+    }
+
+    public void pauseMusic() {
+        this.mediaPlayer.pause();
+    }
+
+    public void pauseSound(String soundName) {
+        SoundAndroid sound = this.sounds.get(soundName);
+        this.soundPool.pause(sound.getSoundId());
     }
 
     public void setMusicVolume(float volume) {
         this.mediaPlayer.setVolume(volume, volume);
     }
 
-    public void setSoundVolume(String name, float volume){
-        this.sounds.get(name).setVolume(volume);
+    public void setSoundVolume(String soundName, float volume) {
+        this.sounds.get(soundName).setVolume(volume);
     }
 }

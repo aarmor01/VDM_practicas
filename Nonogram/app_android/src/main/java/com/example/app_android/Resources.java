@@ -12,7 +12,8 @@ public class Resources {
     public static String FONT_EXO_REGULAR_BIG = null;
     public static String FONT_EXO_REGULAR_MEDIUM = null;
     public static String FONT_KOMIKAX = null;
-    public static String FONT_SIMPLY_SQUARE = null;
+    public static String FONT_SIMPLY_SQUARE_BIG = null;
+    public static String FONT_SIMPLY_SQUARE_MEDIUM = null;
 
     // sounds
     public static String SOUND_BUTTON = null;
