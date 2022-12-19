@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 // onPause() ➟ onStop() ➟ onSaveInstanceState() ➟ onDestroy() ➟ Same Activity Opened Again ➟
 // onCreate() ➟ onStart() ➟ onRestoreInstanceState() ➟ onResume()
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity {
     // engine's window ratio and background colour
     final float RATIO = 4.0f / 6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
@@ -73,13 +73,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         GameManager.init(this.engine, savedInstanceState);
         this.engine.getRender().setBackGorundColor(GameManager.getInstance().getColor(0));
 
-        // set sensor and sensor manager
-        this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
-
         //creates notification channel
-        engine.getIntentSystemAndroid().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
+        engine.getIntentSystem().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
     }
 
     @Override
@@ -101,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // resume engine process cycle
         engine.resume();
-
-        // register listener
-        this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -128,9 +120,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // pause engine process cycle
         this.engine.pause();
         this.engine.getAudio().stopMusic();
-
-        // sensor things i guess
-        this.sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -210,21 +199,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         .build();
 
         WorkManager.getInstance(this).enqueue(uploadWorkRequestPeriodic);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
-            float sensorValue = sensorEvent.values[0];
-            // TODO
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        if (sensor.getType() == Sensor.TYPE_LIGHT) {
-
-            // TODO
-        }
     }
 }
