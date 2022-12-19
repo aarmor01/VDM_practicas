@@ -23,7 +23,7 @@ public class Button {
         font = f;
         image = im;
         sound = s;
-        color = GameManager.getInstance().getColor(GameManager.ColorTypes.auxColor.ordinal());
+        color = GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal());
         mode = m;
     }
 

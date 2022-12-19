@@ -16,16 +16,16 @@ public class Cell {
         int color = 0xFF000000;
         switch (s){
             case EMPTY:
-                color = GameManager.getInstance().getColor(GameManager.ColorTypes.auxColor.ordinal());
+                color = GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal());
                 break;
             case MARKED:
-                color = GameManager.getInstance().getColor(GameManager.ColorTypes.mainColor.ordinal());
+                color = GameManager.getInstance().getColor(GameManager.ColorTypes.MAIN_COLOR.ordinal());
                 break;
             case CROSSED:
                 color = 0xFFFFFFFF;
                 break;
             case CHECKED:
-                color = GameManager.getInstance().getColor(GameManager.ColorTypes.secondaryColor.ordinal());
+                color = GameManager.getInstance().getColor(GameManager.ColorTypes.SECONDARY_COLOR.ordinal());
                 break;
         }
         renderMng.setColor(color);

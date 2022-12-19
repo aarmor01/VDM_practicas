@@ -92,7 +92,7 @@ public class PaletteMenu implements IScene {
                     gM.addCoins(-PALETTE_VALUE);
                 }
                 gM.setPalette(x);
-                engRef.getRender().setBackGroundColor(GameManager.getInstance().getColor(GameManager.ColorTypes.bgColor.ordinal()));
+                engRef.getRender().setBackGroundColor(GameManager.getInstance().getColor(GameManager.ColorTypes.BG_COLOR.ordinal()));
                 this.paletteButtons[0].clicked(engRef.getAudio());
                 coinIndicator.setText(Integer.toString(gM.getCoins()));
             }
