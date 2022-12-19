@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         // resume engine process cycle
         this.engine.resume();
-
-        this.engine.getLightSensor().onResume();
     }
 
     @Override
@@ -114,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
         // pause engine process cycle
         this.engine.pause();
-
-        this.engine.getLightSensor().onPause();
     }
 
     @Override

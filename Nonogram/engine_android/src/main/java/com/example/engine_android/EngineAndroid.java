@@ -126,6 +126,8 @@ public class EngineAndroid implements Runnable {
 
             // resume audio
             this.myAudioManager.playMusic();
+
+            this.myLightSensor.onResume();
         }
     }
 
@@ -133,6 +135,7 @@ public class EngineAndroid implements Runnable {
         if (this.running) {
             // pause audio
             this.myAudioManager.pauseMusic();
+            this.myLightSensor.onPause();
 
             // pause engine
             this.running = false;
