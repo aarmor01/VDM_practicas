@@ -62,11 +62,7 @@ public class RenderAndroid {
     public void holderWait() {
         while (this.holder.getSurfaceFrame().width() == 0) ;
 
-        this.posCanvasX = 0;
-        this.posCanvasY = 0;
         this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
-//        this.baseWidth = this.holder.getSurfaceFrame().width();
-//        this.baseHeight = this.holder.getSurfaceFrame().height();
     }
 
     public boolean surfaceValid() {
@@ -76,7 +72,11 @@ public class RenderAndroid {
     public void clear() {
         this.canvas = this.holder.lockCanvas();
         this.canvas.drawColor(this.bgColor);
-        //this.canvas.translate(this.posCanvasX, this.posCanvasY);
+
+        this.posCanvasX = (int)((this.holder.getSurfaceFrame().width() - this.baseWidth*this.scale) / 2);
+        this.posCanvasY = (int)((this.holder.getSurfaceFrame().height() - this.baseHeight*this.scale) / 2);
+        this.canvas.translate(this.posCanvasX, this.posCanvasY);
+
         this.canvas.scale(this.scale, this.scale);
         setColor(this.bgColor);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
@@ -170,6 +170,10 @@ public class RenderAndroid {
     public int getHeight() {
         return this.myView.getHeight();
     }
+
+    public int getPosCanvasX() { return posCanvasX; }
+
+    public int getPosCanvasY() { return posCanvasY; }
 
 //    public int getViewWidth() {
 //        return this.myView.getWidth();

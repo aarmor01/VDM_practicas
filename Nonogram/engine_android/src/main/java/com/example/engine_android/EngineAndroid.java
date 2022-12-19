@@ -284,8 +284,8 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int input_y = (int) (motionEvent.getY() / myRenderManager.getScale());
-            int input_x = (int) (motionEvent.getX() / myRenderManager.getScale());
+            int input_y = (int) ((motionEvent.getY() - myRenderManager.getPosCanvasY()) / myRenderManager.getScale());
+            int input_x = (int) ((motionEvent.getX() - myRenderManager.getPosCanvasX()) / myRenderManager.getScale());
 
             InputAndroid iA;
 
