@@ -20,7 +20,7 @@ public class GameManager {
     final String FREE_LEVEL_SAVE_NAME = "save_free";
     final String STORY_LEVEL_SAVE_NAME = "save_story_";  // add the level id after this when using it
     final int NUM_LEVELS = 4;
-    final int NUM_PALETTES = 3;
+    final public int NUM_PALETTES = 3;
     final int NUM_COLORS_PER_PALETTE = 4;
 
     // singleton
@@ -190,6 +190,14 @@ public class GameManager {
     }
 
     public int getColor(int colorType){ return palettes[idActPalette][colorType]; }
+
+    public int getActPalette() { return idActPalette; }
+
+    public boolean isPaletteUnlocked(int pId){ return unlockedPalettes[pId]; }
+
+    public void unlockPalette(int pId) { unlockedPalettes[pId] = true; }
+
+    public void setPalette(int pId) { idActPalette = pId; }
 
     public int getCoins(){ return coins; }
 

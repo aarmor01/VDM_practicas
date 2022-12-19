@@ -16,6 +16,7 @@ public class ModeSelectionMenu implements IScene {
 
     private Button playRandomLevelButton;
     private Button playThemeButton;
+    private Button paletteMenu;
     private Button coinIndicator;
 
     @Override
@@ -36,6 +37,8 @@ public class ModeSelectionMenu implements IScene {
                 getW, getH / 8, "RANDOM LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.playThemeButton = new Button(0, (int) (getH / 1.75),
                 getW, getH / 8, "THEME LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.paletteMenu = new Button(0, (int) (getH / 1.1),
+                getW, getH / 8, "PALETTES MENU", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinIndicator = new Button(5 * getW / 8, 0, getW / 4, getW / 8, Integer.toString(GameManager.getInstance().getCoins()),
                 Resources.IMAGE_COIN, Resources.FONT_EXO_REGULAR_MEDIUM, "", false);
     }
@@ -61,6 +64,7 @@ public class ModeSelectionMenu implements IScene {
         // buttons
         this.playRandomLevelButton.render(renderMng);
         this.playThemeButton.render(renderMng);
+        this.paletteMenu.render(renderMng);
         this.coinIndicator.render(renderMng);
     }
 
@@ -73,6 +77,9 @@ public class ModeSelectionMenu implements IScene {
             } else if (this.playThemeButton.isInButton(input.getX(), input.getY())) {
                 engRef.getSceneManager().changeScene(new ThemeSelectionMenu(), engRef);
                 this.playThemeButton.clicked(engRef.getAudio());
+            } else if (this.paletteMenu.isInButton(input.getX(), input.getY())) {
+                engRef.getSceneManager().changeScene(new PaletteMenu(), engRef);
+                this.paletteMenu.clicked(engRef.getAudio());
             }
         }
     }
