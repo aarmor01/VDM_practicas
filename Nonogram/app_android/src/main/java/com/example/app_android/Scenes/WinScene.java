@@ -83,7 +83,7 @@ public class WinScene implements IScene {
             if(this.category == 0)
                 engRef.getSceneManager().changeScene(new SelectionMenu(), engRef);
             else
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(this.category), engRef);
+                engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(this.category), engRef);
             this.backButton.clicked(engRef.getAudio());
         }
     }

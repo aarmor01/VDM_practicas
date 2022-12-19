@@ -10,7 +10,7 @@ import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
-public class LevelHistorySelectionMenu implements IScene {
+public class CategoryLevelSelectionMenu implements IScene {
     private final int LEVELS_PER_CATEGORY = 20;
 
     private Button[] levelSelectionButtons;
@@ -20,7 +20,7 @@ public class LevelHistorySelectionMenu implements IScene {
     private String path;
     private int lastUnlocked, category;
 
-    public LevelHistorySelectionMenu(int cat) {
+    public CategoryLevelSelectionMenu(int cat) {
         switch (cat) {
             case 1:
                 this.path = "levels/animales/";
@@ -91,22 +91,24 @@ public class LevelHistorySelectionMenu implements IScene {
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engRef) {
         if (input.getType() == InputType.TOUCH_UP) {
-            int x = 0;
-            int i = 0;
-            while (x == 0 && i < this.lastUnlocked) {
-                if (this.levelSelectionButtons[i].isInButton(input.getX(), input.getY()))
-                    x = i + 1;
-                i++;
-            }
-
+            // back
             if (this.backButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().changeScene(new ThemeSelectionMenu(), engRef);
                 this.backButton.clicked(engRef.getAudio());
+                engRef.getSceneManager().changeScene(new ThemeSelectionMenu(), engRef);
             }
 
-            if (x != 0) {
+            // check for level selected
+            int level = 0;
+            while (level < this.lastUnlocked) {
+                if (this.levelSelectionButtons[level].isInButton(input.getX(), input.getY()))
+                    break;
+                level++;
+            }
+
+            // if level selected
+            if (level < this.lastUnlocked) {
                 this.levelSelectionButtons[0].clicked(engRef.getAudio());
-                engRef.getSceneManager().changeScene(new BoardScene(this.path, x, this.category), engRef);
+                engRef.getSceneManager().changeScene(new BoardScene(this.path, level + 1, this.category), engRef);
             }
         }
     }

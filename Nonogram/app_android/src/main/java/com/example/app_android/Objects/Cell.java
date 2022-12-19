@@ -4,17 +4,20 @@ import com.example.app_android.GameManager;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class Cell {
-    public enum State {
-        EMPTY, MARKED, CROSSED, CHECKED    }
+    public enum State {EMPTY, MARKED, CROSSED, CHECKED}
 
-    public void init(boolean ans) {
+    private boolean isAnswer;
+    private State state;
+    private State previosToCheckState;
+
+    public void init(boolean ans, State st) {
         isAnswer = ans;
-        s = notCheckedS = State.EMPTY;
+        state = previosToCheckState = st;
     }
 
-    public void render(RenderAndroid renderMng, int x, int y, int size){
+    public void render(RenderAndroid renderMng, int x, int y, int size) {
         int color = 0xFF000000;
-        switch (s){
+        switch (state) {
             case EMPTY:
                 color = GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal());
                 break;
@@ -30,44 +33,57 @@ public class Cell {
         }
         renderMng.setColor(color);
         renderMng.drawRectangle(x, y, size, size, true);
-        if(s == State.CROSSED){
+        if (state == State.CROSSED) {
             renderMng.setColor(0xFF000000);
             renderMng.drawRectangle(x, y, size, size, false);
             renderMng.drawLine(x, y, x + size, y + size);
         }
     }
 
-    public int changeCell(){
-        if(s == State.EMPTY) s=State.MARKED;
-        else if(s == State.MARKED) s=State.CROSSED;
-        else if(s == State.CROSSED) s=State.EMPTY;
+    public int changeCell() {
+        if (state == State.EMPTY) state = State.MARKED;
+        else if (state == State.MARKED) state = State.CROSSED;
+        else if (state == State.CROSSED) state = State.EMPTY;
 
         //Valor para cambiar el contador de casillas restantes
         int retValue = 0;
 
-        if(s==State.CROSSED && isAnswer)
+        if (state == State.CROSSED && isAnswer)
             retValue = -1;
-        else if(s == State.MARKED && isAnswer)
+        else if (state == State.MARKED && isAnswer)
             retValue = 1;
 
         return retValue;
     }
 
-    public void markCell(){
-        if(s == State.EMPTY || s == State.CROSSED) s=State.MARKED;
-        else if(s == State.MARKED) s=State.EMPTY;
+    public void markCell() {
+        if (state == State.EMPTY || state == State.CROSSED) state = State.MARKED;
+        else if (state == State.MARKED) state = State.EMPTY;
     }
 
-    public void crossCell(){
-        if(s == State.EMPTY) s=State.CROSSED;
-        else if(s == State.CROSSED) s=State.EMPTY;
+    public void crossCell() {
+        if (state == State.EMPTY) state = State.CROSSED;
+        else if (state == State.CROSSED) state = State.EMPTY;
     }
 
-    private boolean isAnswer;
-    private State s;
-    private State notCheckedS;
-    public boolean isAnswer(){ return isAnswer;}
-    public State getState(){ return s;}
-    public void setChecked(){ notCheckedS = s; s = State.CHECKED;}
-    public void unChecked(){ s = notCheckedS; }
+    public boolean isAnswer() {
+        return isAnswer;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State st) {
+        state = previosToCheckState = st;
+    }
+
+    public void setChecked() {
+        previosToCheckState = state;
+        state = State.CHECKED;
+    }
+
+    public void unChecked() {
+        state = previosToCheckState;
+    }
 }

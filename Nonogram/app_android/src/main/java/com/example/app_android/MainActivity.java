@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
+import com.example.app_android.Scenes.BoardScene;
 import com.google.android.gms.ads.AdView;
 
 import com.example.app_android.Scenes.BootScene;
@@ -119,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         // save data
+        if(this.engine.getSceneManager().currentScene().getId() == "BoardScene")
+            ((BoardScene)this.engine.getSceneManager().currentScene()).updateCategoryInformation();
         GameManager.shutdown(this.engine, outState);
     }
 
@@ -126,19 +130,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        // not
+        // notifications
         createWorkRequest("not_nonogram", "Nonograms need you!", "Time to play some Nonograms and save the world");
         startPeriodicWorkRequest("not_nonogram", "We miss you!", "If you don't play all of us will starve to death");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
 
         // in case we haven't gone to onSaveInstanceState(), we
         // save data in this part of the lifecycle
-        if (GameManager.getInstance() != null)
-            GameManager.shutdown(this.engine, null);
+//        if (GameManager.getInstance() != null)
+//            GameManager.shutdown(this.engine, null);
     }
 
     private void activityConfigurations() {

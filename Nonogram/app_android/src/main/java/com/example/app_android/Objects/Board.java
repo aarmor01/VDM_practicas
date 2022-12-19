@@ -60,10 +60,10 @@ public class Board {
             for (int j = 0; j < height; j++) {
                 if(content == null){        //Diferenciamos entre lectura de ficharo y aleatorio
                     int rand = random.nextInt(10);
-                    board[i][j].init(rand < 4);
+                    board[i][j].init(rand < 4, Cell.State.EMPTY);
                 }
                 else{
-                    board[i][j].init(content.get(j+1).charAt(i) == 'O');
+                    board[i][j].init(content.get(j+1).charAt(i) == 'O', Cell.State.EMPTY);
                 }
 
                 if (board[i][j].isAnswer()) {   //Si la casilla es solucion modificamos los arrays de filas-columnas
@@ -262,6 +262,31 @@ public class Board {
 
     public int getHeight() {
         return rows.length;
+    }
+
+    public int[][] getBoardState() {
+        int[][] cellState = new int[board.length][board[0].length];
+
+        for (int row = 0; row < board.length; row++)
+            for (int col = 0; col < board[0].length; col++) // we ignore the marked state
+                cellState[row][col] = board[col][row].getState().ordinal() % 3;
+
+        return cellState;
+    }
+
+    public int setBoardState(int[][] savedState) {
+        for (int row = 0; row < board.length; row++){
+            for (int col = 0; col < board[0].length; col++){
+                Cell.State cellState = Cell.State.values()[savedState[row][col]];
+                board[col][row].setState(cellState); // if checked, it was an answer
+                if(cellState == Cell.State.CHECKED) {
+                    checkedCells.add(board[col][row]);
+                    cellsLeft -= 1;
+                }
+            }
+        }
+
+        return 0;
     }
 
     public String getFont() {

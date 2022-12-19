@@ -93,25 +93,25 @@ public class ThemeSelectionMenu implements IScene {
         GameManager gM = GameManager.getInstance();
         if (input.getType() == InputType.TOUCH_UP) {
             if (this.animalThemeButton.isInButton(input.getX(), input.getY())) {
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(1), engRef);
+                engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(1), engRef);
                 this.animalThemeButton.clicked(engRef.getAudio());
             } else if (this.emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 0) {
                 if (gM.getLevelUnlocked(2) == -1) {
-                    gM.updateCategory(2, 0, null);
+                    gM.updateCategory(2, 0, null, -1);
                 }
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(2), engRef);
+                engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(2), engRef);
                 this.emojiThemeButton.clicked(engRef.getAudio());
             } else if (this.theme3ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
                 if (gM.getLevelUnlocked(3) == -1) {
-                    gM.updateCategory(3, 0, null);
+                    gM.updateCategory(3, 0, null, -1);
                 }
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(3), engRef);
+                engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(3), engRef);
                 this.emojiThemeButton.clicked(engRef.getAudio());
             } else if (this.theme4ThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > 20) {
                 if (gM.getLevelUnlocked(4) == -1) {
-                    gM.updateCategory(4, 0, null);
+                    gM.updateCategory(4, 0, null, -1);
                 }
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(4), engRef);
+                engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(4), engRef);
                 this.emojiThemeButton.clicked(engRef.getAudio());
             } else if (this.backButton.isInButton(input.getX(), input.getY())) {
                 engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);

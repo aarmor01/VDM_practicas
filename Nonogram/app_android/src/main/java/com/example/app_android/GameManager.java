@@ -1,6 +1,5 @@
 package com.example.app_android;
 
-import com.example.app_android.Objects.Board;
 import com.example.app_android.Objects.CategoryData;
 
 import com.example.engine_android.EngineAndroid;
@@ -16,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class GameManager {
-    public enum ColorTypes { BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR }
+    public enum ColorTypes {BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR}
 
     // some const parameters
     private final int NUM_CATEGORIES = 5;
@@ -67,7 +66,7 @@ public class GameManager {
     }
 
     private void setup(EngineAndroid engine, Bundle savedState) {
-        loadDefaultData();
+        loadGameDefaultData();
 
         // file to be read from
         try {
@@ -82,7 +81,7 @@ public class GameManager {
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Load].");
             ex.printStackTrace();
-            loadDefaultData();
+            loadGameDefaultData();
         }
     }
 
@@ -104,6 +103,26 @@ public class GameManager {
     }
 
     // ---------------- CATEGORIES ----------------
+    private void loadGameDefaultData() {
+        this.coins = 0;
+        this.currentPalette = 0;
+
+        this.unlockedPalettes = new boolean[this.NUM_PALETTES];
+        this.unlockedPalettes[0] = true;
+        for (int palette = 1; palette < this.NUM_PALETTES; palette++)
+            this.unlockedPalettes[palette] = false;
+        loadPalettes();
+
+        this.categories = new CategoryData[this.NUM_CATEGORIES];
+        for (int ct = 0; ct < this.categories.length; ct++) {
+            this.categories[ct] = new CategoryData();
+            this.categories[ct].levelUnlocked = ct < 2 ? 0 : -1;
+            this.categories[ct].pendingBoardLevel = -1;
+            this.categories[ct].pendingBoardState = null;
+            this.categories[ct].pendingBoardLives = -1;
+        }
+    }
+
     private void loadData(Bundle savedState, ObjectInputStream readSaveFile) {
         try {
             JSONObject dataObject = new JSONObject(readSaveFile.readObject().toString());
@@ -114,9 +133,25 @@ public class GameManager {
             for (int palette = 0; palette < palettes.length(); palette++)
                 this.unlockedPalettes[palette] = palettes.getBoolean(palette);
 
-            JSONArray categories = dataObject.getJSONArray("categories_levelUnlocked");
-            for (int ct = 0; ct < this.categories.length; ct++)
-                this.categories[ct].levelUnlocked = categories.getInt(ct);
+            JSONArray categories = dataObject.getJSONArray("categories");
+            for (int ct = 0; ct < this.categories.length; ct++) {
+                JSONObject categoryData = categories.getJSONObject(ct);
+
+                this.categories[ct].levelUnlocked = categoryData.getInt("levelUnlocked");
+                this.categories[ct].pendingBoardLevel = categoryData.getInt("pendingBoardLevel");
+
+                if (this.categories[ct].pendingBoardLevel != -1) {
+                    this.categories[ct].pendingBoardLives = categoryData.getInt("pendingBoardLives");
+
+                    int boardRows = categoryData.getInt("pendingBoardRow");
+                    int boardCols = categoryData.getInt("pendingBoardCol");
+                    JSONArray boardState = categoryData.getJSONArray("pendingBoardState");
+                    this.categories[ct].pendingBoardState = new int[boardRows][boardCols];
+                    for (int row = 0; row < boardRows; row++)
+                        for (int col = 0; col < boardCols; col++)
+                            this.categories[ct].pendingBoardState[row][col] = boardState.getInt((boardCols * row) + col);
+                }
+            }
         } catch (Exception e) {
             System.out.println("Error loading data.");
             e.printStackTrace();
@@ -151,24 +186,6 @@ public class GameManager {
 //        engine.removeFile(category_file);
     }
 
-    private void loadDefaultData() {
-        this.coins = 0;
-        this.currentPalette = 0;
-
-        this.unlockedPalettes = new boolean[this.NUM_PALETTES];
-        this.unlockedPalettes[0] = true;
-        for (int palette = 1; palette < this.NUM_PALETTES; palette++)
-            this.unlockedPalettes[palette] = false;
-        loadPalettes();
-
-        this.categories = new CategoryData[this.NUM_CATEGORIES];
-        for (int ct = 0; ct < this.categories.length; ct++) {
-            this.categories[ct] = new CategoryData();
-            this.categories[ct].levelUnlocked = ct < 2 ? 0 : -1;
-            this.categories[ct].pendingBoard = null;
-        }
-    }
-
     private void storeData(Bundle savedState, ObjectOutputStream writeSaveFile) {
         try {
             JSONObject dataObject = new JSONObject();
@@ -181,9 +198,27 @@ public class GameManager {
             dataObject.put("unlockedPalettes", palettes);
 
             JSONArray categories = new JSONArray();
-            for (int ct = 0; ct < this.categories.length; ct++)
-                categories.put(this.categories[ct].levelUnlocked);
-            dataObject.put("categories_levelUnlocked", categories);
+            for (int ct = 0; ct < this.categories.length; ct++) {
+                JSONObject categoryObject = new JSONObject();
+                categoryObject.put("levelUnlocked", this.categories[ct].levelUnlocked);
+                categoryObject.put("pendingBoardLevel", this.categories[ct].pendingBoardLevel);
+
+                if (this.categories[ct].pendingBoardLevel != -1) {
+                    categoryObject.put("pendingBoardLives", this.categories[ct].pendingBoardLives);
+
+                    categoryObject.put("pendingBoardRow", this.categories[ct].pendingBoardState.length);
+                    categoryObject.put("pendingBoardCol", this.categories[ct].pendingBoardState[0].length);
+
+                    JSONArray cells = new JSONArray();
+                    for (int row = 0; row < this.categories[ct].pendingBoardState.length; row++)
+                        for (int col = 0; col < this.categories[ct].pendingBoardState[0].length; col++)
+                            cells.put(this.categories[ct].pendingBoardState[row][col]);
+                    categoryObject.put("pendingBoardState", cells);
+                }
+
+                categories.put(categoryObject);
+            }
+            dataObject.put("categories", categories);
 
             writeSaveFile.writeObject(dataObject.toString());
         } catch (Exception e) {
@@ -216,25 +251,39 @@ public class GameManager {
 //        }
     }
 
-    public int getLevelUnlocked(int category) {
-        return this.categories[category].levelUnlocked;
-    }
-
-    public Board getSavedBoard(int category) {
-        return this.categories[category].pendingBoard;
-    }
-
-    public void updateCategory(int category, int level, Board pendBoard) {
-        if (pendBoard != null)
-            this.categories[category].pendingBoard = pendBoard;
+    public void updateCategory(int category, int level, int[][] pendBoard, int lives) {
+        if (pendBoard != null) {
+            this.categories[category].pendingBoardLevel = level;
+            this.categories[category].pendingBoardState = pendBoard;
+            this.categories[category].pendingBoardLives = lives;
+        }
 
         if (level - this.categories[category].levelUnlocked == 1)
             this.categories[category].levelUnlocked = level;
     }
 
     public void resetBoard(int category) {
-        this.categories[category].pendingBoard = null;
+        this.categories[category].pendingBoardLevel = -1;
+        this.categories[category].pendingBoardState = null;
+        this.categories[category].pendingBoardLives = -1;
     }
+
+    public int getLevelUnlocked(int category) {
+        return this.categories[category].levelUnlocked;
+    }
+
+    public int getSavedBoardLevel(int category) {
+        return this.categories[category].pendingBoardLevel;
+    }
+
+    public int[][] getSavedBoardState(int category) {
+        return this.categories[category].pendingBoardState;
+    }
+
+    public int getSavedBoardLives(int category) {
+        return this.categories[category].pendingBoardLives;
+    }
+
     // ---------------- PALETTES ----------------
     private void loadPalettes() {
         palettes = new int[NUM_PALETTES][NUM_COLORS_PER_PALETTE];
@@ -260,18 +309,32 @@ public class GameManager {
 //        currentPalette = 0;
     }
 
-    public int getColor(int colorType) { return palettes[currentPalette][colorType]; }
+    public int getColor(int colorType) {
+        return palettes[currentPalette][colorType];
+    }
 
-    public int getActPalette() { return currentPalette; }
+    public int getActPalette() {
+        return currentPalette;
+    }
 
-    public boolean isPaletteUnlocked(int pId){ return unlockedPalettes[pId]; }
+    public boolean isPaletteUnlocked(int pId) {
+        return unlockedPalettes[pId];
+    }
 
-    public void unlockPalette(int pId) { unlockedPalettes[pId] = true; }
+    public void unlockPalette(int pId) {
+        unlockedPalettes[pId] = true;
+    }
 
-    public void setPalette(int pId) { currentPalette = pId; }
+    public void setPalette(int pId) {
+        currentPalette = pId;
+    }
 
     // ---------------- COINS ----------------
-    public int getCoins(){ return coins; }
+    public int getCoins() {
+        return coins;
+    }
 
-    public void addCoins(int c){ coins += c; }
+    public void addCoins(int c) {
+        coins += c;
+    }
 }

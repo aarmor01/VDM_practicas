@@ -50,19 +50,24 @@ public class BoardScene implements IScene {
     public void init(EngineAndroid engRef) {
         // scene set up
         this.lives = MAX_LIVES;
-        if (GameManager.getInstance().getSavedBoard(this.actCategory) != null) {
-            board = GameManager.getInstance().getSavedBoard(this.actCategory);
-            GameManager.getInstance().resetBoard(this.actCategory);
-        } else {
-            this.board = new Board();
-
-            if (this.dim_h != 0)
-                this.board.init(this.dim_w, this.dim_h, engRef, null);
-            else {
-                ArrayList<String> bf = engRef.readText(this.path, this.level);
-                this.board.initFile(bf, engRef);
-            }
+        // board creation
+        this.board = new Board();
+        if (this.dim_h != 0)
+            this.board.init(this.dim_w, this.dim_h, engRef, null);
+        else {
+            ArrayList<String> bf = engRef.readText(this.path, this.level);
+            this.board.initFile(bf, engRef);
         }
+        // creation needed to not save all data on file (we don't need if cell is the
+        // answer, just if it was marked or not, and how)
+        if (GameManager.getInstance().getSavedBoardLevel(this.actCategory) == this.actLevel - 1 &&
+            GameManager.getInstance().getSavedBoardState(this.actCategory) != null) {
+            this.lives = GameManager.getInstance().getSavedBoardLives(this.actCategory);
+            this.board.setBoardState(GameManager.getInstance().getSavedBoardState(this.actCategory));
+        }
+        // we reset independently of board selected, if a user goes to another board
+        // it loses the save state
+        GameManager.getInstance().resetBoard(this.actCategory);
 
         // board ui
         this.sound = Resources.SOUND_CLICK;
@@ -103,7 +108,7 @@ public class BoardScene implements IScene {
         this.recoverLive.render(renderMng);
         this.coinIndicator.render(renderMng);
 
-        // lives
+        // pendingBoardLives
         int getW = renderMng.getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
@@ -123,21 +128,20 @@ public class BoardScene implements IScene {
                 engine.getAudio().playSound(this.sound);
                 this.lives -= this.board.markCell(input.getX(), input.getY(), false);
 
-                if (this.board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
-                    GameManager.getInstance().updateCategory(this.actCategory, this.actLevel, null);
+                if (this.board.checkear(input.getX(), input.getY())) {            //Checkeo de la victoria
+                    GameManager.getInstance().updateCategory(this.actCategory, this.actLevel, null, -1);
                     engine.getSceneManager().changeScene(new WinScene(this.board, true, this.actCategory), engine);
                 }
-                if(this.lives == 0)
+                if (this.lives == 0)
                     engine.getSceneManager().changeScene(new WinScene(this.board, false, this.actCategory), engine);
-            }
-            else if (this.backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
+            } else if (this.backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
                 this.backButton.clicked(engine.getAudio());
-                if(this.actCategory == 0)
+                if (this.actCategory == 0)
                     engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
                 else
-                    engine.getSceneManager().changeScene(new LevelHistorySelectionMenu(this.actCategory), engine);
+                    engine.getSceneManager().changeScene(new CategoryLevelSelectionMenu(this.actCategory), engine);
 
-                GameManager.getInstance().updateCategory(this.actCategory, this.actLevel - 1, this.board);
+                updateCategoryInformation();
             } else if (this.recoverLive.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
                 engine.getAdSystem().showRewardedAd();
             }
@@ -146,5 +150,9 @@ public class BoardScene implements IScene {
                 this.board.markCell(input.getX(), input.getY(), true);
             }
         }
+    }
+
+    public void updateCategoryInformation() {
+        GameManager.getInstance().updateCategory(this.actCategory, this.actLevel - 1, this.board.getBoardState(), this.lives);
     }
 }
