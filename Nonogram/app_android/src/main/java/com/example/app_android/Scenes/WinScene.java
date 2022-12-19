@@ -1,57 +1,53 @@
 package com.example.app_android.Scenes;
 
 import com.example.app_android.GameManager;
+import com.example.app_android.Resources;
 import com.example.app_android.Objects.Board;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.Enums.FontType;
 import com.example.engine_android.Enums.InputType;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class WinScene implements IScene {
-    private final String MENU = "LevelHistorySelectionMenu";
     private Board board;
+    private boolean victory;
+    private int category;
+
     private String winText;
-    private String font;
+    private String winFont;
+
     private Button backButton;
     private Button coinsButton;
-    private boolean victory;
-    private int coins, category;
-
-    //private EngineAndroid engRef;
 
     public WinScene(Board b, boolean win, int categ){
-        board = b;
-        victory = win;
-        category = categ;
+        this.board = b;
+        this.victory = win;
+        this.category = categ;
     }
 
     @Override
-    public String getId(){return "WinScene";}
+    public String getId() { return "WinScene"; }
 
     @Override
     public void init(EngineAndroid engRef) {
-        if(victory){
-            coins = (board.getWidth() * board.getHeight()) / 2;
-            GameManager.getInstance().addCoins(coins);
-            winText = "¡¡Victoria!!";
-        }
-        else
-            winText = "Derrota :(";
+        // title
+        this.winFont = Resources.FONT_EXO_REGULAR_BIG;
+        this.winText = this.victory ? "¡¡Victoria!!" : "Derrota :(";
 
-        font = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 8);
-        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
-        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
+        // what coins to add
+        int coins = this.victory ? (this.board.getWidth() * this.board.getHeight()) / 2 : 0;
+        GameManager.getInstance().addCoins(coins);
 
+        // buttons
         int w = engRef.getRender().getWidth() / 4;
         int h = engRef.getRender().getHeight();
-        backButton = new Button(w / 2, h * 7 / 8, w, h / 12, "Back",
-                engRef.getRender().loadImage("./assets/images/backbutton.png"), fontButtons, btAudio, false);
-        coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+"+coins,
-                engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, btAudio, false);
+        this.backButton = new Button(w / 2, h * 7 / 8, w, h / 12, "Back",
+                Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+        this.coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+ " + coins,
+                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
     }
 
     @Override
@@ -66,25 +62,29 @@ public class WinScene implements IScene {
 
     @Override
     public void render(RenderAndroid renderMng) {
+        // render text
         renderMng.setColor(0xFF000000);
-        renderMng.setFont(font);
-        int w = renderMng.getTextWidth(font, winText);
-        renderMng.drawText((renderMng.getWidth()-w)/2, renderMng.getHeight()/6, winText);
-        if(victory)
-            board.renderWin(renderMng);
+        renderMng.setFont(this.winFont);
+        int w = renderMng.getTextWidth(this.winFont, this.winText);
+        renderMng.drawText((renderMng.getWidth() - w) / 2, renderMng.getHeight() / 6, this.winText);
 
-        backButton.render(renderMng);
-        coinsButton.render(renderMng);
+        // render solved board
+        if (this.victory)
+            this.board.renderWin(renderMng);
+
+        // render buttons
+        this.backButton.render(renderMng);
+        this.coinsButton.render(renderMng);
     }
 
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engRef) {
-        if(input.getType() == InputType.TOUCH_UP && backButton.isInButton(input.getX(), input.getY())){
-            if(category == 0)
+        if(input.getType() == InputType.TOUCH_UP && this.backButton.isInButton(input.getX(), input.getY())){
+            if(this.category == 0)
                 engRef.getSceneManager().changeScene(new SelectionMenu(), engRef);
             else
-                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(category), engRef);
-            backButton.clicked(engRef.getAudio());
+                engRef.getSceneManager().changeScene(new LevelHistorySelectionMenu(this.category), engRef);
+            this.backButton.clicked(engRef.getAudio());
         }
     }
 }

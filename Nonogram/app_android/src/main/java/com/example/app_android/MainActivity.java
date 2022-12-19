@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.example.app_android.Scenes.BootScene;
 import com.google.android.gms.ads.AdView;
 
 import com.example.app_android.Scenes.MainMenu;
@@ -41,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     final float RATIO = 4.0f / 6.0f;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
     final long NOTIFICATION_PUSH = 30;
-    final String SCENE_ID = "SAVED_SCENE";
 
     // engine
     private EngineAndroid engine;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         //creates notification channel
-        engine.getIntentSystemAndroid().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
+        this.engine.getIntentSystem().createChannel("Nonogram", "Notifications for Nonogram App", "not_nonogram");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // (defensive code just in case, we should be fine with
         // just the onConfigurationChanged)
         if (this.engine.getSceneManager().isEmpty()) {
-            MainMenu scene = new MainMenu();
+            BootScene scene = new BootScene();
             this.engine.getSceneManager().changeScene(scene, engine);
         }
     }

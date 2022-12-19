@@ -1,11 +1,11 @@
 package com.example.app_android.Scenes;
 
 import com.example.app_android.GameManager;
+import com.example.app_android.Resources;
 import com.example.app_android.Objects.Board;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.Enums.FontType;
 import com.example.engine_android.Enums.InputType;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
@@ -15,9 +15,10 @@ import java.util.ArrayList;
 
 //Clase interna que representa la escena que queremos pintar
 public class BoardScene implements IScene {
-    static int MAX_LIVES = 3;
+    private final int MAX_LIVES = 3;
+
     private int dim_w, dim_h;
-    String route, level;
+    private String path, level;
 
     private Board board;
     private int lives, actLevel, actCategory;
@@ -26,7 +27,6 @@ public class BoardScene implements IScene {
     private Button coinIndicator;
     private Button recoverLive;
 
-    //private EngineAndroid engRef;
     private String sound, liveImage, noLiveImage;
 
     public BoardScene(int w, int h) {
@@ -34,49 +34,50 @@ public class BoardScene implements IScene {
         this.dim_h = h;
     }
 
-    public BoardScene(String r, int file, int category){
-        route = r;
-        level = file + ".txt";
-        actLevel = file;
-        actCategory = category;
+    public BoardScene(String path, int file, int category) {
+        this.path = path;
+        this.level = file + ".txt";
+        this.actLevel = file;
+        this.actCategory = category;
     }
 
     @Override
-    public String getId(){return "BoardScene";}
+    public String getId() {
+        return "BoardScene";
+    }
 
     @Override
     public void init(EngineAndroid engRef) {
-        lives = MAX_LIVES;
-        if(GameManager.getInstance().getSavedBoard(actCategory) != null){
-            board = GameManager.getInstance().getSavedBoard(actCategory);
-            GameManager.getInstance().resetBoard(actCategory);
-        }
-        else{
-            board = new Board();
+        // scene set up
+        this.lives = MAX_LIVES;
+        if (GameManager.getInstance().getSavedBoard(this.actCategory) != null) {
+            board = GameManager.getInstance().getSavedBoard(this.actCategory);
+            GameManager.getInstance().resetBoard(this.actCategory);
+        } else {
+            this.board = new Board();
 
-            if(dim_h != 0)
-                board.init(dim_w, dim_h, engRef, null);
-            else{
-                ArrayList<String> bf = engRef.readText(route, level);
-                board.initFile(bf, engRef);
+            if (this.dim_h != 0)
+                this.board.init(this.dim_w, this.dim_h, engRef, null);
+            else {
+                ArrayList<String> bf = engRef.readText(this.path, this.level);
+                this.board.initFile(bf, engRef);
             }
         }
 
-        String fontButtons = engRef.getRender().loadFont("./assets/fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
-        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
+        // board ui
+        this.sound = Resources.SOUND_CLICK;
+        this.liveImage = Resources.IMAGE_HEART;
+        this.noLiveImage = Resources.IMAGE_NO_HEART;
 
+        // buttons
         int w = engRef.getRender().getWidth() / 3;
         int h = engRef.getRender().getHeight() / 12;
-        backButton = new Button(2 * w / 5, h / 2, w, h, "Back", engRef.getRender().loadImage("./assets/images/backbutton.png"),
-                fontButtons, btAudio, false);
-        recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", engRef.getRender().loadImage("./assets/images/backbutton.png"),
-                fontButtons, btAudio, false);
-        coinIndicator = new Button(8 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
-                engRef.getRender().loadImage("./assets/images/coin.png"), fontButtons, "", false);
-
-        sound = engRef.getAudio().loadSound("./assets/sounds/click.wav", 1);
-        liveImage = engRef.getRender().loadImage("./assets/images/heart.png");
-        noLiveImage = engRef.getRender().loadImage("./assets/images/no_heart.png");
+        this.backButton = new Button(2 * w / 5, h / 2, w, h, "Back", Resources.IMAGE_BACK_BUTTON,
+                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+        this.recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", Resources.IMAGE_BACK_BUTTON,
+                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+        this.coinIndicator = new Button(8 * w / 5, h / 2, w, h, Integer.toString(GameManager.getInstance().getCoins()),
+                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE, "", false);
     }
 
     @Override
@@ -89,58 +90,60 @@ public class BoardScene implements IScene {
 //        if(engine.getAdSystem().hasRewardBeenGranted())
 //            GameManager.getInstance().addCoins(69);
 
-        board.update(deltaTime);
+        this.board.update(deltaTime);
     }
 
     @Override
     public void render(RenderAndroid renderMng) {
-        board.render(renderMng);
-        backButton.render(renderMng);
-        recoverLive.render(renderMng);
-        coinIndicator.render(renderMng);
+        // board
+        this.board.render(renderMng);
 
+        // buttons
+        this.backButton.render(renderMng);
+        this.recoverLive.render(renderMng);
+        this.coinIndicator.render(renderMng);
+
+        // lives
         int getW = renderMng.getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
-            if(i>lives)
-                imName = noLiveImage;
+            if (i > this.lives)
+                imName = this.noLiveImage;
             else
-                imName = liveImage;
-            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), renderMng.getHeight() / 6, w, w, imName);
+                imName = this.liveImage;
+            renderMng.drawImage(2 * getW / 15 + (w * (this.MAX_LIVES - i)), renderMng.getHeight() / 6, w, w, imName);
         }
     }
 
     @Override
     public void handleInput(InputAndroid input, EngineAndroid engine) {
         if (input.getType() == InputType.TOUCH_UP) {
-            if (board.isInBoard(input.getX(), input.getY())) {          //Input en la zona del tablero
-                engine.getAudio().playSound(sound);
-                lives -= board.markCell(input.getX(), input.getY(), false);
+            if (this.board.isInBoard(input.getX(), input.getY())) {          //Input en la zona del tablero
+                engine.getAudio().playSound(this.sound);
+                this.lives -= this.board.markCell(input.getX(), input.getY(), false);
 
-                if (board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
-                    GameManager.getInstance().updateCategory(actCategory, actLevel, null);
-                    engine.getSceneManager().changeScene(new WinScene(board, true, actCategory), engine);
+                if (this.board.checkear(input.getX(), input.getY())){            //Checkeo de la victoria
+                    GameManager.getInstance().updateCategory(this.actCategory, this.actLevel, null);
+                    engine.getSceneManager().changeScene(new WinScene(this.board, true, this.actCategory), engine);
                 }
-                if(lives == 0)
-                    engine.getSceneManager().changeScene(new WinScene(board, false, actCategory), engine);
+                if(this.lives == 0)
+                    engine.getSceneManager().changeScene(new WinScene(this.board, false, this.actCategory), engine);
             }
-            else if (backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
-                backButton.clicked(engine.getAudio());
-                if(actCategory == 0)
+            else if (this.backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
+                this.backButton.clicked(engine.getAudio());
+                if(this.actCategory == 0)
                     engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
                 else
-                    engine.getSceneManager().changeScene(new LevelHistorySelectionMenu(actCategory), engine);
+                    engine.getSceneManager().changeScene(new LevelHistorySelectionMenu(this.actCategory), engine);
 
-                GameManager.getInstance().updateCategory(actCategory, actLevel - 1, board);
-            }
-            else if (recoverLive.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
+                GameManager.getInstance().updateCategory(this.actCategory, this.actLevel - 1, this.board);
+            } else if (this.recoverLive.isInButton(input.getX(), input.getY())) {   //Input boton anuncio
                 engine.getAdSystem().showRewardedAd();
             }
-        }
-        else if (input.getType() == InputType.TOUCH_LONG) {     //Long touch en tablero
-            if (board.isInBoard(input.getX(), input.getY())) {
-                board.markCell(input.getX(), input.getY(), true);
+        } else if (input.getType() == InputType.TOUCH_LONG) {     //Long touch en tablero
+            if (this.board.isInBoard(input.getX(), input.getY())) {
+                this.board.markCell(input.getX(), input.getY(), true);
             }
         }
     }

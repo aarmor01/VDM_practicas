@@ -2,22 +2,22 @@ package com.example.app_android;
 
 public class Resources {
     // images
-    public static String Id1 = null;
-    public static String Id2 = null;
-    public static String Id3 = null;
-    public static String Id4 = null;
-    public static String Id5 = null;
+    public static String IMAGE_BACK_BUTTON = null;
+    public static String IMAGE_COIN = null;
+    public static String IMAGE_LOCK = null;
+    public static String IMAGE_HEART = null;
+    public static String IMAGE_NO_HEART = null;
 
     // fonts
-    public static String Id6 = null;
-    public static String Id7 = null;
-    public static String Id8 = null;
-    public static String Id9 = null;
+    public static String FONT_EXO_REGULAR_BIG = null;
+    public static String FONT_EXO_REGULAR_MEDIUM = null;
+    public static String FONT_KOMIKAX = null;
+    public static String FONT_SIMPLY_SQUARE = null;
 
     // sounds
-    public static String Id10 = null;
-    public static String Id11 = null;
+    public static String SOUND_BUTTON = null;
+    public static String SOUND_CLICK = null;
 
     // music
-    public static String Id12 = null;
+    public static String MUSIC = null;
 }
