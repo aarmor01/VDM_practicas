@@ -6,6 +6,7 @@ import com.example.engine_android.Modules.AdSystemAndroid;
 import com.example.engine_android.Modules.AudioAndroid;
 import com.example.engine_android.Modules.InputManager;
 import com.example.engine_android.Modules.IntentSystemAndroid;
+import com.example.engine_android.Modules.LightSensor;
 import com.example.engine_android.Modules.RenderAndroid;
 import com.example.engine_android.Modules.SceneManager;
 
@@ -40,6 +41,7 @@ public class EngineAndroid implements Runnable {
     private final AudioAndroid myAudioManager;
     private final AdSystemAndroid myAdSystem;
     private final IntentSystemAndroid myIntentSystem;
+    private final LightSensor myLightSensor;
 
     // asset manager
     private final AssetManager assetManager;
@@ -69,7 +71,7 @@ public class EngineAndroid implements Runnable {
         this.myInputManager = new InputManager();
         this.myAdSystem = new AdSystemAndroid(activity, this.context);
         this.myIntentSystem = new IntentSystemAndroid(this.context);
-
+        this.myLightSensor = new LightSensor(this.context);
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
 
@@ -116,15 +118,23 @@ public class EngineAndroid implements Runnable {
 
     public void resume() {
         if (!this.running) {
+            // resume engine
             this.running = true;
 
             this.renderThread = new Thread(this);
             this.renderThread.start();
+
+            // resume audio
+            this.myAudioManager.playMusic();
         }
     }
 
     public void pause() {
         if (this.running) {
+            // pause audio
+            this.myAudioManager.pauseMusic();
+
+            // pause engine
             this.running = false;
             while (true) {
                 try {
@@ -162,6 +172,8 @@ public class EngineAndroid implements Runnable {
     public IntentSystemAndroid getIntentSystem() {
         return this.myIntentSystem;
     }
+
+    public LightSensor getLightSensor() {return this.myLightSensor;}
 
     // TODO: change scene init structure so we don't need this and we just return the enum in the method
     public Orientation getOrientation() { return orientation; }

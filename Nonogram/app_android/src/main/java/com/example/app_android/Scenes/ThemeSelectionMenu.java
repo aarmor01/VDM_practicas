@@ -53,7 +53,7 @@ public class ThemeSelectionMenu implements IScene {
 
         this.backButton = new Button(engRef.getRender().getWidth() / 3, (engRef.getRender().getHeight() / 6) * 5,
                 engRef.getRender().getWidth() / 3, (engRef.getRender().getHeight() / 6) / 3, "Back",
-                "", Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                "", Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
 
         this.coinIndicator = new Button(5 * engRef.getRender().getWidth() / 8, 0, engRef.getRender().getWidth() / 4,
                 engRef.getRender().getWidth() / 8, Integer.toString(GameManager.getInstance().getCoins()),

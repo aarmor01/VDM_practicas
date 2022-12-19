@@ -29,20 +29,20 @@ public class SelectionMenu implements IScene {
         int x = engRef.getRender().getWidth() / 3;
         int y = engRef.getRender().getHeight() / 6;
         this.t4x4 = new Button(x / 4, y * 2, x / 2, x / 2, "4x4", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t5x5 = new Button(x * 5 / 4, y * 2, x / 2, x / 2, "5x5", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t5x10 = new Button(x * 9 / 4, y * 2, x / 2, x / 2, "10x5", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t8x8 = new Button(x / 4, y * 3, x / 2, x / 2, "8x8", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t10x10 = new Button(x * 5 / 4, y * 3, x / 2, x / 2, "10x10", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t10x15 = new Button(x * 9 / 4, y * 3, x / 2, x / 2, "15x10", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
 
         this.backButton = new Button(x, y * 5, x, y / 3, "Back", "",
-                Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
     }
 
     @Override

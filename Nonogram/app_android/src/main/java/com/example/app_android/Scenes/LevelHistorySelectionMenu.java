@@ -53,16 +53,16 @@ public class LevelHistorySelectionMenu implements IScene {
         for (int i = 0; i < LEVELS_PER_CATEGORY; i++) {
             String image = i >= this.lastUnlocked ? Resources.IMAGE_LOCK : "";
             this.levelSelectionButtons[i] = new Button(x / 2 + x * (i % 4), y + (y / 2 * (i / 4)), x - x / 10, x - x / 10,
-                    "Lvl " + (i + 1), image, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                    "Lvl " + (i + 1), image, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         }
 
         // buttons
         int getW = engRef.getRender().getWidth();
         this.backButton = new Button(getW / 8, y / 4, getW / 4, (y - y / 4) / 2, "Back",
-                Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinIndicator = new Button(5 * getW / 8, y / 4, getW / 4, (y - y / 4) / 2,
                 Integer.toString(GameManager.getInstance().getCoins()),
-                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE, "", false);
+                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE_MEDIUM, "", false);
     }
 
     @Override

@@ -45,9 +45,9 @@ public class WinScene implements IScene {
         int w = engRef.getRender().getWidth() / 4;
         int h = engRef.getRender().getHeight();
         this.backButton = new Button(w / 2, h * 7 / 8, w, h / 12, "Back",
-                Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+ " + coins,
-                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE, Resources.SOUND_BUTTON, false);
+                Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
     }
 
     @Override
