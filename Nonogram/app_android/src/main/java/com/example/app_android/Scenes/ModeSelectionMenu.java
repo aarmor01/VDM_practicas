@@ -22,7 +22,7 @@ public class ModeSelectionMenu implements IScene {
     public void init(EngineAndroid engRef) {
         String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX_.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
         int getW = engRef.getRender().getWidth();
         int getH = engRef.getRender().getHeight();
 

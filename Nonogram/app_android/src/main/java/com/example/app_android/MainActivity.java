@@ -113,10 +113,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // updates the orientation of the screen
         this.engine.updateConfiguration(newConfig);
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-//            System.out.println("Landscape");
-//        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-//            System.out.println("Portrait");
     }
 
     @Override
