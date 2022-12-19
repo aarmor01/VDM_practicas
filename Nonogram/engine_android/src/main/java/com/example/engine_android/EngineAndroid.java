@@ -118,15 +118,23 @@ public class EngineAndroid implements Runnable {
 
     public void resume() {
         if (!this.running) {
+            // resume engine
             this.running = true;
 
             this.renderThread = new Thread(this);
             this.renderThread.start();
+
+            // resume audio
+            this.myAudioManager.playMusic();
         }
     }
 
     public void pause() {
         if (this.running) {
+            // pause audio
+            this.myAudioManager.pauseMusic();
+
+            // pause engine
             this.running = false;
             while (true) {
                 try {

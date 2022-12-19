@@ -1,31 +1,25 @@
 package com.example.app_android.Scenes;
 
-import static com.example.engine_android.Modules.IntentSystemAndroid.SocialNetwork.TWITTER;
-
-import android.content.Intent;
-import android.net.Uri;
-
-import com.example.app_android.MainActivity;
+import com.example.app_android.Resources;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.InputType;
-import com.example.engine_android.Enums.FontType;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class MainMenu implements IScene {
-    Button playButton;
-    String title;
-    String font;
+    private String title;
+    private String fontTitle;
+
+    private Button playButton;
 
     @Override
     public String getId() {
         return "MainMenu";
     }
 
-    //private EngineAndroid engRef;
     @Override
     public void init(EngineAndroid engRef) {
         if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
@@ -44,51 +38,46 @@ public class MainMenu implements IScene {
 
     @Override
     public void update(double deltaTime) {
-//        if(engRef.getAdSystem().hasRewardBeenGranted())
-//            System.out.println("Reward Granted on " + getId());
+
     }
 
     @Override
     public void render(RenderAndroid renderMng) {
+        // render title
         renderMng.setColor(0xFF000000);
-        renderMng.setFont(font);
-        int wi = renderMng.getTextWidth(font, title);
-        renderMng.drawText((renderMng.getWidth() - wi) / 2, renderMng.getHeight() / 6, title);
-        playButton.render(renderMng);
+        renderMng.setFont(this.fontTitle);
+        int textWidth = renderMng.getTextWidth(this.fontTitle, this.title);
+        renderMng.drawText((renderMng.getWidth() - textWidth) / 2, renderMng.getHeight() / 6, title);
+
+        // render button
+        this.playButton.render(renderMng);
     }
 
     @Override
-    public void handleInput(InputAndroid input, EngineAndroid engRef) {
-        if (input.getType() == InputType.TOUCH_UP && playButton.isInButton(input.getX(), input.getY())) {
-            engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);
-            playButton.clicked(engRef.getAudio());
-            engine.getIntentSystemAndroid().share(TWITTER, "hehe twitter que guapo");
+    public void handleInput(InputAndroid input, EngineAndroid engine) {
+        if (input.getType() == InputType.TOUCH_UP && this.playButton.isInButton(input.getX(), input.getY())) {
+            engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
+            this.playButton.clicked(engine.getAudio());
+//            engine.getIntentSystemAndroid().share(TWITTER, "hehe twitter que guapo");
         }
     }
 
     private void arrangePortrait(EngineAndroid engRef) {
-        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
+        this.title = "NONOGRAMAS";
+        this.fontTitle = Resources.FONT_KOMIKAX;
+        this.playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2,
+                (int) (engRef.getRender().getHeight() / 1.5), engRef.getRender().getWidth() / 3,
+                engRef.getRender().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
-        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2, (int) (engRef.getRender().getHeight() / 1.5),
-                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 8, "PLAY", "", fontButton, btAudio, false);
-        title = "NONOGRAMAS";
-
-        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
-        engRef.getAudio().playMusic();
+//        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
+//        engRef.getAudio().playMusic();
     }
 
     private void arrangeLandscape(EngineAndroid engRef) {
-        String fontButton = engRef.getRender().loadFont("./assets/fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        font = engRef.getRender().loadFont("./assets/fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-
-        String btAudio = engRef.getAudio().loadSound("./assets/sounds/button.wav", 1);
-        playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2, (int) (engRef.getRender().getHeight() / 1.5),
-                engRef.getRender().getWidth() / 3, engRef.getRender().getHeight() / 8, "PLAY", "", fontButton, btAudio, false);
-        title = "NANOGRAMO";
-
-        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
-        engRef.getAudio().playMusic();
+        this.title = "NANOGRAMA";
+        this.fontTitle = Resources.FONT_KOMIKAX;
+        this.playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2,
+                (int) (engRef.getRender().getHeight() / 1.5), engRef.getRender().getWidth() / 3,
+                engRef.getRender().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
     }
 }
