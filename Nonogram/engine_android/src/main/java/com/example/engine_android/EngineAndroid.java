@@ -23,6 +23,7 @@ import android.content.res.AssetManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,7 +47,7 @@ public class EngineAndroid implements Runnable {
     private final AudioAndroid myAudioManager;
     private final AdSystemAndroid myAdSystem;
     private final IntentSystemAndroid myIntentSystem;
-    private final LightSensor myLightSensor;
+    private LightSensor myLightSensor;
 
     // asset manager
     private final AssetManager assetManager;
@@ -76,12 +77,10 @@ public class EngineAndroid implements Runnable {
         this.myInputManager = new InputManager();
         this.myAdSystem = new AdSystemAndroid(activity, this.context);
         this.myIntentSystem = new IntentSystemAndroid(this.context);
-        this.myLightSensor = new LightSensor(this.context);
+
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
 
-        myRenderManager.updateScale(orientation == Orientation.PORTRAIT);
-        
         // thread to generate initial configuration
         initialConfigurationDone = false;
         this.configThread = new Thread(new SurfaceAvailable(this));
@@ -96,6 +95,9 @@ public class EngineAndroid implements Runnable {
         // we wait for the initial configuration to end before starting the game cycle
         waitSurfaceConfiguration();
 
+        // resume audio
+        this.myAudioManager.playMusic();
+
         long currentTime = System.currentTimeMillis();
         while (this.running) {
             try {
@@ -109,7 +111,7 @@ public class EngineAndroid implements Runnable {
                     this.mySceneManager.currentScene().handleInput(input.removeFirst(), this);
 
                 // update
-                this.mySceneManager.currentScene().update(deltaTime / 1000.0f);
+                this.mySceneManager.currentScene().update(deltaTime / 1000.0f, this);
 
                 // render
                 while (!this.myRenderManager.surfaceValid()) ;
@@ -121,6 +123,9 @@ public class EngineAndroid implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        // pause audio
+        this.myAudioManager.pauseMusic();
     }
 
     public void resume() {
@@ -131,17 +136,12 @@ public class EngineAndroid implements Runnable {
             this.renderThread = new Thread(this);
             this.renderThread.start();
 
-            // resume audio
-            this.myAudioManager.playMusic();
-
             this.myLightSensor.onResume();
         }
     }
 
     public void pause() {
         if (this.running) {
-            // pause audio
-            this.myAudioManager.pauseMusic();
             this.myLightSensor.onPause();
 
             // pause engine
@@ -183,15 +183,21 @@ public class EngineAndroid implements Runnable {
         return this.myIntentSystem;
     }
 
-    public LightSensor getLightSensor() {return this.myLightSensor;}
+    public void setLightSensor(LightSensor lS) { this.myLightSensor = lS; }
+
+    public LightSensor getLightSensor() { return this.myLightSensor; }
+
+    public Context getContext() {return this.context;}
 
     // TODO: change scene init structure so we don't need this and we just return the enum in the method
-    public Orientation getOrientation() { return orientation; }
+    public Orientation getOrientation() {
+        return orientation;
+    }
 
     public void updateConfiguration(Configuration config) {
         // (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
         this.orientation = Orientation.values()[config.orientation - 1];
-        myRenderManager.updateScale(orientation == Orientation.PORTRAIT);
+        this.myRenderManager.updateScale(this.orientation == Orientation.PORTRAIT);
         this.mySceneManager.currentScene().rearrange(this);
     }
 
@@ -278,18 +284,12 @@ public class EngineAndroid implements Runnable {
         // This bytes[] has bytes in decimal format;
         // Convert it to hexadecimal format
         StringBuilder sb = new StringBuilder();
-        for(int i=0; i< bytes.length ;i++)
+        for (int i = 0; i < bytes.length; i++)
             sb.append(String.format("%02x", bytes[i]));
 
         // return complete hash
         return sb.toString();
     }
-
-    public boolean checkChecksum (String ogDigest, FileInputStream fis) throws NoSuchAlgorithmException, IOException {
-        return MessageDigest.isEqual(ogDigest.getBytes(StandardCharsets.UTF_8),
-                getChecksum(fis).getBytes(StandardCharsets.UTF_8));
-    }
-
 
     private void waitSurfaceConfiguration() {
         while (!this.initialConfigurationDone) ;
@@ -322,7 +322,7 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public void run() {
-            myRenderManager.holderWait();
+            myRenderManager.holderWait(this.engine.getOrientation());
             mySceneManager.currentScene().init(this.engine);
 
             initialConfigurationDone = true;

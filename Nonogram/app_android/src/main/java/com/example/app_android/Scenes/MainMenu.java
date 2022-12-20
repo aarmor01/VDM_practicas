@@ -48,7 +48,6 @@ public class MainMenu implements IScene {
         this.title.render(renderMng);
         // render button
         this.playButton.render(renderMng);
-
     }
 
     @Override

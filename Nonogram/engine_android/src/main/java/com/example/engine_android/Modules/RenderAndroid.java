@@ -2,6 +2,7 @@ package com.example.engine_android.Modules;
 
 import com.example.engine_android.DataStructures.FontAndroid;
 import com.example.engine_android.DataStructures.ImageAndroid;
+import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.FontType;
 
 import android.content.res.AssetManager;
@@ -35,6 +36,7 @@ public class RenderAndroid {
     private int baseWidth;
     private int baseHeight;
     private float scale;
+    private boolean landscape;
 
     //background color
     private int bgColor;
@@ -54,22 +56,22 @@ public class RenderAndroid {
         //this.scale = ratio;
         this.baseWidth = w;
         this.baseHeight = h;
+        this.landscape = false;
 
         // sets the background color
         this.bgColor = bgColor;
     }
 
-    public void holderWait() {
+    public void holderWait(EngineAndroid.Orientation ori) {
         while (this.holder.getSurfaceFrame().width() == 0) ;
 
-        this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
+        updateScale (ori != EngineAndroid.Orientation.PORTRAIT);
     }
 
-    public void updateScale(boolean width){
-        if(width)
-            this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
-        else
-            this.scale = this.holder.getSurfaceFrame().height() / (float)(this.baseHeight);
+    public void updateScale (boolean landscape) {
+        this.landscape = landscape;
+        this.scale = (landscape ? this.holder.getSurfaceFrame().height() :
+                this.holder.getSurfaceFrame().width()) / (float) (this.baseWidth);
     }
 
     public boolean surfaceValid() {
@@ -79,11 +81,11 @@ public class RenderAndroid {
     public void clear() {
         this.canvas = this.holder.lockCanvas();
         this.canvas.drawColor(this.bgColor);
-
-        this.posCanvasX = (int)((this.holder.getSurfaceFrame().width() - this.baseWidth*this.scale) / 2);
-        this.posCanvasY = (int)((this.holder.getSurfaceFrame().height() - this.baseHeight*this.scale) / 2);
+        this.posCanvasX = (int) (((landscape ? this.holder.getSurfaceFrame().height() :
+                this.holder.getSurfaceFrame().width()) - this.baseWidth * this.scale) / 2);
+        this.posCanvasY = (int) (((landscape ? this.holder.getSurfaceFrame().width() :
+                this.holder.getSurfaceFrame().height()) - this.baseHeight * this.scale) / 2);
         this.canvas.translate(this.posCanvasX, this.posCanvasY);
-
         this.canvas.scale(this.scale, this.scale);
         setColor(this.bgColor);
         drawRectangle(0, 0, this.baseWidth, this.baseHeight, true);
@@ -95,7 +97,7 @@ public class RenderAndroid {
 
     public String loadImage(String filePath) {
         File imageFile = new File(filePath);
-        if(!this.images.containsKey(imageFile.getName()))
+        if (!this.images.containsKey(imageFile.getName()))
             this.images.put(imageFile.getName(), new ImageAndroid(filePath, this.assetManager));
         return imageFile.getName();
     }
@@ -103,7 +105,7 @@ public class RenderAndroid {
     public String loadFont(String filePath, FontType type, int size) {
         File fontFile = new File(filePath);
         String fontID = fontFile.getName() + type.toString() + size;
-        if(!this.fonts.containsKey(fontID))
+        if (!this.fonts.containsKey(fontID))
             this.fonts.put(fontID, new FontAndroid(filePath, this.assetManager, size, type));
         return fontID;
     }
@@ -118,7 +120,9 @@ public class RenderAndroid {
         this.paint.setTextSize(font.getSize());
     }
 
-    public void setBackGroundColor(int hexColor){ bgColor = hexColor; }
+    public void setBackGroundColor(int hexColor) {
+        bgColor = hexColor;
+    }
 
     public void drawLine(int og_x, int og_y, int dst_x, int dst_y) {
         this.canvas.drawLine(og_x, og_y, dst_x, dst_y, this.paint);
@@ -136,15 +140,15 @@ public class RenderAndroid {
 
     public void drawImage(int x, int y, int width, int height, String imageID) {
         Bitmap image = this.images.get(imageID).getImage();
-        Rect src = new Rect(0,0,image.getWidth(), image.getHeight());
-        Rect dst = new Rect(x, y, x + width, y+height);
+        Rect src = new Rect(0, 0, image.getWidth(), image.getHeight());
+        Rect dst = new Rect(x, y, x + width, y + height);
         this.canvas.drawBitmap(image, src, dst, this.paint);
     }
 
     public void drawText(int x, int y, String text) {
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         String[] txSpl = text.split("\n");
-        for(String l : txSpl){
+        for (String l : txSpl) {
             this.canvas.drawText(l, x, y, this.paint);
             y += this.paint.getTextSize();
         }
@@ -170,15 +174,21 @@ public class RenderAndroid {
         return this.fonts.get(fontID).getSize();
     }
 
-    public int getWidth() {return this.myView.getWidth(); }
+    public int getWidth() {
+        return this.myView.getWidth();
+    }
 
     public int getHeight() {
         return this.myView.getHeight();
     }
 
-    public int getPosCanvasX() { return posCanvasX; }
+    public int getPosCanvasX() {
+        return posCanvasX;
+    }
 
-    public int getPosCanvasY() { return posCanvasY; }
+    public int getPosCanvasY() {
+        return posCanvasY;
+    }
 
 //    public int getViewWidth() {
 //        return this.myView.getWidth();
@@ -188,5 +198,7 @@ public class RenderAndroid {
 //        return this.myView.getHeight();
 //    }
 
-    public float getScale() { return scale; }
+    public float getScale() {
+        return scale;
+    }
 }
