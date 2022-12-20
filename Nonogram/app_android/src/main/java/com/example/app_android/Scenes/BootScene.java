@@ -1,5 +1,6 @@
 package com.example.app_android.Scenes;
 
+import com.example.app_android.GameManager;
 import com.example.app_android.Resources;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
@@ -24,11 +25,12 @@ public class BootScene implements IScene {
         Resources.IMAGE_NO_HEART = engRef.getRender().loadImage("images/no_heart.png");
         Resources.IMAGE_TWITTER_BUTTON = engRef.getRender().loadImage("images/twitter_logo.png");
         // fonts
-        Resources.FONT_EXO_REGULAR_BIG = engRef.getRender().loadFont("fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 8);
-        Resources.FONT_EXO_REGULAR_MEDIUM = engRef.getRender().loadFont("fonts/Exo-Regular.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        Resources.FONT_KOMIKAX = engRef.getRender().loadFont("fonts/KOMIKAX.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 10);
-        Resources.FONT_SIMPLY_SQUARE_BIG = engRef.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 20);
-        Resources.FONT_SIMPLY_SQUARE_MEDIUM = engRef.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, engRef.getRender().getWidth() / 22);
+        int size = engRef.getOrientation()==EngineAndroid.Orientation.PORTRAIT ? GameManager.getInstance().getWidth() : GameManager.getInstance().getHeight();
+        Resources.FONT_EXO_REGULAR_BIG = engRef.getRender().loadFont("fonts/Exo-Regular.ttf", FontType.DEFAULT, size / 8);
+        Resources.FONT_EXO_REGULAR_MEDIUM = engRef.getRender().loadFont("fonts/Exo-Regular.ttf", FontType.DEFAULT, size / 10);
+        Resources.FONT_KOMIKAX = engRef.getRender().loadFont("fonts/KOMIKAX.ttf", FontType.DEFAULT, size / 10);
+        Resources.FONT_SIMPLY_SQUARE_BIG = engRef.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, size / 20);
+        Resources.FONT_SIMPLY_SQUARE_MEDIUM = engRef.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, size / 22);
 
         // sounds
         Resources.SOUND_BUTTON = engRef.getAudio().loadSound("sounds/button.wav", 1);

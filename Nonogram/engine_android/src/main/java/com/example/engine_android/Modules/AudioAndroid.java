@@ -35,6 +35,7 @@ public class AudioAndroid {
 
     public void loadMusic(String filePath, float volume) {
         // reset the audio player for background music
+        this.mediaPlayer.stop();
         this.mediaPlayer.reset();
         AssetFileDescriptor assetFD = null;
         try {

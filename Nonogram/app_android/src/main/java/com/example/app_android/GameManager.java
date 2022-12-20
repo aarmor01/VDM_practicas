@@ -4,7 +4,6 @@ import com.example.app_android.Objects.CategoryData;
 
 import com.example.app_android.Scenes.BoardScene;
 import com.example.engine_android.EngineAndroid;
-import com.example.engine_android.Modules.LightSensor;
 
 import android.os.Bundle;
 
@@ -12,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +36,6 @@ public class GameManager {
 
     //Sensor
     private LightSensorApp lightSensor;
-
 
     //Dimensions
     int width, height;
@@ -409,5 +406,11 @@ public class GameManager {
 
     public int getHeight() {
         return height;
+    }
+
+    public void flipDimensions(){
+        int aux = height;
+        height = width;
+        width = aux;
     }
 }

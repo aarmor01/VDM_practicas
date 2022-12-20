@@ -77,6 +77,7 @@ public class EngineAndroid implements Runnable {
         this.myInputManager = new InputManager();
         this.myAdSystem = new AdSystemAndroid(activity, this.context);
         this.myIntentSystem = new IntentSystemAndroid(this.context);
+
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
 
@@ -182,9 +183,9 @@ public class EngineAndroid implements Runnable {
         return this.myIntentSystem;
     }
 
-    public void setLightSensor(LightSensor lS) {this.myLightSensor = lS;}
+    public void setLightSensor(LightSensor lS) { this.myLightSensor = lS; }
 
-    public LightSensor getLightSensor() {return this.myLightSensor;}
+    public LightSensor getLightSensor() { return this.myLightSensor; }
 
     public Context getContext() {return this.context;}
 
@@ -196,6 +197,7 @@ public class EngineAndroid implements Runnable {
     public void updateConfiguration(Configuration config) {
         // (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
         this.orientation = Orientation.values()[config.orientation - 1];
+        this.myRenderManager.updateScale(this.orientation == Orientation.PORTRAIT);
         this.mySceneManager.currentScene().rearrange(this);
     }
 
@@ -320,7 +322,7 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public void run() {
-            myRenderManager.holderWait();
+            myRenderManager.holderWait(this.engine.getOrientation());
             mySceneManager.currentScene().init(this.engine);
 
             initialConfigurationDone = true;
