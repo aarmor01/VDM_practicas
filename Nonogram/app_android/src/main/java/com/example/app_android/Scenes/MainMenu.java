@@ -1,6 +1,7 @@
 package com.example.app_android.Scenes;
 
 import com.example.app_android.Resources;
+import com.example.app_android.GameManager;
 import com.example.app_android.Objects.Button;
 
 import com.example.engine_android.EngineAndroid;
@@ -47,10 +48,10 @@ public class MainMenu implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(this.fontTitle);
         int textWidth = renderMng.getTextWidth(this.fontTitle, this.title);
-        renderMng.drawText((renderMng.getWidth() - textWidth) / 2, renderMng.getHeight() / 6, title);
-
+        renderMng.drawText((GameManager.getInstance().getWidth() - textWidth)/2, GameManager.getInstance().getHeight()/6, title);
         // render button
         this.playButton.render(renderMng);
+
     }
 
     @Override
@@ -65,9 +66,9 @@ public class MainMenu implements IScene {
     private void arrangePortrait(EngineAndroid engRef) {
         this.title = "NONOGRAMAS";
         this.fontTitle = Resources.FONT_KOMIKAX;
-        this.playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2,
-                (int) (engRef.getRender().getHeight() / 1.5), engRef.getRender().getWidth() / 3,
-                engRef.getRender().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.playButton = new Button((GameManager.getInstance().getWidth() - GameManager.getInstance().getWidth() / 3) / 2,
+                (int) (GameManager.getInstance().getHeight() / 1.5), GameManager.getInstance().getWidth() / 3,
+                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
 //        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
 //        engRef.getAudio().playMusic();
@@ -76,8 +77,8 @@ public class MainMenu implements IScene {
     private void arrangeLandscape(EngineAndroid engRef) {
         this.title = "NANOGRAMA";
         this.fontTitle = Resources.FONT_KOMIKAX;
-        this.playButton = new Button((engRef.getRender().getWidth() - engRef.getRender().getWidth() / 3) / 2,
-                (int) (engRef.getRender().getHeight() / 1.5), engRef.getRender().getWidth() / 3,
-                engRef.getRender().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.playButton = new Button((GameManager.getInstance().getWidth() - GameManager.getInstance().getWidth() / 3) / 2,
+                (int) (GameManager.getInstance().getHeight() / 1.5), GameManager.getInstance().getWidth() / 3,
+                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.app_android.Scenes;
 
+import com.example.app_android.GameManager;
 import com.example.app_android.Resources;
 import com.example.app_android.Objects.Button;
 
@@ -26,8 +27,8 @@ public class SelectionMenu implements IScene {
 
     @Override
     public void init(EngineAndroid engRef) {
-        int x = engRef.getRender().getWidth() / 3;
-        int y = engRef.getRender().getHeight() / 6;
+        int x = GameManager.getInstance().getWidth()/3;
+        int y = GameManager.getInstance().getHeight()/6;
         this.t4x4 = new Button(x / 4, y * 2, x / 2, x / 2, "4x4", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.t5x5 = new Button(x * 5 / 4, y * 2, x / 2, x / 2, "5x5", "",

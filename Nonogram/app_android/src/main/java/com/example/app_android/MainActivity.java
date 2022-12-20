@@ -31,9 +31,9 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     // engine's window ratio and background colour
-    final float RATIO = 4.0f / 6.0f;
-    final long NOTIFICATION_PUSH = 30;
+    final int WIDTH = 400, HEIGHT = 600;
     final int BACKGROUND_COLOR = 0xFFFFFFFF;
+    final long NOTIFICATION_PUSH = 30;
 
     // engine
     private EngineAndroid engine;
@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
         activityConfigurations();
 
         // create engine
-        this.engine = new EngineAndroid(renderView, this, RATIO, BACKGROUND_COLOR);
+        engine = new EngineAndroid(renderView, this, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
         // start ad process
-         this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
+        this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
         this.engine.getAdSystem().loadRewardedAd();
 
         //creates notification channel
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 "Notifications for Nonogram App", "not_nonogram");
 
         // load game data
-        GameManager.init(this.engine, savedInstanceState);
+        GameManager.init(WIDTH, HEIGHT, this.engine, savedInstanceState);
         this.engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
     }
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // if the onCreate method doesn't work, we load data here
         if (GameManager.getInstance() == null)
-            GameManager.init(this.engine, savedInstanceState);
+            GameManager.init(WIDTH, HEIGHT, this.engine, savedInstanceState);
     }
 
     @Override

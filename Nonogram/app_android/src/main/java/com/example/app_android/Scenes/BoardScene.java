@@ -75,8 +75,8 @@ public class BoardScene implements IScene {
         this.noLiveImage = Resources.IMAGE_NO_HEART;
 
         // buttons
-        int w = engRef.getRender().getWidth() / 3;
-        int h = engRef.getRender().getHeight() / 12;
+        int w = GameManager.getInstance().getWidth() / 3;
+        int h = GameManager.getInstance().getHeight() / 12;
         this.backButton = new Button(2 * w / 5, h / 2, w, h, "Back", Resources.IMAGE_BACK_BUTTON,
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.recoverLive = new Button(8 * w / 5, h * 2, w, h, "Recover\n live", Resources.IMAGE_BACK_BUTTON,
@@ -108,8 +108,7 @@ public class BoardScene implements IScene {
         this.recoverLive.render(renderMng);
         this.coinIndicator.render(renderMng);
 
-        // pendingBoardLives
-        int getW = renderMng.getWidth();
+        int getW = GameManager.getInstance().getWidth();
         int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
@@ -117,7 +116,7 @@ public class BoardScene implements IScene {
                 imName = this.noLiveImage;
             else
                 imName = this.liveImage;
-            renderMng.drawImage(2 * getW / 15 + (w * (this.MAX_LIVES - i)), renderMng.getHeight() / 6, w, w, imName);
+            renderMng.drawImage(2 * getW / 15 + (w * (MAX_LIVES - i)), GameManager.getInstance().getHeight() / 6, w, w, imName);
         }
     }
 

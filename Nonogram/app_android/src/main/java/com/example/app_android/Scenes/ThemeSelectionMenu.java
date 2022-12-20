@@ -32,31 +32,31 @@ public class ThemeSelectionMenu implements IScene {
         this.mainText = "Choose theme:";
         this.mainFont = Resources.FONT_KOMIKAX;
 
-        this.animalThemeButton = new Button(0, (int) (engRef.getRender().getHeight() / 4.0),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight() / 10, "ANIMAL THEME", "",
+        this.animalThemeButton = new Button(0, (int) (GameManager.getInstance().getHeight() / 4.0),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight() / 10, "ANIMAL THEME", "",
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
         String buttonImage = GameManager.getInstance().getLevelUnlocked(1) > 10 ? "" : Resources.IMAGE_LOCK;
-        this.emojiThemeButton = new Button(0, (int) (engRef.getRender().getHeight() / 2.75),
-                engRef.getRender().getWidth(), engRef.getRender().getHeight() / 10, "EMOJI THEME", buttonImage,
+        this.emojiThemeButton = new Button(0, (int) (GameManager.getInstance().getHeight() / 2.75),
+                GameManager.getInstance().getWidth(), GameManager.getInstance().getHeight() / 10, "EMOJI THEME", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
         buttonImage = GameManager.getInstance().getLevelUnlocked(2) > 10 ? "" : Resources.IMAGE_LOCK;
-        this.theme3ThemeButton = new Button(0, (int) (engRef.getRender().getHeight() / 2.1), engRef.getRender().getWidth(),
-                engRef.getRender().getHeight() / 10, "SOON", buttonImage,
+        this.theme3ThemeButton = new Button(0, (int) (GameManager.getInstance().getHeight() / 2.1), GameManager.getInstance().getWidth(),
+                GameManager.getInstance().getHeight() / 10, "SOON", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
         buttonImage = GameManager.getInstance().getLevelUnlocked(3) > 10 ? "" : Resources.IMAGE_LOCK;
-        this.theme4ThemeButton = new Button(0, (int) (engRef.getRender().getHeight() / 1.7), engRef.getRender().getWidth(),
-                engRef.getRender().getHeight() / 10, "SOON", buttonImage,
+        this.theme4ThemeButton = new Button(0, (int) (GameManager.getInstance().getHeight() / 1.7), GameManager.getInstance().getWidth(),
+                GameManager.getInstance().getHeight() / 10, "SOON", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
 
-        this.backButton = new Button(engRef.getRender().getWidth() / 3, (engRef.getRender().getHeight() / 6) * 5,
-                engRef.getRender().getWidth() / 3, (engRef.getRender().getHeight() / 6) / 3, "Back",
+        this.backButton = new Button(GameManager.getInstance().getWidth() / 3, (GameManager.getInstance().getHeight() / 6) * 5,
+                GameManager.getInstance().getWidth() / 3, (GameManager.getInstance().getHeight() / 6) / 3, "Back",
                 "", Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
 
-        this.coinIndicator = new Button(5 * engRef.getRender().getWidth() / 8, 0, engRef.getRender().getWidth() / 4,
-                engRef.getRender().getWidth() / 8, Integer.toString(GameManager.getInstance().getCoins()),
+        this.coinIndicator = new Button(5 * GameManager.getInstance().getWidth() / 8, 0, GameManager.getInstance().getWidth() / 4,
+                GameManager.getInstance().getWidth() / 8, Integer.toString(GameManager.getInstance().getCoins()),
                 Resources.IMAGE_COIN, Resources.FONT_EXO_REGULAR_MEDIUM, "", false);
     }
 
@@ -76,7 +76,7 @@ public class ThemeSelectionMenu implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(this.mainFont);
         int textWidth = renderMng.getTextWidth(this.mainFont, this.mainText);
-        renderMng.drawText((renderMng.getWidth() - textWidth) / 2, renderMng.getHeight() / 6, this.mainText);
+        renderMng.drawText((GameManager.getInstance().getWidth() - textWidth)/2, GameManager.getInstance().getHeight()/6, mainText);
 
         // buttons
         this.animalThemeButton.render(renderMng);
