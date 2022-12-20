@@ -41,8 +41,8 @@ public class WinScene implements IScene {
         GameManager.getInstance().addCoins(coins);
 
         // title
-        this.winLabel = new Label(this.victory ? "¡¡Victoria!!" : "Derrota :(", 0, 0, Resources.FONT_EXO_REGULAR_BIG,
-                engRef);
+        this.winLabel = new Label(this.victory ? "¡¡Victoria!!" : "Derrota :(", 0, 0,
+                Resources.FONT_EXO_REGULAR_BIG, engRef);
 
         // buttons
         this.backButton = new Button(0, 0, 0, 0, "Back", Resources.IMAGE_BACK_BUTTON,
