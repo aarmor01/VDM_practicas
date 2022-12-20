@@ -31,7 +31,7 @@ public class ThemeSelectionMenu implements IScene {
 
     @Override
     public void init(EngineAndroid engRef) {
-        this.mainLabel = new Label("Choose theme:", 0, 0, Resources.FONT_KOMIKAX, engRef);
+        this.mainLabel = new Label("Choose theme", 0, 0, Resources.FONT_KOMIKAX);
 
         this.animalThemeButton = new Button(0, 0, 0, 0, "ANIMAL THEME", "",
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
@@ -155,7 +155,7 @@ public class ThemeSelectionMenu implements IScene {
 
         this.backButton.setPosition(w / 3, (h / 6) * 5);
         this.backButton.setSize(w / 3, (h / 6) / 3);
-        this.coinIndicator.setPosition(5 * w / 8, 0);
-        this.coinIndicator.setSize(w / 4, w / 8);
+        this.coinIndicator.setPosition(w - w / 5, 0);
+        this.coinIndicator.setSize(w / 5, w / 8);
     }
 }

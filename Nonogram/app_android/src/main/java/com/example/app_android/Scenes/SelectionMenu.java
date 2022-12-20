@@ -27,28 +27,33 @@ public class SelectionMenu implements IScene {
 
     @Override
     public void init(EngineAndroid engRef) {
-        int x = GameManager.getInstance().getWidth()/3;
-        int y = GameManager.getInstance().getHeight()/6;
-        this.t4x4 = new Button(x / 4, y * 2, x / 2, x / 2, "4x4", "",
+        // select buttons
+        this.t4x4 = new Button(0, 0, 0, 0, "4x4", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.t5x5 = new Button(x * 5 / 4, y * 2, x / 2, x / 2, "5x5", "",
+        this.t5x5 = new Button(0, 0, 0, 0, "5x5", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.t5x10 = new Button(x * 9 / 4, y * 2, x / 2, x / 2, "10x5", "",
+        this.t5x10 = new Button(0, 0, 0, 0, "10x5", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.t8x8 = new Button(x / 4, y * 3, x / 2, x / 2, "8x8", "",
+        this.t8x8 = new Button(0, 0, 0, 0, "8x8", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.t10x10 = new Button(x * 5 / 4, y * 3, x / 2, x / 2, "10x10", "",
+        this.t10x10 = new Button(0, 0, 0, 0, "10x10", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.t10x15 = new Button(x * 9 / 4, y * 3, x / 2, x / 2, "15x10", "",
+        this.t10x15 = new Button(0, 0, 0, 0, "15x10", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
 
-        this.backButton = new Button(x, y * 5, x, y / 3, "Back", "",
+        // back button
+        this.backButton = new Button(0, 0, 0, 0, "Back", "",
                 Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
+
+        rearrange(engRef);
     }
 
     @Override
     public void rearrange(EngineAndroid engRef) {
-
+        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
+            arrangePortrait();
+        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
+            arrangeLandscape();
     }
 
     @Override
@@ -102,5 +107,50 @@ public class SelectionMenu implements IScene {
                 engRef.getSceneManager().changeScene(new BoardScene(x, y), engRef);
             }
         }
+    }
+
+
+    private void arrangePortrait() {
+        // select buttons
+        int x = GameManager.getInstance().getWidth() / 3;
+        int y = GameManager.getInstance().getHeight() / 6;
+        this.t4x4.setPosition(x / 4, y * 2);
+        this.t4x4.setSize(x / 2, x / 2);
+        this.t5x5.setPosition(x * 5 / 4, y * 2);
+        this.t5x5.setSize(x / 2, x / 2);
+        this.t5x10.setPosition(x * 9 / 4, y * 2);
+        this.t5x10.setSize(x / 2, x / 2);
+        this.t8x8.setPosition(x / 4, y * 3);
+        this.t8x8.setSize(x / 2, x / 2);
+        this.t10x10.setPosition(x * 5 / 4, y * 3);
+        this.t10x10.setSize(x / 2, x / 2);
+        this.t10x15.setPosition(x * 9 / 4, y * 3);
+        this.t10x15.setSize(x / 2, x / 2);
+
+        // back buttons
+        this.backButton.setPosition(x, y * 5);
+        this.backButton.setSize(x, y / 3);
+    }
+
+    private void arrangeLandscape() {
+        // select buttons
+        int x = GameManager.getInstance().getWidth() / 3;
+        int y = GameManager.getInstance().getHeight() / 6;
+        this.t4x4.setPosition(x / 4, y);
+        this.t4x4.setSize(x / 2, x / 2);
+        this.t5x5.setPosition(x * 5 / 4, y);
+        this.t5x5.setSize(x / 2, x / 2);
+        this.t5x10.setPosition(x * 9 / 4, y);
+        this.t5x10.setSize(x / 2, x / 2);
+        this.t8x8.setPosition(x / 4, y * 3);
+        this.t8x8.setSize(x / 2, x / 2);
+        this.t10x10.setPosition(x * 5 / 4, y * 3);
+        this.t10x10.setSize(x / 2, x / 2);
+        this.t10x15.setPosition(x * 9 / 4, y * 3);
+        this.t10x15.setSize(x / 2, x / 2);
+
+        // back buttons
+        this.backButton.setPosition(x, y * 5);
+        this.backButton.setSize(x, y / 3);
     }
 }
