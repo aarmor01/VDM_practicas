@@ -67,27 +67,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        // create boot scene
-        BootScene scene = new BootScene();
-        this.engine.getSceneManager().changeScene(scene, engine);
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // if the onCreate method doesn't work, we load data here
+        if (GameManager.getInstance() == null)
+            GameManager.init(WIDTH, HEIGHT, this.engine, savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        // create boot scene
+        BootScene scene = new BootScene();
+        this.engine.getSceneManager().changeScene(scene, engine);
+
         // resume engine process cycle
         this.engine.resume();
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // if the onCreate method doesn't work, we load data here
-        if (GameManager.getInstance() == null)
-            GameManager.init(WIDTH, HEIGHT, this.engine, savedInstanceState);
     }
 
     @Override
@@ -116,11 +111,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        GameManager.shutdown();
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // save data
-        GameManager.shutdown(this.engine, outState);
+        GameManager.save(this.engine, outState);
     }
 
     private void activityConfigurations() {

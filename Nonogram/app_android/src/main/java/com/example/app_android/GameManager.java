@@ -10,13 +10,11 @@ import android.os.Bundle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class GameManager {
     public enum ColorTypes {BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR}
@@ -53,8 +51,9 @@ public class GameManager {
 
     // loads the corresponding CategoryData saved files
     public static void init(int w, int h, EngineAndroid engine, Bundle savedState) {
-        // singleton initialization
-        instance = new GameManager();
+        if (instance == null)
+            // singleton initialization
+            instance = new GameManager();
 
         // instance setting
         instance.setup(engine, w, h, savedState);
@@ -64,13 +63,16 @@ public class GameManager {
         return instance;
     }
 
-    // saves CategoryData data
-    public static void shutdown(EngineAndroid engine, Bundle savedState) {
+    public static void save(EngineAndroid engine, Bundle savedState) {
         // instance closure
         instance.close(engine, savedState);
+    }
 
-        // delete instance
-        instance = null;
+    // saves CategoryData data
+    public static void shutdown() {
+        if (instance != null)
+            // delete instance
+            instance = null;
     }
 
     private void setup(EngineAndroid engine, int w, int h, Bundle savedState) {
@@ -322,12 +324,6 @@ public class GameManager {
         palettes[2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFFFF0000;
         palettes[2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFF00FF00;
         palettes[2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF00FF44;
-
-//        unlockedPalettes = new boolean[NUM_PALETTES];
-//        unlockedPalettes[0] = true;
-//        for(int i=1; i<NUM_PALETTES; i++)
-//            unlockedPalettes[i] = false;
-//        currentPalette = 0;
     }
 
     public int getColor(int colorType) {
@@ -358,7 +354,12 @@ public class GameManager {
     public void addCoins(int c) {
         coins += c;
     }
-    public int getWidth() { return width; }
 
-    public int getHeight() { return height; }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
