@@ -288,14 +288,6 @@ public class EngineAndroid implements Runnable {
         return sb.toString();
     }
 
-    public boolean checkChecksum(String ogDigest, FileInputStream fis) throws NoSuchAlgorithmException, IOException {
-        byte[] d1 = ogDigest.getBytes(StandardCharsets.UTF_8);
-        byte[] d2 = getChecksum(fis).getBytes(StandardCharsets.UTF_8);
-
-        return MessageDigest.isEqual(d1, d2);
-    }
-
-
     private void waitSurfaceConfiguration() {
         while (!this.initialConfigurationDone) ;
         if (this.configThread != null) {

@@ -10,11 +10,15 @@ import android.os.Bundle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 
 public class GameManager {
     public enum ColorTypes {BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR}
@@ -90,25 +94,27 @@ public class GameManager {
 
         // file to be read from
         try {
-            FileInputStream file = engine.openInputFile(SAVE_FILE);
-            ObjectInputStream readSaveFile = new ObjectInputStream(file);
+            FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
+            FileInputStream checksumFile = engine.openInputFile(CHECKSUM_FILE);
 
             // check if file has been modified
-//            byte[] byteArray = new byte[1024];
-//            StringBuilder sb = new StringBuilder();
-//            while (file.read(byteArray) != -1)
-//                sb.append(byteArray);
-//
-//            if (engine.checkChecksum(sb.toString(), file)) {
-//                System.out.println("Save file has been modified, so we discard it");
-//                return;
-//            }
+            String savedChecksum = obtainSavedChecksum(checksumFile);
+            String actualChecksum = engine.getChecksum(fileInputStream);
+            if (!savedChecksum.equals(actualChecksum)) {
+                System.out.println("Save file has been modified, so we discard it");
+                return;
+            }
+            fileInputStream.close();
+
+            // input stream object
+            fileInputStream = engine.openInputFile(SAVE_FILE);
+            ObjectInputStream readSaveFile = new ObjectInputStream(fileInputStream);
 
             // load all game data
             loadData(readSaveFile);
 
             readSaveFile.close();
-            file.close();
+            fileInputStream.close();
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Load].");
             ex.printStackTrace();
@@ -136,11 +142,7 @@ public class GameManager {
             file.close();
 
             // save checksum
-//            FileOutputStream fileOutputStream = engine.openOutputFile(CHECKSUM_FILE);
-//            FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
-//            fileOutputStream.write(engine.getChecksum(fileInputStream).getBytes(StandardCharsets.UTF_8));
-//            fileInputStream.close();
-//            fileOutputStream.close();
+            saveChecksum(engine);
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Store].");
             ex.printStackTrace();
@@ -272,6 +274,25 @@ public class GameManager {
 
         for (int ct = 0; ct < this.categories.length; ct++)
             savedState.putSerializable("category_" + ct, this.categories[ct]);
+    }
+
+    private String obtainSavedChecksum(FileInputStream checksumFile) throws IOException {
+        ByteArrayOutputStream resultChecksum = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192]; int length;
+        while ((length = checksumFile.read(buffer)) != -1)
+            resultChecksum.write(buffer, 0, length);
+
+        return resultChecksum.toString("UTF-8");
+    }
+
+    private void saveChecksum(EngineAndroid engine) throws NoSuchAlgorithmException, IOException {
+        FileOutputStream fileOutputStream = engine.openOutputFile(CHECKSUM_FILE);
+        FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
+        String checksum = engine.getChecksum(fileInputStream);
+        System.out.println(checksum);
+        fileOutputStream.write(checksum.getBytes(StandardCharsets.UTF_8));
+        fileInputStream.close();
+        fileOutputStream.close();
     }
 
     public void updateCategory(int category, int level, int[][] pendBoard, int lives) {
