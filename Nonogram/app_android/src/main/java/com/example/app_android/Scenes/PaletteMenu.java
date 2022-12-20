@@ -95,6 +95,7 @@ public class PaletteMenu implements IScene {
                 engRef.getRender().setBackGroundColor(GameManager.getInstance().getColor(GameManager.ColorTypes.BG_COLOR.ordinal()));
                 this.paletteButtons[0].clicked(engRef.getAudio());
                 coinIndicator.setText(Integer.toString(gM.getCoins()));
+                rearrange(engRef);
             }
 
             if (this.backButton.isInButton(input.getX(), input.getY())) {
@@ -141,6 +142,7 @@ public class PaletteMenu implements IScene {
         for (int i = 0; i < numPalettes; i++) {
             this.paletteButtons[i].setPosition(getW / 2 - (getW / 5)*numPalettes/2 + (getW / 5 + 5)*i, (getH / 2));
             this.paletteButtons[i].setSize(getW / 5, getW / 5);
+            this.paletteButtons[i].setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
         }
     }
 }

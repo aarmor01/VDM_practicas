@@ -53,7 +53,7 @@ public class CategoryLevelSelectionMenu implements IScene {
         for (int i = 0; i < LEVELS_PER_CATEGORY; i++) {
             String image = i >= this.lastUnlocked ? Resources.IMAGE_LOCK : "";
             String text = i < this.lastUnlocked ? "Lvl" + (i + 1) : "";
-            this.levelSelectionButtons[i] = new Button(0, 0, 0, 0,  text, image,
+            this.levelSelectionButtons[i] = new Button(0, 0, 0, 0, text, image,
                     Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         }
 
@@ -137,19 +137,17 @@ public class CategoryLevelSelectionMenu implements IScene {
     private void arrangeLandscape() {
         int getW = GameManager.getInstance().getWidth();
         int getH = GameManager.getInstance().getHeight();
-        this.coinIndicator.setPosition(5 * getW / 8, 0);
-        this.coinIndicator.setSize(getW / 3, getW / 8);
-        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+        this.coinIndicator.setPosition(getW - getW / 5, 0);
+        this.coinIndicator.setSize(getW / 5, getH / 8);
 
         this.backButton.setPosition(getW / 3, 7 * getH / 8);
-        this.backButton.setSize(getW / 3, getW / 8);
-        this.backButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+        this.backButton.setSize(getW / 3, getH / 8);
 
         int x = getW / 5;
-        int y = getH / 8;
+        int y = getH / 7;
         for (int i = 0; i < LEVELS_PER_CATEGORY; i++) {
-            this.levelSelectionButtons[i].setPosition(x / 2 + x * (i % 4), y + (y * (i / 4)));
-            this.levelSelectionButtons[i].setSize(x - x / 10, x - x / 10);
+            this.levelSelectionButtons[i].setPosition(x * (i % 5), (int)(y + (y * 1.25 * (i / 5))));
+            this.levelSelectionButtons[i].setSize(x / 2, x/ 2);
         }
     }
 }

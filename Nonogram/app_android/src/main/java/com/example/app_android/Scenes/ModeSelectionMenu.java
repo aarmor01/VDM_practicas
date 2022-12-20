@@ -114,18 +114,14 @@ public class ModeSelectionMenu implements IScene {
         int getH = GameManager.getInstance().getHeight();
         this.playRandomLevelButton.setPosition(0, (int)(getH * 2 / 8));
         this.playRandomLevelButton.setSize(getW, getH / 8);
-        this.playRandomLevelButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
         this.playThemeButton.setPosition(0, (int) (getH * 4 / 8));
         this.playThemeButton.setSize(getW, getH / 8);
-        this.playThemeButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
         this.paletteMenu.setPosition(0, (int) (getH * 6 / 8));
         this.paletteMenu.setSize(getW, getH / 8);
-        this.paletteMenu.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
         this.coinIndicator.setPosition(getW - getW / 5, 0);
         this.coinIndicator.setSize(getW / 5, getW / 8);
-        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 }
