@@ -62,7 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 "Notifications for Nonogram App", "not_nonogram");
 
         // load game data
-        GameManager.init(WIDTH, HEIGHT, this.engine, savedInstanceState);
+        int w = WIDTH, h = HEIGHT;
+        if(engine.getOrientation() == EngineAndroid.Orientation.LANDSCAPE){
+            w = HEIGHT;
+            h = WIDTH;
+        }
+
+        GameManager.init(w, h, this.engine, savedInstanceState);
         this.engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
     }
 
@@ -91,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
         // updates the orientation of the screen
         this.engine.updateConfiguration(newConfig);
+
+        GameManager.getInstance().flipDimensions();
     }
 
     @Override

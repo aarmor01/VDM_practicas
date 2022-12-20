@@ -65,6 +65,13 @@ public class RenderAndroid {
         this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
     }
 
+    public void updateScale(boolean width){
+        if(width)
+            this.scale = this.holder.getSurfaceFrame().width() / (float)(this.baseWidth);
+        else
+            this.scale = this.holder.getSurfaceFrame().height() / (float)(this.baseHeight);
+    }
+
     public boolean surfaceValid() {
         return this.holder.getSurface().isValid();
     }

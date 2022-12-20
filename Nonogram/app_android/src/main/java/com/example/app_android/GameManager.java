@@ -410,4 +410,10 @@ public class GameManager {
     public int getHeight() {
         return height;
     }
+
+    public void flipDimensions(){
+        int aux = height;
+        height = width;
+        width = aux;
+    }
 }
