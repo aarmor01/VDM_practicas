@@ -43,6 +43,7 @@ public class RenderAndroid {
 
     public RenderAndroid(SurfaceView myView, AssetManager aM, int w, int h, int bgColor) {
         this.myView = myView;
+
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
 
@@ -69,9 +70,17 @@ public class RenderAndroid {
     }
 
     public void updateScale (boolean landscape) {
-        this.landscape = landscape;
+        System.out.println(this.holder.getSurfaceFrame().width() + " " + this.holder.getSurfaceFrame().height());
+        System.out.println(landscape + " " + posCanvasX + "  " + posCanvasY + "  " + scale);
+        System.out.println("");
         this.scale = (landscape ? this.holder.getSurfaceFrame().height() :
                 this.holder.getSurfaceFrame().width()) / (float) (this.baseWidth);
+        this.posCanvasX = (int) ((this.holder.getSurfaceFrame().width()
+                - ((landscape ? this.baseHeight : this.baseWidth) * this.scale)) / 2);
+        this.posCanvasY = (int) ((this.holder.getSurfaceFrame().height()
+                - ((landscape ? this.baseWidth : this.baseHeight) * this.scale)) / 2);
+        System.out.println(this.holder.getSurfaceFrame().width() + " " + this.holder.getSurfaceFrame().height());
+        System.out.println(landscape + " " + posCanvasX + "  " + posCanvasY + "  " + scale);
     }
 
     public boolean surfaceValid() {
@@ -81,10 +90,6 @@ public class RenderAndroid {
     public void clear() {
         this.canvas = this.holder.lockCanvas();
         this.canvas.drawColor(this.bgColor);
-        this.posCanvasX = (int) (((landscape ? this.holder.getSurfaceFrame().height() :
-                this.holder.getSurfaceFrame().width()) - this.baseWidth * this.scale) / 2);
-        this.posCanvasY = (int) (((landscape ? this.holder.getSurfaceFrame().width() :
-                this.holder.getSurfaceFrame().height()) - this.baseHeight * this.scale) / 2);
         this.canvas.translate(this.posCanvasX, this.posCanvasY);
         this.canvas.scale(this.scale, this.scale);
         setColor(this.bgColor);

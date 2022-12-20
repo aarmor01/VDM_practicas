@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 
 import com.example.app_android.Scenes.BootScene;
@@ -96,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        GameManager.getInstance().flipDimensions();
+
         // updates the orientation of the screen
         this.engine.updateConfiguration(newConfig);
-
-        GameManager.getInstance().flipDimensions();
     }
 
     @Override

@@ -80,6 +80,15 @@ public class EngineAndroid implements Runnable {
 
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
+        surface.addOnLayoutChangeListener( new View.OnLayoutChangeListener()
+        {
+            public void onLayoutChange( View v,
+                                        int left,    int top,    int right,    int bottom,
+                                        int leftWas, int topWas, int rightWas, int bottomWas )
+            {
+                myRenderManager.updateScale(orientation != Orientation.PORTRAIT);
+            }
+        });
 
         // thread to generate initial configuration
         initialConfigurationDone = false;
@@ -197,7 +206,6 @@ public class EngineAndroid implements Runnable {
     public void updateConfiguration(Configuration config) {
         // (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
         this.orientation = Orientation.values()[config.orientation - 1];
-        this.myRenderManager.updateScale(this.orientation == Orientation.PORTRAIT);
         this.mySceneManager.currentScene().rearrange(this);
     }
 

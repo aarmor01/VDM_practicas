@@ -8,27 +8,23 @@ public class Label {
     private String text;
     private int posX, posY;
     private String font;
-    private int textWidth;
 
     public Label(String tx, int x, int y, String f, EngineAndroid engRef) {
         text = tx;
         posX = x;
         posY = y;
         font = f;
-        textWidth = engRef.getRender().getTextWidth(font, text);
     }
 
     public void render(RenderAndroid renderMng){
         renderMng.setColor(0xFF000000);
         renderMng.setFont(this.font);
-        int textWidth = renderMng.getTextWidth(this.font, this.text);
-        renderMng.drawText(posX, posY, text);
+        int textWidth = renderMng.getTextWidth(this.font, this.text)/2;
+        renderMng.drawText(posX - textWidth, posY, text);
     }
 
     public void setPos(int x, int y){
         posX = x;
         posY = y;
     }
-
-    public int getTextW(){ return textWidth; }
 }
