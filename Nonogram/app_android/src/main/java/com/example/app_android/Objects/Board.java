@@ -105,21 +105,14 @@ public class Board {
             if (rows[i].get(rows[i].size() - 1) != -1)
                 rows[i].add(-1);
         }
+
         int maxDimension = Math.max(w, h);
 
         int winW = (GameManager.getInstance().getWidth()) / (maxDimension);
         int winH = ((int) (GameManager.getInstance().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
 
-        board_cell_size = Math.min(winH, winW);
-        separation_margin = Math.max(board_cell_size / 25, 1);
-        board_cell_size -= separation_margin;
-        fontSize = board_cell_size / 3;
+        calcCellSize(eng);
 
-        posX = (GameManager.getInstance().getWidth() - (board_cell_size + separation_margin) * width - maxNumbers * fontSize) / 2;
-        posY = ((int) (GameManager.getInstance().getHeight() / 0.75f) - (board_cell_size + separation_margin) * height - maxNumbers * fontSize) / 2;
-
-        font = eng.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
-        fontWrongText = Resources.FONT_SIMPLY_SQUARE_BIG;
         lastTimeChecked = -1;
     }
 
@@ -249,14 +242,6 @@ public class Board {
         return 0;
     }
 
-    public int getCellSize() {
-        return board_cell_size;
-    }
-
-    public int getMarginCells() {
-        return separation_margin;
-    }
-
     public int getWidth() {
         return cols.length;
     }
@@ -291,7 +276,27 @@ public class Board {
         return 0;
     }
 
-    public String getFont() {
-        return font;
+    public void setPos(int x, int y){
+        posX = x;
+        posY = y;
+    }
+
+    public int getHeightInPixels(){ return (board_cell_size + separation_margin) * width + maxNumbers * fontSize; }
+
+    public int getWidthInPixels(){ return (board_cell_size + separation_margin) * height + maxNumbers * fontSize; }
+
+    public void calcCellSize(EngineAndroid eng){
+        int maxDimension = Math.max(width, height);
+
+        int winW = (GameManager.getInstance().getWidth()) / (maxDimension);
+        int winH = ((int) (GameManager.getInstance().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
+
+        board_cell_size = Math.min(winH, winW);
+        separation_margin = Math.max(board_cell_size / 25, 1);
+        board_cell_size -= separation_margin;
+        fontSize = board_cell_size / 3;
+
+        font = eng.getRender().loadFont("fonts/SimplySquare.ttf", FontType.DEFAULT, fontSize);
+        fontWrongText = Resources.FONT_SIMPLY_SQUARE_BIG;
     }
 }

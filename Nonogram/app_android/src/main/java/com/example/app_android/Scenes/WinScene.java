@@ -41,8 +41,7 @@ public class WinScene implements IScene {
         GameManager.getInstance().addCoins(coins);
 
         // title
-        this.winLabel = new Label(this.victory ? "¡¡Victoria!!" : "Derrota :(", 0, 0, Resources.FONT_EXO_REGULAR_BIG,
-                engRef);
+        this.winLabel = new Label(this.victory ? "¡¡Victoria!!" : "Derrota :(", 0, 0, Resources.FONT_EXO_REGULAR_BIG);
 
         // buttons
         this.backButton = new Button(0, 0, 0, 0, "Back", Resources.IMAGE_BACK_BUTTON,
@@ -58,9 +57,9 @@ public class WinScene implements IScene {
     @Override
     public void rearrange(EngineAndroid engRef) {
         if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
-            arrangePortrait();
+            arrangePortrait(engRef);
         else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
-            arrangeLandscape();
+            arrangeLandscape(engRef);
     }
 
     @Override
@@ -105,7 +104,7 @@ public class WinScene implements IScene {
         }
     }
 
-    private void arrangePortrait() {
+    private void arrangePortrait(EngineAndroid engRef) {
         // label
         this.winLabel.setPos(GameManager.getInstance().getWidth() / 2, GameManager.getInstance().getHeight() / 6);
 
@@ -118,9 +117,13 @@ public class WinScene implements IScene {
         this.coinsButton.setSize(w, h / 12);
         this.shareButton.setPosition(3 * w / 2, (int)(h * 7.25 / 8));
         this.shareButton.setSize(w, h / 12);
+
+        this.board.calcCellSize(engRef);
+        this.board.setPos((GameManager.getInstance().getWidth() - board.getWidthInPixels()) / 2,
+                (int)((GameManager.getInstance().getHeight() / 0.75f) - board.getHeightInPixels()) / 2);
     }
 
-    private void arrangeLandscape() {
+    private void arrangeLandscape(EngineAndroid engRef) {
         // label
         this.winLabel.setPos(GameManager.getInstance().getWidth() / 2, GameManager.getInstance().getHeight() / 6);
 
@@ -133,5 +136,9 @@ public class WinScene implements IScene {
         this.coinsButton.setSize(w, h / 12);
         this.shareButton.setPosition(3 * w / 2, (int)(h * 7.25 / 8));
         this.shareButton.setSize(w, h / 12);
+
+        this.board.calcCellSize(engRef);
+        this.board.setPos((GameManager.getInstance().getWidth() - board.getWidthInPixels()) / 2,
+                (int)((GameManager.getInstance().getHeight() / 0.75f) - board.getHeightInPixels()) / 2);
     }
 }
