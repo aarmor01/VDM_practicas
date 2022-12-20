@@ -27,7 +27,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -209,10 +213,6 @@ public class EngineAndroid implements Runnable {
         return file;
     }
 
-    public void removeFile(String path) {
-        this.context.deleteFile(path);
-    }
-
     public ArrayList<String> readText(String path, String file) {
         //Carga de archivo
         ArrayList<String> receiveString = new ArrayList<>();
@@ -255,6 +255,37 @@ public class EngineAndroid implements Runnable {
         }
         return null;
     }
+
+    public String getChecksum(FileInputStream fis) throws NoSuchAlgorithmException, IOException {
+        // Use MD5 algorithm
+        MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+
+        // Create byte array to read data in chunks
+        byte[] byteArray = new byte[1024];
+        int bytesCount = 0;
+
+        // Read file data and update in message digest
+        while ((bytesCount = fis.read(byteArray)) != -1)
+            md5Digest.update(byteArray, 0, bytesCount);
+
+        // Get the hash's bytes
+        byte[] bytes = md5Digest.digest();
+
+        // This bytes[] has bytes in decimal format;
+        // Convert it to hexadecimal format
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i< bytes.length ;i++)
+            sb.append(String.format("%02x", bytes[i]));
+
+        // return complete hash
+        return sb.toString();
+    }
+
+    public boolean checkChecksum (String ogDigest, FileInputStream fis) throws NoSuchAlgorithmException, IOException {
+        return MessageDigest.isEqual(ogDigest.getBytes(StandardCharsets.UTF_8),
+                getChecksum(fis).getBytes(StandardCharsets.UTF_8));
+    }
+
 
     private void waitSurfaceConfiguration() {
         while (!this.initialConfigurationDone) ;

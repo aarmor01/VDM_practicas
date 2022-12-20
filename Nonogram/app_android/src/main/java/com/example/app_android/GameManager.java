@@ -10,10 +10,13 @@ import android.os.Bundle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class GameManager {
     public enum ColorTypes {BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR}
@@ -24,6 +27,7 @@ public class GameManager {
     private final int NUM_COLORS_PER_PALETTE = 4;
 
     final String SAVE_FILE = "save_data.json";
+    final String CHECKSUM_FILE = "checksum.txt";
 
     // singleton
     private static GameManager instance = null;
@@ -81,6 +85,17 @@ public class GameManager {
             FileInputStream file = engine.openInputFile(SAVE_FILE);
             ObjectInputStream readSaveFile = new ObjectInputStream(file);
 
+            // check if file has been modified
+//            byte[] byteArray = new byte[1024];
+//            StringBuilder sb = new StringBuilder();
+//            while (file.read(byteArray) != -1)
+//                sb.append(byteArray);
+//
+//            if (engine.checkChecksum(sb.toString(), file)) {
+//                System.out.println("Save file has been modified, so we discard it");
+//                return;
+//            }
+
             // load all game data
             loadData(readSaveFile);
 
@@ -111,6 +126,13 @@ public class GameManager {
 
             writeSaveFile.close();
             file.close();
+
+            // save checksum
+//            FileOutputStream fileOutputStream = engine.openOutputFile(CHECKSUM_FILE);
+//            FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
+//            fileOutputStream.write(engine.getChecksum(fileInputStream).getBytes(StandardCharsets.UTF_8));
+//            fileInputStream.close();
+//            fileOutputStream.close();
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Store].");
             ex.printStackTrace();
