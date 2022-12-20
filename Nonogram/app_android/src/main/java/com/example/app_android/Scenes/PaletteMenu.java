@@ -2,6 +2,7 @@ package com.example.app_android.Scenes;
 
 import com.example.app_android.GameManager;
 import com.example.app_android.Objects.Button;
+import com.example.app_android.Objects.Label;
 import com.example.app_android.Resources;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
@@ -11,8 +12,7 @@ import com.example.engine_android.Modules.RenderAndroid;
 
 public class PaletteMenu implements IScene {
     final int PALETTE_VALUE = 3;
-    private String mainText;
-    private String mainFont;
+    private Label mainText;
 
     private Button[] paletteButtons;
     private Button coinIndicator;
@@ -26,29 +26,32 @@ public class PaletteMenu implements IScene {
     @Override
     public void init(EngineAndroid engRef) {
         // main text
-        this.mainText = "Palette menu";
-        this.mainFont = Resources.FONT_KOMIKAX;
+        this.mainText = new Label("Palette menu", 0, 0, Resources.FONT_KOMIKAX);
 
         // buttons
-        int getW = engRef.getRender().getWidth();
-        int getH = engRef.getRender().getHeight();
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
         int numPalettes = GameManager.getInstance().NUM_PALETTES;
 
         paletteButtons = new Button[numPalettes];
         for (int i = 0; i < numPalettes; i++) {
-            this.paletteButtons[i] = new Button(getW / 2 - (getW / 5)*numPalettes/2 + (getW / 5 + 5)*i, (getH / 2), getW / 5, getW / 5,
+            this.paletteButtons[i] = new Button(0, 0, 0, 0,
                     "Palette " + (i + 1), "", Resources.FONT_SIMPLY_SQUARE_BIG, Resources.SOUND_BUTTON, false);
         }
-        this.coinIndicator = new Button(5 * getW / 8, 0, getW / 4, getW / 8, Integer.toString(GameManager.getInstance().getCoins()),
+        this.coinIndicator = new Button(0,0,0,0, Integer.toString(GameManager.getInstance().getCoins()),
                 Resources.IMAGE_COIN, Resources.FONT_EXO_REGULAR_MEDIUM, "", false);
-        this.backButton = new Button(getW / 3, (getH / 6) * 5,
-                getW / 3, (getH / 6) / 3, "Back",
+        this.backButton = new Button(0, 0, 0, 0, "Back",
                 Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE_BIG, Resources.SOUND_BUTTON, false);
+
+        rearrange(engRef);
     }
 
     @Override
     public void rearrange(EngineAndroid engRef) {
-
+        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
+            arrangePortrait();
+        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
+            arrangeLandscape();
     }
 
     @Override
@@ -59,10 +62,7 @@ public class PaletteMenu implements IScene {
     @Override
     public void render(RenderAndroid renderMng) {
         // text
-        renderMng.setColor(0xFF000000);
-        renderMng.setFont(this.mainFont);
-        int textWidth = renderMng.getTextWidth(this.mainFont, this.mainText);
-        renderMng.drawText((renderMng.getWidth() - textWidth) / 2, renderMng.getHeight() / 6, this.mainText);
+        mainText.render(renderMng);
 
         // buttons
         for(Button a : paletteButtons)
@@ -101,6 +101,46 @@ public class PaletteMenu implements IScene {
                 engRef.getSceneManager().changeScene(new ModeSelectionMenu(), engRef);
                 this.backButton.clicked(engRef.getAudio());
             }
+        }
+    }
+
+    private void arrangePortrait() {
+        this.mainText.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
+
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
+        this.coinIndicator.setPosition(5 * getW / 8, 0);
+        this.coinIndicator.setSize(getW / 4, getW / 8);
+        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.backButton.setPosition(getW / 3, (getH / 6) * 5);
+        this.backButton.setSize(getW / 3, (getH / 6) / 3);
+        this.backButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        int numPalettes = GameManager.getInstance().NUM_PALETTES;
+        for (int i = 0; i < numPalettes; i++) {
+            this.paletteButtons[i].setPosition(getW / 2 - (getW / 5)*numPalettes/2 + (getW / 5 + 5)*i, (getH / 2));
+            this.paletteButtons[i].setSize(getW / 5, getW / 5);
+        }
+    }
+
+    private void arrangeLandscape() {
+        this.mainText.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
+
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
+        this.coinIndicator.setPosition(5 * getW / 8, 0);
+        this.coinIndicator.setSize(getW / 4, getW / 8);
+        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.backButton.setPosition(getW / 3, (getH / 6) * 5);
+        this.backButton.setSize(getW / 3, (getH / 6) / 3);
+        this.backButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        int numPalettes = GameManager.getInstance().NUM_PALETTES;
+        for (int i = 0; i < numPalettes; i++) {
+            this.paletteButtons[i].setPosition(getW / 2 - (getW / 5)*numPalettes/2 + (getW / 5 + 5)*i, (getH / 2));
+            this.paletteButtons[i].setSize(getW / 5, getW / 5);
         }
     }
 }

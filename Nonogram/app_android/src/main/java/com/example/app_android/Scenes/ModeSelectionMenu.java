@@ -1,6 +1,7 @@
 package com.example.app_android.Scenes;
 
 import com.example.app_android.GameManager;
+import com.example.app_android.Objects.Label;
 import com.example.app_android.Resources;
 import com.example.app_android.Objects.Button;
 
@@ -11,8 +12,7 @@ import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class ModeSelectionMenu implements IScene {
-    private String mainText;
-    private String mainFont;
+    private Label mainText;
 
     private Button playRandomLevelButton;
     private Button playThemeButton;
@@ -27,25 +27,29 @@ public class ModeSelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engRef) {
         // main text
-        this.mainText = "Choose play mode: ";
-        this.mainFont = Resources.FONT_KOMIKAX;
+        this.mainText = new Label("Select mode: ", 0, 0, Resources.FONT_KOMIKAX);
 
         // buttons
         int getW = GameManager.getInstance().getWidth();
         int getH = GameManager.getInstance().getHeight();
-        this.playRandomLevelButton = new Button(0, (int) (getH / 1.25),
-                getW, getH / 8, "RANDOM LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.playThemeButton = new Button(0, (int) (getH / 1.75),
-                getW, getH / 8, "THEME LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.paletteMenu = new Button(0, (int) (getH / 2.2),
-                getW, getH / 8, "PALETTES MENU", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        this.coinIndicator = new Button(5 * getW / 8, 0, getW / 4, getW / 8, Integer.toString(GameManager.getInstance().getCoins()),
+        this.playRandomLevelButton = new Button(0, 0, 0, 0,
+                "RANDOM LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.playThemeButton = new Button(0, 0, 0, 0,
+                "THEME LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.paletteMenu = new Button(0, 0, 0, 0,
+                "PALETTES MENU", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.coinIndicator = new Button(0, 0, 0, 0, Integer.toString(GameManager.getInstance().getCoins()),
                 Resources.IMAGE_COIN, Resources.FONT_EXO_REGULAR_MEDIUM, "", false);
+
+        rearrange(engRef);
     }
 
     @Override
     public void rearrange(EngineAndroid engRef) {
-
+        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
+            arrangePortrait();
+        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
+            arrangeLandscape();
     }
 
     @Override
@@ -56,10 +60,7 @@ public class ModeSelectionMenu implements IScene {
     @Override
     public void render(RenderAndroid renderMng) {
         // text
-        renderMng.setColor(0xFF000000);
-        renderMng.setFont(this.mainFont);
-        int textWidth = renderMng.getTextWidth(this.mainFont, mainText);
-        renderMng.drawText((GameManager.getInstance().getWidth() - textWidth)/2, GameManager.getInstance().getHeight()/6, mainText);
+        this.mainText.render(renderMng);
 
         // buttons
         this.playRandomLevelButton.render(renderMng);
@@ -82,5 +83,49 @@ public class ModeSelectionMenu implements IScene {
                 this.paletteMenu.clicked(engRef.getAudio());
             }
         }
+    }
+
+    private void arrangePortrait() {
+        this.mainText.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
+
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
+        this.playRandomLevelButton.setPosition(0, (int)(getH / 1.25));
+        this.playRandomLevelButton.setSize(getW, getH / 8);
+        this.playRandomLevelButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.playThemeButton.setPosition(0, (int) (getH / 1.75));
+        this.playThemeButton.setSize(getW, getH / 8);
+        this.playThemeButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.paletteMenu.setPosition(0, (int) (getH / 2.2));
+        this.paletteMenu.setSize(getW, getH / 8);
+        this.paletteMenu.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.coinIndicator.setPosition(5 * getW / 8, 0);
+        this.coinIndicator.setSize(getW / 4, getW / 8);
+        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+    }
+
+    private void arrangeLandscape() {
+        this.mainText.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
+
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
+        this.playRandomLevelButton.setPosition(0, (int)(getH / 1.25));
+        this.playRandomLevelButton.setSize(getW, getH / 8);
+        this.playRandomLevelButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.playThemeButton.setPosition(0, (int) (getH / 1.75));
+        this.playThemeButton.setSize(getW, getH / 8);
+        this.playThemeButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.paletteMenu.setPosition(0, (int) (getH / 2.2));
+        this.paletteMenu.setSize(getW, getH / 8);
+        this.paletteMenu.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
+
+        this.coinIndicator.setPosition(5 * getW / 8, 0);
+        this.coinIndicator.setSize(getW / 4, getW / 8);
+        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 }

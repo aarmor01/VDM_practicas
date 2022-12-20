@@ -304,7 +304,7 @@ public class GameManager {
     }
 
     public void updateCategory(int category, int level, int[][] pendBoard, int lives) {
-        if (pendBoard != null) {
+        if (category != 0 && pendBoard != null) {
             this.categories[category].pendingBoardLevel = level;
             this.categories[category].pendingBoardState = pendBoard;
             this.categories[category].pendingBoardLives = lives;
