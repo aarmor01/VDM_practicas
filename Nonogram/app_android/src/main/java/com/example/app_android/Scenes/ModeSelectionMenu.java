@@ -27,7 +27,7 @@ public class ModeSelectionMenu implements IScene {
     @Override
     public void init(EngineAndroid engRef) {
         // main text
-        this.mainText = new Label("Select mode: ", 0, 0, Resources.FONT_KOMIKAX);
+        this.mainText = new Label("Select mode", 0, 0, Resources.FONT_KOMIKAX);
 
         // buttons
         int getW = GameManager.getInstance().getWidth();
@@ -37,7 +37,7 @@ public class ModeSelectionMenu implements IScene {
         this.playThemeButton = new Button(0, 0, 0, 0,
                 "THEME LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.paletteMenu = new Button(0, 0, 0, 0,
-                "PALETTES MENU", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+                "PALETTE SELECTION", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinIndicator = new Button(0, 0, 0, 0, Integer.toString(GameManager.getInstance().getCoins()),
                 Resources.IMAGE_COIN, Resources.FONT_EXO_REGULAR_MEDIUM, "", false);
 
@@ -90,15 +90,15 @@ public class ModeSelectionMenu implements IScene {
 
         int getW = GameManager.getInstance().getWidth();
         int getH = GameManager.getInstance().getHeight();
-        this.playRandomLevelButton.setPosition(0, (int)(getH / 1.25));
+        this.playRandomLevelButton.setPosition(0, (int)(getH * 2 / 8));
         this.playRandomLevelButton.setSize(getW, getH / 8);
         this.playRandomLevelButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.playThemeButton.setPosition(0, (int) (getH / 1.75));
+        this.playThemeButton.setPosition(0, (int) (getH * 4 / 8));
         this.playThemeButton.setSize(getW, getH / 8);
         this.playThemeButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.paletteMenu.setPosition(0, (int) (getH / 2.2));
+        this.paletteMenu.setPosition(0, (int) (getH * 6 / 8));
         this.paletteMenu.setSize(getW, getH / 8);
         this.paletteMenu.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
@@ -112,20 +112,20 @@ public class ModeSelectionMenu implements IScene {
 
         int getW = GameManager.getInstance().getWidth();
         int getH = GameManager.getInstance().getHeight();
-        this.playRandomLevelButton.setPosition(0, (int)(getH / 1.25));
+        this.playRandomLevelButton.setPosition(0, (int)(getH * 2 / 8));
         this.playRandomLevelButton.setSize(getW, getH / 8);
         this.playRandomLevelButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.playThemeButton.setPosition(0, (int) (getH / 1.75));
+        this.playThemeButton.setPosition(0, (int) (getH * 4 / 8));
         this.playThemeButton.setSize(getW, getH / 8);
         this.playThemeButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.paletteMenu.setPosition(0, (int) (getH / 2.2));
+        this.paletteMenu.setPosition(0, (int) (getH * 6 / 8));
         this.paletteMenu.setSize(getW, getH / 8);
         this.paletteMenu.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.coinIndicator.setPosition(5 * getW / 8, 0);
-        this.coinIndicator.setSize(getW / 4, getW / 8);
+        this.coinIndicator.setPosition(getW - getW / 5, 0);
+        this.coinIndicator.setSize(getW / 5, getW / 8);
         this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 }
