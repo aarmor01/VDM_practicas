@@ -46,7 +46,7 @@ public class EngineAndroid implements Runnable {
     private final AudioAndroid myAudioManager;
     private final AdSystemAndroid myAdSystem;
     private final IntentSystemAndroid myIntentSystem;
-    private final LightSensor myLightSensor;
+    private LightSensor myLightSensor;
 
     // asset manager
     private final AssetManager assetManager;
@@ -76,7 +76,6 @@ public class EngineAndroid implements Runnable {
         this.myInputManager = new InputManager();
         this.myAdSystem = new AdSystemAndroid(activity, this.context);
         this.myIntentSystem = new IntentSystemAndroid(this.context);
-        this.myLightSensor = new LightSensor(this.context);
         // add input listener to window
         surface.setOnTouchListener(new InputListener());
 
@@ -181,7 +180,11 @@ public class EngineAndroid implements Runnable {
         return this.myIntentSystem;
     }
 
+    public void setLightSensor(LightSensor lS) {this.myLightSensor = lS;}
+
     public LightSensor getLightSensor() {return this.myLightSensor;}
+
+    public Context getContext() {return this.context;}
 
     // TODO: change scene init structure so we don't need this and we just return the enum in the method
     public Orientation getOrientation() { return orientation; }

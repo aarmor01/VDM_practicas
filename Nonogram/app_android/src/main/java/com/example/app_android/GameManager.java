@@ -4,6 +4,7 @@ import com.example.app_android.Objects.CategoryData;
 
 import com.example.app_android.Scenes.BoardScene;
 import com.example.engine_android.EngineAndroid;
+import com.example.engine_android.Modules.LightSensor;
 
 import android.os.Bundle;
 
@@ -25,12 +26,17 @@ public class GameManager {
     private final int NUM_CATEGORIES = 5;
     public final int NUM_PALETTES = 3;
     private final int NUM_COLORS_PER_PALETTE = 4;
+    private final int LIGHTMODES = 2;
 
     final String SAVE_FILE = "save_data.json";
     final String CHECKSUM_FILE = "checksum.txt";
 
     // singleton
     private static GameManager instance = null;
+
+    //Sensor
+    private LightSensorApp lightSensor;
+
 
     //Dimensions
     int width, height;
@@ -39,9 +45,10 @@ public class GameManager {
     private CategoryData[] categories = null;   // save
 
     // palettes data
-    private int[][] palettes;
+    private int[][][] palettes;
     private boolean[] unlockedPalettes;         // save
     private int currentPalette;                 // save
+    private int nightMode;
 
     // coins
     private int coins;                          // save
@@ -74,6 +81,10 @@ public class GameManager {
     }
 
     private void setup(EngineAndroid engine, int w, int h, Bundle savedState) {
+        //lightSensor
+        lightSensor = new LightSensorApp(engine.getContext(), engine);
+        engine.setLightSensor(lightSensor);
+
         // load default values, in case something goes wrong
         loadGameDefaultData();
 
@@ -307,21 +318,37 @@ public class GameManager {
 
     // ---------------- PALETTES ----------------
     private void loadPalettes() {
-        palettes = new int[NUM_PALETTES][NUM_COLORS_PER_PALETTE];
-        palettes[0][ColorTypes.BG_COLOR.ordinal()] = 0xFFFFFFFF;//Background
-        palettes[0][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000FF;//CellsCorrect
-        palettes[0][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFFF0000;//CellsFailed
-        palettes[0][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
+        nightMode = 0;
+        palettes = new int[LIGHTMODES][NUM_PALETTES][NUM_COLORS_PER_PALETTE];
+        palettes[0][0][ColorTypes.BG_COLOR.ordinal()] = 0xFFFFFFFF;//Background
+        palettes[0][0][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000FF;//CellsCorrect
+        palettes[0][0][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFFF0000;//CellsFailed
+        palettes[0][0][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
 
-        palettes[1][ColorTypes.BG_COLOR.ordinal()] = 0xFF008800;
-        palettes[1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF00FF00;
-        palettes[1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFFF00FF;
-        palettes[1][ColorTypes.AUX_COLOR.ordinal()] = 0xFF0000FF;
+        palettes[1][0][ColorTypes.BG_COLOR.ordinal()] = 0xFFAAAAAA;//Background
+        palettes[1][0][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
+        palettes[1][0][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
+        palettes[1][0][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
 
-        palettes[2][ColorTypes.BG_COLOR.ordinal()] = 0xFF660000;
-        palettes[2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFFFF0000;
-        palettes[2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFF00FF00;
-        palettes[2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF00FF44;
+        palettes[0][1][ColorTypes.BG_COLOR.ordinal()] = 0xFF008800;
+        palettes[0][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF00FF00;
+        palettes[0][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFFF00FF;
+        palettes[0][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFF0000FF;
+
+        palettes[1][1][ColorTypes.BG_COLOR.ordinal()] = 0xFFAAAAAA;//Background
+        palettes[1][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
+        palettes[1][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
+        palettes[1][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
+
+        palettes[0][2][ColorTypes.BG_COLOR.ordinal()] = 0xFF660000;
+        palettes[0][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFFFF0000;
+        palettes[0][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFF00FF00;
+        palettes[0][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF00FF44;
+
+        palettes[1][2][ColorTypes.BG_COLOR.ordinal()] = 0xFFAAAAAA;//Background
+        palettes[1][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
+        palettes[1][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
+        palettes[1][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
 
 //        unlockedPalettes = new boolean[NUM_PALETTES];
 //        unlockedPalettes[0] = true;
@@ -330,9 +357,9 @@ public class GameManager {
 //        currentPalette = 0;
     }
 
-    public int getColor(int colorType) {
-        return palettes[currentPalette][colorType];
-    }
+    public int getColor(int colorType) { return palettes[nightMode][currentPalette][colorType];}
+
+    public void setNightMode(int nightMode_) { nightMode = nightMode_;}
 
     public int getActPalette() {
         return currentPalette;

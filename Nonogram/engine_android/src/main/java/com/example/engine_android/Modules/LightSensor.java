@@ -32,18 +32,8 @@ public class LightSensor implements SensorEventListener {
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
-            float sensorValue = sensorEvent.values[0];
-            // TODO
-        }
-    }
+    public void onSensorChanged(SensorEvent sensorEvent) {}
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        if (sensor.getType() == Sensor.TYPE_LIGHT) {
-
-            // TODO
-        }
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) {}
 }
