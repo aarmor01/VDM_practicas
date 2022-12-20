@@ -2,6 +2,7 @@ package com.example.app_android;
 
 import com.example.app_android.Objects.CategoryData;
 
+import com.example.app_android.Scenes.BoardScene;
 import com.example.engine_android.EngineAndroid;
 
 import android.os.Bundle;
@@ -66,7 +67,14 @@ public class GameManager {
     }
 
     private void setup(EngineAndroid engine, Bundle savedState) {
+        // load default values, in case something goes wrong
         loadGameDefaultData();
+
+        // try to load from bundle
+        if (loadData(savedState)) {
+            System.out.println("Loaded properly from bundle");
+            return;
+        }
 
         // file to be read from
         try {
@@ -74,7 +82,7 @@ public class GameManager {
             ObjectInputStream readSaveFile = new ObjectInputStream(file);
 
             // load all game data
-            loadData(savedState, readSaveFile);
+            loadData(readSaveFile);
 
             readSaveFile.close();
             file.close();
@@ -86,13 +94,20 @@ public class GameManager {
     }
 
     private void close(EngineAndroid engine, Bundle savedState) {
+        // if we are on BoardScene, we save the state anyways
+        if (engine.getSceneManager().currentScene().getId() == "BoardScene")
+            ((BoardScene) engine.getSceneManager().currentScene()).updateCategoryInformation();
+
+        // store on bundle (made to persist through config changes)
+        storeData(savedState);
+
         // file to be written to
         try {
             FileOutputStream file = engine.openOutputFile(SAVE_FILE);
             ObjectOutputStream writeSaveFile = new ObjectOutputStream(file);
 
             // store all game data
-            storeData(savedState, writeSaveFile);
+            storeData(writeSaveFile);
 
             writeSaveFile.close();
             file.close();
@@ -123,7 +138,7 @@ public class GameManager {
         }
     }
 
-    private void loadData(Bundle savedState, ObjectInputStream readSaveFile) {
+    private void loadData(ObjectInputStream readSaveFile) {
         try {
             JSONObject dataObject = new JSONObject(readSaveFile.readObject().toString());
             this.coins = dataObject.getInt("coins");
@@ -156,37 +171,28 @@ public class GameManager {
             System.out.println("Error loading data.");
             e.printStackTrace();
         }
-//              if (savedState != null) {
-//                this.categories[category] = (CategoryData) savedState.getSerializable(category_name);
-//                if (this.categories[category] != null)
-//                    return;
-//            }
-//        // if it doesn't work, we load from file
-//        try {
-//            // Reading the object from a file
-//            FileInputStream file = engine.openInputFile(category_file);
-//            ObjectInputStream in = new ObjectInputStream(file);
-//
-//            // Method for deserialization of object
-//            this.categories[category] = (CategoryData) in.readObject();
-//            System.out.println("Category " + category + " has been deserialized.");
-//
-//            // close
-//            in.close();
-//            file.close();
-//        } catch (Exception ex) { // if file also fails, we end up creating new data
-//            System.out.println("Category not serialised previously. Loading new Category");
-//            this.categories[category] = new CategoryData();
-//            if (category == 1) // we set the first story level with the first level unlocked
-//                this.categories[category].levelUnlocked++;
-//        }
-//
-//        // we remove the file so we make sure it has to be
-//        // saved on GameManager shutdown
-//        engine.removeFile(category_file);
     }
 
-    private void storeData(Bundle savedState, ObjectOutputStream writeSaveFile) {
+    private boolean loadData(Bundle savedState) {
+        if (savedState == null)
+            return false;
+
+        this.coins = savedState.getInt("coins");
+        this.currentPalette = savedState.getInt("currentPalette");
+
+        for (int palette = 0; palette < this.NUM_PALETTES; palette++)
+            this.unlockedPalettes[palette] = savedState.getBoolean("unlockedPalettes_" + palette);
+
+        for (int ct = 0; ct < this.categories.length; ct++) {
+            this.categories[ct] = (CategoryData) savedState.getSerializable("category_" + ct);
+            if (this.categories[ct] == null)
+                return false;
+        }
+
+        return true;
+    }
+
+    private void storeData(ObjectOutputStream writeSaveFile) {
         try {
             JSONObject dataObject = new JSONObject();
             dataObject.put("coins", this.coins);
@@ -225,30 +231,17 @@ public class GameManager {
             System.out.println("Error storing data.");
             e.printStackTrace();
         }
-//        // name and file of the category for serialization
-//        String category_name = CATEGORY_SAVE_NAME + category,
-//               category_file = category_name + SAVE_FILE_EXTENSION;
-//
-//        // first, we save it from bundle
-//        if (savedState != null)
-//            savedState.putSerializable(category_name, this.categories[category]);
-//
-//        // then, we save it on a file just in case
-//        try {
-//            // Reading the object to a file
-//            FileOutputStream file = engine.openOutputFile(category_file);
-//            ObjectOutputStream out = new ObjectOutputStream(file);
-//
-//            // Method for serialization of object
-//            out.writeObject(this.categories[category]);
-//            System.out.println("Category " + category + " has been serialized.");
-//
-//            // close
-//            out.close();
-//            file.close();
-//        } catch (Exception ex) {
-//            System.out.println("Category not serialised correctly. Serializing new empty Category");
-//        }
+    }
+
+    private void storeData(Bundle savedState) {
+        savedState.putInt("coins", this.coins);
+        savedState.putInt("currentPalette", this.currentPalette);
+
+        for (int palette = 0; palette < this.NUM_PALETTES; palette++)
+            savedState.putBoolean("unlockedPalettes_" + palette, this.unlockedPalettes[palette]);
+
+        for (int ct = 0; ct < this.categories.length; ct++)
+            savedState.putSerializable("category_" + ct, this.categories[ct]);
     }
 
     public void updateCategory(int category, int level, int[][] pendBoard, int lives) {

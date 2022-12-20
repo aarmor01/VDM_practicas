@@ -9,12 +9,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,7 +17,6 @@ import android.view.View;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.app_android.Scenes.BoardScene;
 import com.google.android.gms.ads.AdView;
 
 import com.example.app_android.Scenes.BootScene;
@@ -63,15 +57,11 @@ public class MainActivity extends AppCompatActivity {
          this.engine.getAdSystem().loadBannerAd((AdView)findViewById(R.id.adView));
         this.engine.getAdSystem().loadRewardedAd();
 
-        // load files
-        GameManager.init(this.engine, savedInstanceState);
-        this.engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
-
         //creates notification channel
         this.engine.getIntentSystem().createChannel("Nonogram",
                 "Notifications for Nonogram App", "not_nonogram");
 
-        // load files
+        // load game data
         GameManager.init(this.engine, savedInstanceState);
         this.engine.getRender().setBackGroundColor(GameManager.getInstance().getColor(0));
     }
@@ -117,27 +107,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        // notifications done on app closure
+        createWorkRequest("not_nonogram", "Nonograms need you!", "Time to play some Nonograms and save the world");
+        startPeriodicWorkRequest("not_nonogram", "We miss you!", "If you don't play all of us will starve to death");
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // save data
-        if(this.engine.getSceneManager().currentScene().getId() == "BoardScene")
-            ((BoardScene)this.engine.getSceneManager().currentScene()).updateCategoryInformation();
         GameManager.shutdown(this.engine, outState);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // notifications
-        createWorkRequest("not_nonogram", "Nonograms need you!", "Time to play some Nonograms and save the world");
-        startPeriodicWorkRequest("not_nonogram", "We miss you!", "If you don't play all of us will starve to death");
-
-        // in case we haven't gone to onSaveInstanceState(), we
-        // save data in this part of the lifecycle
-//        if (GameManager.getInstance() != null)
-//            GameManager.shutdown(this.engine, null);
     }
 
     private void activityConfigurations() {
