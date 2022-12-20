@@ -1,5 +1,6 @@
 package com.example.app_android.Scenes;
 
+import com.example.app_android.Objects.Label;
 import com.example.app_android.Resources;
 import com.example.app_android.GameManager;
 import com.example.app_android.Objects.Button;
@@ -11,9 +12,7 @@ import com.example.engine_android.DataStructures.InputAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class MainMenu implements IScene {
-    private String title;
-    private String fontTitle;
-
+    private Label title;
     private Button playButton;
 
     @Override
@@ -23,10 +22,11 @@ public class MainMenu implements IScene {
 
     @Override
     public void init(EngineAndroid engRef) {
-        if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
-            arrangePortrait(engRef);
-        else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
-            arrangeLandscape(engRef);
+        this.title = new Label("NONOGRAMAS", 0, 0, Resources.FONT_KOMIKAX, engRef);
+        this.playButton = new Button(0, 0, GameManager.getInstance().getWidth() / 3,
+                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+
+        rearrange(engRef);
     }
 
     @Override
@@ -45,10 +45,7 @@ public class MainMenu implements IScene {
     @Override
     public void render(RenderAndroid renderMng) {
         // render title
-        renderMng.setColor(0xFF000000);
-        renderMng.setFont(this.fontTitle);
-        int textWidth = renderMng.getTextWidth(this.fontTitle, this.title);
-        renderMng.drawText((GameManager.getInstance().getWidth() - textWidth)/2, GameManager.getInstance().getHeight()/6, title);
+        this.title.render(renderMng);
         // render button
         this.playButton.render(renderMng);
 
@@ -64,21 +61,18 @@ public class MainMenu implements IScene {
     }
 
     private void arrangePortrait(EngineAndroid engRef) {
-        this.title = "NONOGRAMAS";
-        this.fontTitle = Resources.FONT_KOMIKAX;
-        this.playButton = new Button((GameManager.getInstance().getWidth() - GameManager.getInstance().getWidth() / 3) / 2,
-                (int) (GameManager.getInstance().getHeight() / 1.5), GameManager.getInstance().getWidth() / 3,
-                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.title.setPos((GameManager.getInstance().getWidth() - this.title.getTextW()) / 2, GameManager.getInstance().getHeight() / 6);
 
-//        engRef.getAudio().loadMusic("./assets/sounds/puzzleTheme.wav", 0.1f);
-//        engRef.getAudio().playMusic();
+        this.playButton.setPosition((2 * GameManager.getInstance().getWidth() / 3) / 2,
+                (int)(GameManager.getInstance().getHeight() / 1.5));
+        this.playButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 
     private void arrangeLandscape(EngineAndroid engRef) {
-        this.title = "NANOGRAMA";
-        this.fontTitle = Resources.FONT_KOMIKAX;
-        this.playButton = new Button((GameManager.getInstance().getWidth() - GameManager.getInstance().getWidth() / 3) / 2,
-                (int) (GameManager.getInstance().getHeight() / 1.5), GameManager.getInstance().getWidth() / 3,
-                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 2);
+
+        this.playButton.setPosition((int)(GameManager.getInstance().getHeight() / 1.5),
+                (2 * GameManager.getInstance().getWidth() / 3) / 2);
+        this.playButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 }

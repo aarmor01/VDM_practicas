@@ -29,10 +29,10 @@ public class CategoryLevelSelectionMenu implements IScene {
                 this.path = "levels/emojis/";
                 break;
             case 3:
-                this.path = "levels/theme3/";
+                this.path = "levels/cocina/";
                 break;
             case 4:
-                this.path = "levels/theme4/";
+                this.path = "levels/navidad/";
                 break;
         }
         this.category = cat;
