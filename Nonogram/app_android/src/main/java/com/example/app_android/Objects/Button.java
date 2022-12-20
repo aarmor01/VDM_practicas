@@ -51,4 +51,11 @@ public class Button {
     public void clicked(AudioAndroid soundMng){
         soundMng.playSound(sound);
     }
+
+    public void setPosition(int x, int y){
+        posX = x;
+        posY = y;
+    }
+
+    public void setColor(int c){ color = c; }
 }
