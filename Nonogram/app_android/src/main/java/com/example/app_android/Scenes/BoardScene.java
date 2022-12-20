@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class BoardScene implements IScene {
     private final int MAX_LIVES = 3;
 
-    private int dim_w, dim_h;
+    private int dim_w, dim_h, numberLevel;
     private String path, level;
 
     private Board board;
@@ -32,10 +32,12 @@ public class BoardScene implements IScene {
     public BoardScene(int w, int h) {
         this.dim_w = w;
         this.dim_h = h;
+        this.numberLevel = -1;
     }
 
     public BoardScene(String path, int file, int category) {
         this.path = path;
+        this.numberLevel = file;
         this.level = file + ".txt";
         this.actLevel = file;
         this.actCategory = category;
@@ -129,10 +131,10 @@ public class BoardScene implements IScene {
 
                 if (this.board.checkear(input.getX(), input.getY())) {            //Checkeo de la victoria
                     GameManager.getInstance().updateCategory(this.actCategory, this.actLevel, null, -1);
-                    engine.getSceneManager().changeScene(new WinScene(this.board, true, this.actCategory), engine);
+                    engine.getSceneManager().changeScene(new WinScene(this.board, true, this.actCategory, this.numberLevel), engine);
                 }
                 if (this.lives == 0)
-                    engine.getSceneManager().changeScene(new WinScene(this.board, false, this.actCategory), engine);
+                    engine.getSceneManager().changeScene(new WinScene(this.board, false, this.actCategory, this.numberLevel), engine);
             } else if (this.backButton.isInButton(input.getX(), input.getY())) {   //Input boton de volver
                 this.backButton.clicked(engine.getAudio());
                 if (this.actCategory == 0)

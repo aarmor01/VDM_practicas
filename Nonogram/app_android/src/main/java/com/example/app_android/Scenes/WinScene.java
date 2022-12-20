@@ -9,21 +9,24 @@ import com.example.engine_android.EngineAndroid;
 import com.example.engine_android.Enums.InputType;
 import com.example.engine_android.DataStructures.IScene;
 import com.example.engine_android.DataStructures.InputAndroid;
+import com.example.engine_android.Modules.IntentSystemAndroid;
 import com.example.engine_android.Modules.RenderAndroid;
 
 public class WinScene implements IScene {
     private Board board;
     private boolean victory;
-    private int category;
+    private int category, level;
 
     private String winText;
     private String winFont;
 
     private Button backButton;
     private Button coinsButton;
+    private Button shareButton;
 
-    public WinScene(Board b, boolean win, int categ){
+    public WinScene(Board b, boolean win, int categ, int level){
         this.board = b;
+        this.level = level;
         this.victory = win;
         this.category = categ;
     }
@@ -48,6 +51,8 @@ public class WinScene implements IScene {
                 Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+ " + coins,
                 Resources.IMAGE_COIN, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.shareButton = new Button(3 * w / 2, h, w, h / 12, "Share",
+                Resources.IMAGE_TWITTER_BUTTON, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
     }
 
     @Override
@@ -69,8 +74,11 @@ public class WinScene implements IScene {
         renderMng.drawText((GameManager.getInstance().getWidth() - w) / 2, GameManager.getInstance().getHeight() / 6, winText);
 
         // render solved board
-        if (this.victory)
+        if (this.victory){
             this.board.renderWin(renderMng);
+            this.shareButton.render(renderMng);
+        }
+
 
         // render buttons
         this.backButton.render(renderMng);
@@ -85,6 +93,16 @@ public class WinScene implements IScene {
             else
                 engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(this.category), engRef);
             this.backButton.clicked(engRef.getAudio());
+        }
+        else if (input.getType() == InputType.TOUCH_UP && this.shareButton.isInButton(input.getX(), input.getY())){
+            if (this.victory){
+                String text = " ";
+                if (level == -1)
+                    text =  "I just won a super awesome random level on Nonograms, I dare you to beat it as well!";
+                else
+                    text = "I just won level " + level + " on Nonograms, I dare you to beat it as well!";
+                engRef.getIntentSystem().share(IntentSystemAndroid.SocialNetwork.TWITTER, text);
+            }
         }
     }
 }
