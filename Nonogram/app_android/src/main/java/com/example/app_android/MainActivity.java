@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WorkManager.getInstance(this).cancelAllWork();
+        WorkManager.getInstance(this).cancelAllWorkByTag("notifications");
 
         // set surface view
         setContentView(R.layout.activity_main);
@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(IntentWork.class)
                         // Additional configuration
+                        .addTag("notifications")
                         .setInitialDelay(NOTIFICATION_PUSH, TimeUnit.SECONDS)
                         .setInputData(inputData)
                         .build();
@@ -172,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                         15, TimeUnit.MINUTES,
                         5, TimeUnit.MINUTES)
                         // Constraints
+                        .addTag("notifications")
                         .setInputData(inputData)
                         .build();
 
