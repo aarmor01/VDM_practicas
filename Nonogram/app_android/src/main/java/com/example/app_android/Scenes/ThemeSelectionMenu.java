@@ -24,6 +24,8 @@ public class ThemeSelectionMenu implements IScene {
     private Button backButton;
     private Button coinIndicator;
 
+    final int LEVEL_UNLOCK_CATEGORY = 10;
+
     @Override
     public String getId() {
         return "ThemeSelectionMenu";
@@ -35,13 +37,13 @@ public class ThemeSelectionMenu implements IScene {
 
         this.animalThemeButton = new Button(0, 0, 0, 0, "ANIMAL THEME", "",
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        String buttonImage = GameManager.getInstance().getLevelUnlocked(1) > 10 ? "" : Resources.IMAGE_LOCK;
+        String buttonImage = GameManager.getInstance().getLevelUnlocked(1) > LEVEL_UNLOCK_CATEGORY ? "" : Resources.IMAGE_LOCK;
         this.emojiThemeButton = new Button(0, 0, 0, 0, "EMOJI THEME", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        buttonImage = GameManager.getInstance().getLevelUnlocked(2) > 10 ? "" : Resources.IMAGE_LOCK;
+        buttonImage = GameManager.getInstance().getLevelUnlocked(2) > LEVEL_UNLOCK_CATEGORY ? "" : Resources.IMAGE_LOCK;
         this.kitchenThemeButton = new Button(0, 0, 0, 0, "KITCHEN THEME", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
-        buttonImage = GameManager.getInstance().getLevelUnlocked(3) > 10 ? "" : Resources.IMAGE_LOCK;
+        buttonImage = GameManager.getInstance().getLevelUnlocked(3) > LEVEL_UNLOCK_CATEGORY ? "" : Resources.IMAGE_LOCK;
         this.christmasThemeButton = new Button(0, 0, 0, 0, "XMAS THEME", buttonImage,
                 Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.backButton = new Button(0, 0, 0, 0, "Back",
@@ -90,19 +92,19 @@ public class ThemeSelectionMenu implements IScene {
             if (this.animalThemeButton.isInButton(input.getX(), input.getY())) {
                 engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(1), engRef);
                 this.animalThemeButton.clicked(engRef.getAudio());
-            } else if (this.emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > 0) {
+            } else if (this.emojiThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(1) > LEVEL_UNLOCK_CATEGORY) {
                 if (gM.getLevelUnlocked(2) == -1) {
                     gM.updateCategory(2, 0, null, -1);
                 }
                 engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(2), engRef);
                 this.emojiThemeButton.clicked(engRef.getAudio());
-            } else if (this.kitchenThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > 20) {
+            } else if (this.kitchenThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(2) > LEVEL_UNLOCK_CATEGORY) {
                 if (gM.getLevelUnlocked(3) == -1) {
                     gM.updateCategory(3, 0, null, -1);
                 }
                 engRef.getSceneManager().changeScene(new CategoryLevelSelectionMenu(3), engRef);
                 this.emojiThemeButton.clicked(engRef.getAudio());
-            } else if (this.christmasThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > 20) {
+            } else if (this.christmasThemeButton.isInButton(input.getX(), input.getY()) && gM.getLevelUnlocked(3) > LEVEL_UNLOCK_CATEGORY) {
                 if (gM.getLevelUnlocked(4) == -1) {
                     gM.updateCategory(4, 0, null, -1);
                 }

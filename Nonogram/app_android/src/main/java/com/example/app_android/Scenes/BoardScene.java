@@ -26,7 +26,7 @@ public class BoardScene implements IScene {
     private Button backButton;
     private Button coinIndicator;
     private Button recoverLive;
-    private int livesPosX, livesPosY;
+    private int livesPosX, livesPosY, liveW;
 
     private String sound, liveImage, noLiveImage;
 
@@ -114,15 +114,13 @@ public class BoardScene implements IScene {
         this.recoverLive.render(renderMng);
         this.coinIndicator.render(renderMng);
 
-        int getW = GameManager.getInstance().getWidth();
-        int w = getW / 9;
         for (int i = MAX_LIVES; i > 0; i--) {
             String imName;
             if (i > this.lives)
                 imName = this.noLiveImage;
             else
                 imName = this.liveImage;
-            renderMng.drawImage(livesPosX + (w * (MAX_LIVES - i)), livesPosY, w, w, imName);
+            renderMng.drawImage(livesPosX + (liveW * (MAX_LIVES - i)), livesPosY, liveW, liveW, imName);
         }
     }
 
@@ -166,17 +164,15 @@ public class BoardScene implements IScene {
         int h = GameManager.getInstance().getHeight() / 12;
         this.backButton.setPosition(2 * w / 5, h / 2);
         this.backButton.setSize(w, h);
-        this.backButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
         this.coinIndicator.setPosition(8 * w / 5, h * 2);
         this.coinIndicator.setSize(w, h);
-        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
         this.recoverLive.setPosition(8 * w / 5, h / 2);
         this.recoverLive.setSize(w, h);
-        this.recoverLive.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
         this.livesPosX = 2 * GameManager.getInstance().getWidth() / 15;
-        this.livesPosY = GameManager.getInstance().getHeight() / 6;
+        this.livesPosY = h * 2;
+        this.liveW = GameManager.getInstance().getWidth() / 9;
 
         this.board.calcCellSize(engRef);
         this.board.setPos((GameManager.getInstance().getWidth() - board.getWidthInPixels()) / 2,
@@ -184,24 +180,21 @@ public class BoardScene implements IScene {
     }
 
     private void arrangeLandscape(EngineAndroid engRef) {
-        int w = GameManager.getInstance().getWidth() / 3;
+        int w = GameManager.getInstance().getWidth() / 6;
         int h = GameManager.getInstance().getHeight() / 12;
-        this.backButton.setPosition(2 * w / 5, h / 2);
+        this.backButton.setPosition(0, h / 2);
         this.backButton.setSize(w, h);
-        this.backButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.coinIndicator.setPosition(8 * w / 5, h * 2);
+        this.coinIndicator.setPosition(GameManager.getInstance().getWidth() - w, h * 2);
         this.coinIndicator.setSize(w, h);
-        this.coinIndicator.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
 
-        this.recoverLive.setPosition(8 * w / 5, h / 2);
+        this.recoverLive.setPosition(GameManager.getInstance().getWidth() - w, h / 2);
         this.recoverLive.setSize(w, h);
-        this.recoverLive.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
-        this.livesPosX = 2 * GameManager.getInstance().getWidth() / 15;
+        this.livesPosX = 0;
         this.livesPosY = GameManager.getInstance().getHeight() / 6;
+        this.liveW = GameManager.getInstance().getWidth() / 18;
 
         this.board.calcCellSize(engRef);
-        this.board.setPos((GameManager.getInstance().getWidth() - board.getWidthInPixels()) / 2,
-                (int)((GameManager.getInstance().getHeight() / 0.75f) - board.getHeightInPixels()) / 2);
+        this.board.setPos((GameManager.getInstance().getWidth() - board.getWidthInPixels()) / 2, 10);
     }
 }

@@ -64,7 +64,7 @@ public class Board {
                     board[i][j].init(rand < 4, Cell.State.EMPTY);
                 }
                 else{
-                    board[i][j].init(content.get(j+1).charAt(i) == '1', Cell.State.EMPTY);
+                    board[i][j].init(content.get(i+1).charAt(j) == '1', Cell.State.EMPTY);
                 }
 
                 if (board[i][j].isAnswer()) {   //Si la casilla es solucion modificamos los arrays de filas-columnas
@@ -106,11 +106,6 @@ public class Board {
                 rows[i].add(-1);
         }
 
-        int maxDimension = Math.max(w, h);
-
-        int winW = (GameManager.getInstance().getWidth()) / (maxDimension);
-        int winH = ((int) (GameManager.getInstance().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
-
         calcCellSize(eng);
 
         lastTimeChecked = -1;
@@ -118,14 +113,14 @@ public class Board {
 
     public void render(RenderAndroid renderMng) {
         renderMng.setColor(0xFF000000); //Cuadrado alrededor
-        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, width * (board_cell_size + separation_margin) + separation_margin,
-                height * (board_cell_size + separation_margin) + separation_margin, false);
+        renderMng.drawRectangle(maxNumbers * fontSize + posX, posY + maxNumbers * fontSize, height * (board_cell_size + separation_margin) + separation_margin,
+                width * (board_cell_size + separation_margin) + separation_margin, false);
 
         printNumbers(renderMng);    //Escribimos los números
 
-        for (int i = 0; i < width; i++) {   //Dibujado casillas
-            for (int j = 0; j < height; j++) {
-                board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
+        for (int i = 0; i < height; i++) {   //Dibujado casillas
+            for (int j = 0; j < width; j++) {
+                board[j][i].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX + maxNumbers * fontSize,
                         j * board_cell_size + (j + 1) * separation_margin + posY + maxNumbers * fontSize, board_cell_size);
             }
         }
@@ -143,11 +138,11 @@ public class Board {
     }
 
     public void renderWin(RenderAndroid renderMng) {    //Dibujamos solo las casillas solucion
-        posX = (GameManager.getInstance().getWidth() - board_cell_size * width - separation_margin * (width + 1)) / 2;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (board[i][j].isAnswer()) {
-                    board[i][j].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
+        posX = (GameManager.getInstance().getWidth() - board_cell_size * height - separation_margin * (height + 1)) / 2;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (board[j][i].isAnswer()) {
+                    board[j][i].render(renderMng, i * board_cell_size + (i + 1) * separation_margin + posX,
                             j * board_cell_size + (j + 1) * separation_margin + posY - GameManager.getInstance().getHeight() / 10, board_cell_size);
                 }
             }
@@ -175,34 +170,34 @@ public class Board {
 
     private void printNumbers(RenderAndroid renderMng) {
         renderMng.setFont(font);
-        for (int i = 0; i < cols.length; i++) {
-            if (cols[i].size() == 1) {
+        for (int i = 0; i < rows.length; i++) {
+            if (rows[i].size() == 1) {
                 renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size / 2 + maxNumbers * fontSize,
                         posY + maxNumbers * fontSize - 2 * separation_margin, "0");
             }
-            for (int j = cols[i].size() - 2; j >= 0; j--) {
-                int w = cols[i].get(j);
+            for (int j = rows[i].size() - 2; j >= 0; j--) {
+                int w = rows[i].get(j);
                 renderMng.drawText(posX + board_cell_size * (i + 1) + separation_margin * i - board_cell_size / 2 + maxNumbers * fontSize,
-                        posY + maxNumbers * fontSize - 2 * separation_margin - (fontSize * (cols[i].size() - 2 - j)), Integer.toString(w));
+                        posY + maxNumbers * fontSize - 2 * separation_margin - (fontSize * (rows[i].size() - 2 - j)), Integer.toString(w));
             }
         }
 
-        for (int i = 0; i < rows.length; i++) {
-            if (rows[i].size() == 1) {
+        for (int i = 0; i < cols.length; i++) {
+            if (cols[i].size() == 1) {
                 renderMng.drawText(posX + maxNumbers * fontSize - 8 * separation_margin,
                         posY + board_cell_size * (i + 1) + separation_margin * i - (int) (board_cell_size / 2.5) + maxNumbers * fontSize, "0");
             }
-            for (int j = rows[i].size() - 2; j >= 0; j--) {
-                int w = rows[i].get(j);
-                renderMng.drawText(posX + maxNumbers * fontSize - 8 * separation_margin - (fontSize * (rows[i].size() - 2 - j)),
+            for (int j = cols[i].size() - 2; j >= 0; j--) {
+                int w = cols[i].get(j);
+                renderMng.drawText(posX + maxNumbers * fontSize - 8 * separation_margin - (fontSize * (cols[i].size() - 2 - j)),
                         posY + board_cell_size * (i + 1) + separation_margin * i - (int) (board_cell_size / 2.5) + maxNumbers * fontSize, Integer.toString(w));
             }
         }
     }
 
     public boolean checkear(int x, int y) {
-        int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
-        int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardY = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardX = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
 
         if (!board[boardX][boardY].isAnswer() && board[boardX][boardY].getState() == Cell.State.MARKED) {
             board[boardX][boardY].setChecked();
@@ -217,13 +212,13 @@ public class Board {
     }
 
     public boolean isInBoard(int posX, int posY) {
-        return posX > (separation_margin + this.posX + maxNumbers * fontSize) && posX < (width * board_cell_size + width * separation_margin + this.posX + maxNumbers * fontSize)
-                && posY > (separation_margin + this.posY + maxNumbers * fontSize) && posY < (height * board_cell_size + height * separation_margin + this.posY + maxNumbers * fontSize);
+        return posX > (separation_margin + this.posX + maxNumbers * fontSize) && posX < (height * board_cell_size + height * separation_margin + this.posX + maxNumbers * fontSize)
+                && posY > (separation_margin + this.posY + maxNumbers * fontSize) && posY < (width * board_cell_size + width * separation_margin + this.posY + maxNumbers * fontSize);
     }
 
     public int markCell(int x, int y, boolean longT) {
-        int boardX = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
-        int boardY = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardY = ((x - posX - separation_margin - maxNumbers * fontSize) - (x - posX - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
+        int boardX = ((y - posY - separation_margin - maxNumbers * fontSize) - (y - posY - separation_margin - maxNumbers * fontSize) / board_cell_size * separation_margin) / board_cell_size;
         if (longT)
             board[boardX][boardY].crossCell();
         else {
@@ -288,8 +283,8 @@ public class Board {
     public void calcCellSize(EngineAndroid eng){
         int maxDimension = Math.max(width, height);
 
-        int winW = (GameManager.getInstance().getWidth()) / (maxDimension);
-        int winH = ((int) (GameManager.getInstance().getHeight() / 1.85) - maxNumbers * fontSize) / (maxDimension);
+        int winW = (9 * GameManager.getInstance().getWidth() / 10 - maxNumbers * fontSize) / (maxDimension);
+        int winH = (9 * GameManager.getInstance().getHeight() / 10 - maxNumbers * fontSize) / (maxDimension);
 
         board_cell_size = Math.min(winH, winW);
         separation_margin = Math.max(board_cell_size / 25, 1);
