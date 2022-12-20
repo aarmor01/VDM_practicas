@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WorkManager.getInstance(this).cancelAllWorkByTag("notifications");
 
         // set surface view
         setContentView(R.layout.activity_main);
@@ -77,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        //cancel notifications
+        WorkManager.getInstance(this).cancelAllWork();
         // create boot scene
         BootScene scene = new BootScene();
         this.engine.getSceneManager().changeScene(scene, engine);
