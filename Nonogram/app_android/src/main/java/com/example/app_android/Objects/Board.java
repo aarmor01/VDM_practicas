@@ -278,11 +278,12 @@ public class Board {
         for (int row = 0; row < board.length; row++){
             for (int col = 0; col < board[0].length; col++){
                 Cell.State cellState = Cell.State.values()[savedState[row][col]];
-                board[col][row].setState(cellState); // if checked, it was an answer
-                if(cellState == Cell.State.CHECKED) {
+                board[col][row].setState(cellState);
+
+                if(cellState == Cell.State.CHECKED)     // if checked, it was an error
                     checkedCells.add(board[col][row]);
-                    cellsLeft -= 1;
-                }
+                else if(cellState == Cell.State.MARKED && board[col][row].isAnswer())   // if marked and answer, discount from cellsleft
+                    cellsLeft--;
             }
         }
 
