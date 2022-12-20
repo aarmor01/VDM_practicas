@@ -22,7 +22,7 @@ public class MainMenu implements IScene {
 
     @Override
     public void init(EngineAndroid engRef) {
-        this.title = new Label("NONOGRAMAS", 0, 0, Resources.FONT_KOMIKAX, engRef);
+        this.title = new Label("NONOGRAMAS", 0, 0, Resources.FONT_KOMIKAX);
         this.playButton = new Button(0, 0, 0, 0, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM,
                 Resources.SOUND_BUTTON, false);
 
@@ -32,9 +32,9 @@ public class MainMenu implements IScene {
     @Override
     public void rearrange(EngineAndroid engRef) {
         if (engRef.getOrientation() == EngineAndroid.Orientation.PORTRAIT)
-            arrangePortrait(engRef);
+            arrangePortrait();
         else if (engRef.getOrientation() == EngineAndroid.Orientation.LANDSCAPE)
-            arrangeLandscape(engRef);
+            arrangeLandscape();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MainMenu implements IScene {
         }
     }
 
-    private void arrangePortrait(EngineAndroid engRef) {
+    private void arrangePortrait() {
         this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
 
         this.playButton.setPosition((2 * GameManager.getInstance().getWidth() / 3) / 2,
@@ -68,7 +68,7 @@ public class MainMenu implements IScene {
         this.playButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 
-    private void arrangeLandscape(EngineAndroid engRef) {
+    private void arrangeLandscape() {
         this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
 
         this.playButton.setPosition((2 * GameManager.getInstance().getWidth() / 3) / 2,

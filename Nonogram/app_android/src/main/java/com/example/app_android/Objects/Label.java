@@ -9,7 +9,7 @@ public class Label {
     private int posX, posY;
     private String font;
 
-    public Label(String tx, int x, int y, String f, EngineAndroid engRef) {
+    public Label(String tx, int x, int y, String f) {
         text = tx;
         posX = x;
         posY = y;
