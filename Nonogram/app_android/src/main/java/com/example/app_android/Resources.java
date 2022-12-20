@@ -3,6 +3,7 @@ package com.example.app_android;
 public class Resources {
     // images
     public static String IMAGE_BACK_BUTTON = null;
+    public static String IMAGE_TWITTER_BUTTON = null;
     public static String IMAGE_COIN = null;
     public static String IMAGE_LOCK = null;
     public static String IMAGE_HEART = null;

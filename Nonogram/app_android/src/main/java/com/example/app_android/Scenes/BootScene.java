@@ -23,7 +23,7 @@ public class BootScene implements IScene {
         Resources.IMAGE_LOCK = engRef.getRender().loadImage("images/lock.png");
         Resources.IMAGE_HEART = engRef.getRender().loadImage("images/heart.png");
         Resources.IMAGE_NO_HEART = engRef.getRender().loadImage("images/no_heart.png");
-
+        Resources.IMAGE_TWITTER_BUTTON = engRef.getRender().loadImage("images/twitter_logo.png");
         // fonts
         int size = engRef.getOrientation()==EngineAndroid.Orientation.PORTRAIT ? GameManager.getInstance().getWidth() : GameManager.getInstance().getHeight();
         Resources.FONT_EXO_REGULAR_BIG = engRef.getRender().loadFont("fonts/Exo-Regular.ttf", FontType.DEFAULT, size / 8);
