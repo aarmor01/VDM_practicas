@@ -36,16 +36,16 @@ public class BootScene implements IScene {
 
         // music
         engRef.getAudio().loadMusic("sounds/puzzleTheme.wav", 0.1f);
-
-        // change to main menu
-        engRef.getSceneManager().changeScene(new MainMenu(), engRef);
     }
 
     @Override
     public void rearrange(EngineAndroid engRef) {}
 
     @Override
-    public void update(double deltaTime, EngineAndroid engine) {}
+    public void update(double deltaTime, EngineAndroid engine) {
+        // change to main menu
+        engine.getSceneManager().changeScene(new MainMenu(), engine);
+    }
 
     @Override
     public void render(RenderAndroid renderMng) {}

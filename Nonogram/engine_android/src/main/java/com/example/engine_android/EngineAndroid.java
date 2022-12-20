@@ -23,6 +23,7 @@ import android.content.res.AssetManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -93,6 +94,9 @@ public class EngineAndroid implements Runnable {
         // we wait for the initial configuration to end before starting the game cycle
         waitSurfaceConfiguration();
 
+        // resume audio
+        this.myAudioManager.playMusic();
+
         long currentTime = System.currentTimeMillis();
         while (this.running) {
             try {
@@ -106,7 +110,7 @@ public class EngineAndroid implements Runnable {
                     this.mySceneManager.currentScene().handleInput(input.removeFirst(), this);
 
                 // update
-                this.mySceneManager.currentScene().update(deltaTime / 1000.0f);
+                this.mySceneManager.currentScene().update(deltaTime / 1000.0f, this);
 
                 // render
                 while (!this.myRenderManager.surfaceValid()) ;
@@ -118,6 +122,9 @@ public class EngineAndroid implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        // pause audio
+        this.myAudioManager.pauseMusic();
     }
 
     public void resume() {
@@ -128,17 +135,12 @@ public class EngineAndroid implements Runnable {
             this.renderThread = new Thread(this);
             this.renderThread.start();
 
-            // resume audio
-            this.myAudioManager.playMusic();
-
             this.myLightSensor.onResume();
         }
     }
 
     public void pause() {
         if (this.running) {
-            // pause audio
-            this.myAudioManager.pauseMusic();
             this.myLightSensor.onPause();
 
             // pause engine
@@ -187,7 +189,9 @@ public class EngineAndroid implements Runnable {
     public Context getContext() {return this.context;}
 
     // TODO: change scene init structure so we don't need this and we just return the enum in the method
-    public Orientation getOrientation() { return orientation; }
+    public Orientation getOrientation() {
+        return orientation;
+    }
 
     public void updateConfiguration(Configuration config) {
         // (-1 because it starts PORTRAIT == 1, LANDSCAPE == 2)
@@ -278,18 +282,12 @@ public class EngineAndroid implements Runnable {
         // This bytes[] has bytes in decimal format;
         // Convert it to hexadecimal format
         StringBuilder sb = new StringBuilder();
-        for(int i=0; i< bytes.length ;i++)
+        for (int i = 0; i < bytes.length; i++)
             sb.append(String.format("%02x", bytes[i]));
 
         // return complete hash
         return sb.toString();
     }
-
-    public boolean checkChecksum (String ogDigest, FileInputStream fis) throws NoSuchAlgorithmException, IOException {
-        return MessageDigest.isEqual(ogDigest.getBytes(StandardCharsets.UTF_8),
-                getChecksum(fis).getBytes(StandardCharsets.UTF_8));
-    }
-
 
     private void waitSurfaceConfiguration() {
         while (!this.initialConfigurationDone) ;

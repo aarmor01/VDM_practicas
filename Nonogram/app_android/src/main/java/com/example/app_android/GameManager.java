@@ -11,13 +11,15 @@ import android.os.Bundle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.security.NoSuchAlgorithmException;
 
 public class GameManager {
     public enum ColorTypes {BG_COLOR, MAIN_COLOR, SECONDARY_COLOR, AUX_COLOR}
@@ -60,8 +62,9 @@ public class GameManager {
 
     // loads the corresponding CategoryData saved files
     public static void init(int w, int h, EngineAndroid engine, Bundle savedState) {
-        // singleton initialization
-        instance = new GameManager();
+        if (instance == null)
+            // singleton initialization
+            instance = new GameManager();
 
         // instance setting
         instance.setup(engine, w, h, savedState);
@@ -71,13 +74,16 @@ public class GameManager {
         return instance;
     }
 
-    // saves CategoryData data
-    public static void shutdown(EngineAndroid engine, Bundle savedState) {
+    public static void save(EngineAndroid engine, Bundle savedState) {
         // instance closure
         instance.close(engine, savedState);
+    }
 
-        // delete instance
-        instance = null;
+    // saves CategoryData data
+    public static void shutdown() {
+        if (instance != null)
+            // delete instance
+            instance = null;
     }
 
     private void setup(EngineAndroid engine, int w, int h, Bundle savedState) {
@@ -99,25 +105,27 @@ public class GameManager {
 
         // file to be read from
         try {
-            FileInputStream file = engine.openInputFile(SAVE_FILE);
-            ObjectInputStream readSaveFile = new ObjectInputStream(file);
+            FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
+            FileInputStream checksumFile = engine.openInputFile(CHECKSUM_FILE);
 
             // check if file has been modified
-//            byte[] byteArray = new byte[1024];
-//            StringBuilder sb = new StringBuilder();
-//            while (file.read(byteArray) != -1)
-//                sb.append(byteArray);
-//
-//            if (engine.checkChecksum(sb.toString(), file)) {
-//                System.out.println("Save file has been modified, so we discard it");
-//                return;
-//            }
+            String savedChecksum = obtainSavedChecksum(checksumFile);
+            String actualChecksum = engine.getChecksum(fileInputStream);
+            if (!savedChecksum.equals(actualChecksum)) {
+                System.out.println("Save file has been modified, so we discard it");
+                return;
+            }
+            fileInputStream.close();
+
+            // input stream object
+            fileInputStream = engine.openInputFile(SAVE_FILE);
+            ObjectInputStream readSaveFile = new ObjectInputStream(fileInputStream);
 
             // load all game data
             loadData(readSaveFile);
 
             readSaveFile.close();
-            file.close();
+            fileInputStream.close();
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Load].");
             ex.printStackTrace();
@@ -145,11 +153,7 @@ public class GameManager {
             file.close();
 
             // save checksum
-//            FileOutputStream fileOutputStream = engine.openOutputFile(CHECKSUM_FILE);
-//            FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
-//            fileOutputStream.write(engine.getChecksum(fileInputStream).getBytes(StandardCharsets.UTF_8));
-//            fileInputStream.close();
-//            fileOutputStream.close();
+            saveChecksum(engine);
         } catch (Exception ex) {
             System.out.println("Save file doesn't exist [Store].");
             ex.printStackTrace();
@@ -283,6 +287,25 @@ public class GameManager {
             savedState.putSerializable("category_" + ct, this.categories[ct]);
     }
 
+    private String obtainSavedChecksum(FileInputStream checksumFile) throws IOException {
+        ByteArrayOutputStream resultChecksum = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192]; int length;
+        while ((length = checksumFile.read(buffer)) != -1)
+            resultChecksum.write(buffer, 0, length);
+
+        return resultChecksum.toString("UTF-8");
+    }
+
+    private void saveChecksum(EngineAndroid engine) throws NoSuchAlgorithmException, IOException {
+        FileOutputStream fileOutputStream = engine.openOutputFile(CHECKSUM_FILE);
+        FileInputStream fileInputStream = engine.openInputFile(SAVE_FILE);
+        String checksum = engine.getChecksum(fileInputStream);
+        System.out.println(checksum);
+        fileOutputStream.write(checksum.getBytes(StandardCharsets.UTF_8));
+        fileInputStream.close();
+        fileOutputStream.close();
+    }
+
     public void updateCategory(int category, int level, int[][] pendBoard, int lives) {
         if (pendBoard != null) {
             this.categories[category].pendingBoardLevel = level;
@@ -349,12 +372,6 @@ public class GameManager {
         palettes[1][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
         palettes[1][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
         palettes[1][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
-
-//        unlockedPalettes = new boolean[NUM_PALETTES];
-//        unlockedPalettes[0] = true;
-//        for(int i=1; i<NUM_PALETTES; i++)
-//            unlockedPalettes[i] = false;
-//        currentPalette = 0;
     }
 
     public int getColor(int colorType) { return palettes[nightMode][currentPalette][colorType];}
@@ -385,7 +402,12 @@ public class GameManager {
     public void addCoins(int c) {
         coins += c;
     }
-    public int getWidth() { return width; }
 
-    public int getHeight() { return height; }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
