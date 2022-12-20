@@ -57,5 +57,10 @@ public class Button {
         posY = y;
     }
 
+    public void setSize(int w, int h){
+        width = w;
+        height = h;
+    }
+
     public void setColor(int c){ color = c; }
 }

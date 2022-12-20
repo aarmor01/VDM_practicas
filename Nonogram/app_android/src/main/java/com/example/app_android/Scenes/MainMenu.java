@@ -23,8 +23,8 @@ public class MainMenu implements IScene {
     @Override
     public void init(EngineAndroid engRef) {
         this.title = new Label("NONOGRAMAS", 0, 0, Resources.FONT_KOMIKAX, engRef);
-        this.playButton = new Button(0, 0, GameManager.getInstance().getWidth() / 3,
-                GameManager.getInstance().getHeight() / 8, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
+        this.playButton = new Button(0, 0, 0, 0, "PLAY", "", Resources.FONT_EXO_REGULAR_MEDIUM,
+                Resources.SOUND_BUTTON, false);
 
         rearrange(engRef);
     }
@@ -60,18 +60,20 @@ public class MainMenu implements IScene {
     }
 
     private void arrangePortrait(EngineAndroid engRef) {
-        this.title.setPos((GameManager.getInstance().getWidth() - this.title.getTextW()) / 2, GameManager.getInstance().getHeight() / 6);
+        this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
 
         this.playButton.setPosition((2 * GameManager.getInstance().getWidth() / 3) / 2,
                 (int)(GameManager.getInstance().getHeight() / 1.5));
+        this.playButton.setSize(GameManager.getInstance().getWidth() / 3, GameManager.getInstance().getHeight() / 8);
         this.playButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 
     private void arrangeLandscape(EngineAndroid engRef) {
-        this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 2);
+        this.title.setPos((GameManager.getInstance().getWidth()) / 2, GameManager.getInstance().getHeight() / 6);
 
-        this.playButton.setPosition((int)(GameManager.getInstance().getHeight() / 1.5),
-                (2 * GameManager.getInstance().getWidth() / 3) / 2);
+        this.playButton.setPosition((2 * GameManager.getInstance().getWidth() / 3) / 2,
+                (int)(GameManager.getInstance().getHeight() / 1.5));
+        this.playButton.setSize(GameManager.getInstance().getWidth() / 3, GameManager.getInstance().getHeight() / 8);
         this.playButton.setColor(GameManager.getInstance().getColor(GameManager.ColorTypes.AUX_COLOR.ordinal()));
     }
 }
