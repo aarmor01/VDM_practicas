@@ -64,7 +64,7 @@ public class Board {
                     board[i][j].init(rand < 4, Cell.State.EMPTY);
                 }
                 else{
-                    board[i][j].init(content.get(j+1).charAt(i) == 'O', Cell.State.EMPTY);
+                    board[i][j].init(content.get(j+1).charAt(i) == '1', Cell.State.EMPTY);
                 }
 
                 if (board[i][j].isAnswer()) {   //Si la casilla es solucion modificamos los arrays de filas-columnas

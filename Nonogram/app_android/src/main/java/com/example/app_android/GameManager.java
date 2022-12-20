@@ -353,25 +353,25 @@ public class GameManager {
         palettes[1][0][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
         palettes[1][0][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
 
-        palettes[0][1][ColorTypes.BG_COLOR.ordinal()] = 0xFF008800;
-        palettes[0][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF00FF00;
-        palettes[0][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFFF00FF;
-        palettes[0][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFF0000FF;
+        palettes[0][1][ColorTypes.BG_COLOR.ordinal()] = 0xFFEF9A3A;
+        palettes[0][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFFC059DF;
+        palettes[0][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFD1421F;
+        palettes[0][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFF996F40;
 
-        palettes[1][1][ColorTypes.BG_COLOR.ordinal()] = 0xFFAAAAAA;//Background
-        palettes[1][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
-        palettes[1][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
-        palettes[1][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
+        palettes[1][1][ColorTypes.BG_COLOR.ordinal()] = 0xFF996F40;//Background
+        palettes[1][1][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF9035AC;//CellsCorrect
+        palettes[1][1][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFB53111;//CellsFailed
+        palettes[1][1][ColorTypes.AUX_COLOR.ordinal()] = 0xFFEF9A3A;//CellsNotMarked
 
-        palettes[0][2][ColorTypes.BG_COLOR.ordinal()] = 0xFF660000;
-        palettes[0][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFFFF0000;
-        palettes[0][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFF00FF00;
-        palettes[0][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF00FF44;
+        palettes[0][2][ColorTypes.BG_COLOR.ordinal()] = 0xFF3824E4;
+        palettes[0][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0DC270;
+        palettes[0][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFB1254D;
+        palettes[0][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF3A3092;
 
-        palettes[1][2][ColorTypes.BG_COLOR.ordinal()] = 0xFFAAAAAA;//Background
-        palettes[1][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF0000CC;//CellsCorrect
-        palettes[1][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFFCC0000;//CellsFailed
-        palettes[1][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFFCCCCCC;//CellsNotMarked
+        palettes[1][2][ColorTypes.BG_COLOR.ordinal()] = 0xFF3A3092;//Background
+        palettes[1][2][ColorTypes.MAIN_COLOR.ordinal()] = 0xFF2B9364;//CellsCorrect
+        palettes[1][2][ColorTypes.SECONDARY_COLOR.ordinal()] = 0xFF80223D;//CellsFailed
+        palettes[1][2][ColorTypes.AUX_COLOR.ordinal()] = 0xFF3824E4;//CellsNotMarked
     }
 
     public int getColor(int colorType) { return palettes[nightMode][currentPalette][colorType];}
