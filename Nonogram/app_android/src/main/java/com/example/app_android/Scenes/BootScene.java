@@ -45,7 +45,7 @@ public class BootScene implements IScene {
     public void rearrange(EngineAndroid engRef) {}
 
     @Override
-    public void update(double deltaTime) {}
+    public void update(double deltaTime, EngineAndroid engine) {}
 
     @Override
     public void render(RenderAndroid renderMng) {}

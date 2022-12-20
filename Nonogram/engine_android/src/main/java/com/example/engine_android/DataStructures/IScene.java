@@ -8,7 +8,7 @@ public interface IScene {
 
     public void init(EngineAndroid engRef);
     public void rearrange(EngineAndroid engRef);
-    public void update(double deltaTime);
+    public void update(double deltaTime, EngineAndroid engine);
     public void render(RenderAndroid renderMng);
     public void handleInput(InputAndroid input, EngineAndroid engRef);
 }

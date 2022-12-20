@@ -61,7 +61,7 @@ public class BoardScene implements IScene {
         // creation needed to not save all data on file (we don't need if cell is the
         // answer, just if it was marked or not, and how)
         if (GameManager.getInstance().getSavedBoardLevel(this.actCategory) == this.actLevel - 1 &&
-            GameManager.getInstance().getSavedBoardState(this.actCategory) != null) {
+                GameManager.getInstance().getSavedBoardState(this.actCategory) != null) {
             this.lives = GameManager.getInstance().getSavedBoardLives(this.actCategory);
             this.board.setBoardState(GameManager.getInstance().getSavedBoardState(this.actCategory));
         }
@@ -91,9 +91,9 @@ public class BoardScene implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) {
-//        if(engine.getAdSystem().hasRewardBeenGranted())
-//            GameManager.getInstance().addCoins(69);
+    public void update(double deltaTime, EngineAndroid engine) {
+        if (engine.getAdSystem().hasRewardBeenGranted())
+            this.lives = this.lives == MAX_LIVES ? MAX_LIVES : this.lives + 1;
 
         this.board.update(deltaTime);
     }

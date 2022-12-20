@@ -71,11 +71,8 @@ public class CategoryLevelSelectionMenu implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) {
-//        this.lastUnlocked = GameManager.getInstance().getLevelUnlocked(this.category) + 1;
-//        for (int i = 0; i < lastUnlocked; i++)
-//            this.levelSelectionButtons[i].setImage("");
-//        this.coinIndicator.setText(Integer.toString(GameManager.getInstance().getCoins()));
+    public void update(double deltaTime, EngineAndroid engine) {
+
     }
 
     @Override

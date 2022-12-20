@@ -37,7 +37,7 @@ public class MainMenu implements IScene {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(double deltaTime, EngineAndroid engine) {
 
     }
 
