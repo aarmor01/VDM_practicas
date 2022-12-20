@@ -31,8 +31,8 @@ public class ModeSelectionMenu implements IScene {
         this.mainFont = Resources.FONT_KOMIKAX;
 
         // buttons
-        int getW = engRef.getRender().getWidth();
-        int getH = engRef.getRender().getHeight();
+        int getW = GameManager.getInstance().getWidth();
+        int getH = GameManager.getInstance().getHeight();
         this.playRandomLevelButton = new Button(0, (int) (getH / 1.25),
                 getW, getH / 8, "RANDOM LEVELS", "", Resources.FONT_EXO_REGULAR_MEDIUM, Resources.SOUND_BUTTON, false);
         this.playThemeButton = new Button(0, (int) (getH / 1.75),
@@ -58,8 +58,8 @@ public class ModeSelectionMenu implements IScene {
         // text
         renderMng.setColor(0xFF000000);
         renderMng.setFont(this.mainFont);
-        int textWidth = renderMng.getTextWidth(this.mainFont, this.mainText);
-        renderMng.drawText((renderMng.getWidth() - textWidth) / 2, renderMng.getHeight() / 6, this.mainText);
+        int textWidth = renderMng.getTextWidth(this.mainFont, mainText);
+        renderMng.drawText((GameManager.getInstance().getWidth() - textWidth)/2, GameManager.getInstance().getHeight()/6, mainText);
 
         // buttons
         this.playRandomLevelButton.render(renderMng);

@@ -42,8 +42,8 @@ public class WinScene implements IScene {
         GameManager.getInstance().addCoins(coins);
 
         // buttons
-        int w = engRef.getRender().getWidth() / 4;
-        int h = engRef.getRender().getHeight();
+        int w = GameManager.getInstance().getWidth() / 4;
+        int h = GameManager.getInstance().getHeight();
         this.backButton = new Button(w / 2, h * 7 / 8, w, h / 12, "Back",
                 Resources.IMAGE_BACK_BUTTON, Resources.FONT_SIMPLY_SQUARE_MEDIUM, Resources.SOUND_BUTTON, false);
         this.coinsButton = new Button(5 * w / 2, h * 7 / 8, w, h / 12, "+ " + coins,
@@ -66,7 +66,7 @@ public class WinScene implements IScene {
         renderMng.setColor(0xFF000000);
         renderMng.setFont(this.winFont);
         int w = renderMng.getTextWidth(this.winFont, this.winText);
-        renderMng.drawText((renderMng.getWidth() - w) / 2, renderMng.getHeight() / 6, this.winText);
+        renderMng.drawText((GameManager.getInstance().getWidth() - w) / 2, GameManager.getInstance().getHeight() / 6, winText);
 
         // render solved board
         if (this.victory)

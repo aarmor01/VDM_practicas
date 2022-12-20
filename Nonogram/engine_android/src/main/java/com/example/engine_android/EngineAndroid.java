@@ -10,6 +10,7 @@ import com.example.engine_android.Modules.LightSensor;
 import com.example.engine_android.Modules.RenderAndroid;
 import com.example.engine_android.Modules.SceneManager;
 
+import android.app.GameManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Handler;
@@ -60,7 +61,7 @@ public class EngineAndroid implements Runnable {
     private Thread configThread;
     private boolean initialConfigurationDone;
 
-    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, float ratio, int bgColor) {
+    public EngineAndroid(SurfaceView surface, AppCompatActivity activity, int w, int h, int bgColor) {
         // context
         this.context = activity.getBaseContext();
         this.assetManager = this.context.getAssets();
@@ -69,7 +70,7 @@ public class EngineAndroid implements Runnable {
         this.orientation = Orientation.values()[activity.getResources().getConfiguration().orientation - 1];
 
         // engine modules initialization
-        this.myRenderManager = new RenderAndroid(surface, this.assetManager, ratio, bgColor);
+        this.myRenderManager = new RenderAndroid(surface, this.assetManager, w, h, bgColor);
         this.myAudioManager = new AudioAndroid(this.assetManager);
         this.mySceneManager = new SceneManager();
         this.myInputManager = new InputManager();
@@ -314,6 +315,8 @@ public class EngineAndroid implements Runnable {
             this.engine = engine;
         }
 
+        ;
+
         @Override
         public void run() {
             myRenderManager.holderWait();
@@ -341,13 +344,10 @@ public class EngineAndroid implements Runnable {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int input_y = (int) motionEvent.getY() - (myRenderManager.getViewHeight() - myRenderManager.getHeight()) / 2;
-            int input_x = (int) motionEvent.getX() - (myRenderManager.getViewWidth() - myRenderManager.getWidth()) / 2;
+            int input_y = (int) ((motionEvent.getY() - myRenderManager.getPosCanvasY()) / myRenderManager.getScale());
+            int input_x = (int) ((motionEvent.getX() - myRenderManager.getPosCanvasX()) / myRenderManager.getScale());
 
-            if (input_x < 0 || input_y < 0 || input_x > myRenderManager.getWidth() || input_y > myRenderManager.getHeight())
-                return true;
-
-            InputAndroid iA = null;
+            InputAndroid iA;
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:

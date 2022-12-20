@@ -32,6 +32,9 @@ public class GameManager {
     // singleton
     private static GameManager instance = null;
 
+    //Dimensions
+    int width, height;
+
     // categories (0 FREE LEVEL, 1-4 STORY LEVELS)
     private CategoryData[] categories = null;   // save
 
@@ -49,12 +52,12 @@ public class GameManager {
     }
 
     // loads the corresponding CategoryData saved files
-    public static void init(EngineAndroid engine, Bundle savedState) {
+    public static void init(int w, int h, EngineAndroid engine, Bundle savedState) {
         // singleton initialization
         instance = new GameManager();
 
         // instance setting
-        instance.setup(engine, savedState);
+        instance.setup(engine, w, h, savedState);
     }
 
     public static GameManager getInstance() {
@@ -70,9 +73,12 @@ public class GameManager {
         instance = null;
     }
 
-    private void setup(EngineAndroid engine, Bundle savedState) {
+    private void setup(EngineAndroid engine, int w, int h, Bundle savedState) {
         // load default values, in case something goes wrong
         loadGameDefaultData();
+
+        width = w;
+        height = h;
 
         // try to load from bundle
         if (loadData(savedState)) {
@@ -352,4 +358,7 @@ public class GameManager {
     public void addCoins(int c) {
         coins += c;
     }
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
 }
