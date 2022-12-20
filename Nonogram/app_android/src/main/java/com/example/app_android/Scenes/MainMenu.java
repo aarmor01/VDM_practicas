@@ -55,7 +55,6 @@ public class MainMenu implements IScene {
         if (input.getType() == InputType.TOUCH_UP && this.playButton.isInButton(input.getX(), input.getY())) {
             engine.getSceneManager().changeScene(new ModeSelectionMenu(), engine);
             this.playButton.clicked(engine.getAudio());
-//            engine.getIntentSystemAndroid().share(TWITTER, "hehe twitter que guapo");
         }
     }
 
