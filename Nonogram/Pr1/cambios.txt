@@ -1,0 +1,14 @@
+- Eliminada la referencia a Engine en el SceneManager, ya que no era necesaria.
+- Cambiados nombres de numerosas variables para un mejor entendimiento de su función en el código.
+- Para la carga de recursos anteriormente le pasabas el String completo de la ruta al archivo, incluyendo la carpeta /assets. Esta posteriormente se eliminaba del String en la versión de Android, pues la ruta raíz se encontraba ya dentro de la carpeta assets. Esto podía provocar que si se llamaba a la siguiente ruta /assets/assets/… se eliminaban ambos fragmentos del String y se perdía parte de la ruta que no debia perderse. Por ello ahora la ruta obviará la carpeta /assets, y dentro de la versión de Desktop se añadira esa parte de la ruta al String, de esta manera no podrá darse el mismo error.
+- Eliminados los números mágicos que necesitaban de documentación y formaban parte importante del código de la lógica. Ahora son variables constantes de la clase.
+- El renderizado de las escenas utiliza para renderizarse el tamaño del espacio lógico almacenado en el GameManager, y se aplica la escala en el RenderManager. Anteriormente le pedía el tamaño al render, que le pasaba el tamaño físico de la pantalla, por lo que los propios objetos se renderizaban en función del tamaño físico.
+- Se para la música en el Pause, para que no se solapen cuando se lance la actividad de nuevo.
+- Hemos añadido la clase Label para evitar la repetición de código cuando queríamos imprimir textos.
+- Los niveles no cuadrados ahora se centran ocupando el máximo tamaño para una mejor visibilidad del tablero.
+- Por la misma razón ahora los tableros asimétricos siempre tienen más filas que columnas.
+- Al igual que en la practica 2, para evitar la carga de recursos divida por las escenas, se agrupan en una primera escena que se llama al principio de la ejecución, 
+la BootScene, que carga todos los recursos necesarios en el juego.
+- Tras checkear el tablero ahora se desmarcan las casillas que habías marcado y eran erróneas. 
+Solo lo hemos hecho porque nos parecía más lógico a que la casilla 
+- Ahora el botón de back se encuentra a la izquierda, para que sea más intuitivo para el jugador.
