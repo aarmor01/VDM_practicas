@@ -1,0 +1,17 @@
+- Hemos refactorizado algunas variables y quitado numeros mágicos al igual que en la practica 1
+- Hemos recolocado algunos botones para que los textos no se salgan de estos, ni se superpongan elementos de la pantalla entre si.
+(tambien hemos hecho otros ajustes de posicion al board en la pantalla de victoria y otros ligeros cambios)
+- Ahora indicamos cuanto cuesta comprar cada paleta, y les hemos cambiado para que cada una tenga un precio diferente y más alto,
+para que sea mas coherente con la ganancia de monedas a lo largo del juego. Además, en el menú de paletas ahora indicamos que paleta 
+es la que esta actualmente en uso.
+- Hemos privatizado la constructora de GameManager para que cumpla su función de singleton y no se puedan crear instancias fuera. 
+También hemos aprovechado para ajustar las variables y métodos que necesitaban ser privados o publicos.
+- Ahora al abrir el juego desde una notificación se recibirá un reward de 5 monedas en el juego.
+- Hemos añadido un par de imágenes para los botones de ver anuncio para recuperar vidas. 
+- Hemos cambiado en el board la orientaciión del array de celdas marcadas (estaba al reves columnas-filas), que aunque en niveles cuadrados
+no daba error, si los daba en la persistencia (guardado y carga) de niveles asimetricos.
+- Hemos añadido una comprabación en el onResume() para que no vuelva a cargar la escena Boot despues de ver el anuncio.
+- No hemos arreglado que no se tenga en cuenta el valor del sensor inicial. Hemos estado investigando y según esta página:
+https://stackoverflow.com/questions/6433889/getting-light-sensor-value
+no se puede revisar el valor del sensor. Sin embargo en ciertas versiones se hace automáticamente.
+(En mi móvil por ejemplo, supongo que también porque detecta ligeros cambios de luz, pero funciona desde que se abre la app)
